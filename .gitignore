@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv-pio/
+venv/
+models/
+
+# Tool output
+waypoints_*.txt
+*.csv.log
+
+# PlatformIO / Arduino build
+.pio/
+build/
+
+# Local hardware logs / MuJoCo output
+logs/
+MUJOCO_LOG.TXT
+
+# Internal materials (not for public distribution)
+assets/feishu_imu/
+docs/research.md
+
+# Unlicensed third-party assets (SelfRisingRobot) and models derived from them
+training/b_line/assets/selfrising/
+training/b_line/assets/robot_selfrising*.xml
+training/b_line/assets/_tmp_*.xml

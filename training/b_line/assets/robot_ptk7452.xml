@@ -1,0 +1,57 @@
+<mujoco model="selfright2dof_ptk7452">
+  <!-- SR-Support B-line, based on Juxi-Technology/2dof-selfrighting-robot
+       sim/robot_ptk7465.xml (MIT/Apache-2.0; see third_party/juxi-2dof/).
+       Modified for PTK7452MG: 3.4 kg*cm at 6 V => forcerange +/-0.333 N*m.
+       Geometry matches the Juxi B-line CAD (80 mm shoulder, 45+100 mm arm).
+       Update masses/sizes from the actual print and servo before retraining. -->
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.001" integrator="implicitfast" cone="elliptic" impratio="10"/>
+
+  <default>
+    <geom friction="0.9 0.02 0.001" solref="0.004 1" solimp="0.95 0.99 0.001"
+          contype="2" conaffinity="0"/>
+    <joint type="hinge" limited="true" range="-1.55 1.55" damping="0.05" armature="0.0005"/>
+    <position ctrllimited="true" ctrlrange="-1.55 1.55" forcelimited="true"
+              forcerange="-0.333 0.333" kp="2.0" kv="0.05"/>
+  </default>
+
+  <worldbody>
+    <light name="top" pos="0 0 1.2" dir="0 0 -1" directional="true"/>
+    <geom name="floor" type="plane" size="1 1 0.05" contype="1" conaffinity="3"
+          friction="1.2 0.02 0.001" rgba="0.55 0.58 0.62 1"/>
+
+    <body name="torso" pos="0 0 0.07">
+      <freejoint name="root"/>
+      <geom name="base" type="box" size="0.028 0.046 0.008" mass="0.020"
+            rgba="0.20 0.55 0.90 1" friction="0.8 0.02 0.001"/>
+      <geom name="tower" type="box" size="0.010 0.010 0.032" pos="0 0 0.040"
+            mass="0.008" rgba="0.15 0.35 0.70 1"/>
+      <geom name="electronics" type="box" size="0.020 0.024 0.005" pos="0 0 0.013"
+            mass="0.008" rgba="0.15 0.15 0.15 1"/>
+      <geom name="servo1_body" type="box" size="0.006 0.011 0.012" pos="0 0 0.072"
+            mass="0.0122" rgba="0.35 0.35 0.35 1"/>
+      <site name="imu" pos="0 0 0" size="0.004" rgba="1 0 0 1"/>
+
+      <body name="arm1" pos="0 0 0.072">
+        <joint name="servo1_joint" axis="1 0 0"/>
+        <geom name="arm1_link" type="box" size="0.006 0.005 0.0225" pos="0 0 0.0225"
+              mass="0.005" rgba="0.95 0.50 0.10 1"/>
+        <geom name="servo2_body" type="box" size="0.006 0.011 0.012" pos="0 0 0.045"
+              mass="0.0122" rgba="0.35 0.35 0.35 1"/>
+
+        <body name="arm2" pos="0 0 0.045">
+          <joint name="servo2_joint" axis="0 1 0"/>
+          <geom name="arm2_link" type="box" size="0.005 0.007 0.050" pos="0 0.02325 0.050"
+                mass="0.007" rgba="0.95 0.50 0.10 1"/>
+          <geom name="pad" type="sphere" size="0.010" pos="0 0.0223 0.100" mass="0.002"
+                friction="1.5 0.02 0.001" rgba="0.08 0.08 0.08 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="servo1" joint="servo1_joint"/>
+    <position name="servo2" joint="servo2_joint"/>
+  </actuator>
+</mujoco>

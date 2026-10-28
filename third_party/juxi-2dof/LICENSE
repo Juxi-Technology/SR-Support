@@ -1,0 +1,45 @@
+# Licensing
+
+This repository is open and multi-licensed by component.
+
+## Original software: MIT OR Apache-2.0
+
+Applies to the original code in:
+
+- `sim/`
+- `firmware/src/` and `firmware/include/` except the vendored library
+- `cad/src/` (the build123d model source)
+- `tools/`
+- `docs/` examples
+
+You may use these files under either the MIT License or the Apache License
+2.0, at your option. Full texts are in `LICENSES/MIT.txt` and
+`LICENSES/Apache-2.0.txt`.
+
+## Hardware design: CERN-OHL-S-2.0
+
+Applies to the hardware design and its generated files:
+
+- `cad/STEP/`
+- `cad/STL/`
+- `release/*/print/`
+- the hardware design described by `cad/src/lib/design.py`
+
+Full text: `LICENSES/CERN-OHL-S-2.0.txt`.
+
+## Vendored SCServo library: GPL-3.0
+
+`firmware/lib/scservo/` is the Feetech SCServo library, licensed under
+GPL-3.0. Its license is in `firmware/lib/scservo/LICENSE` and a copy is in
+`LICENSES/GPL-3.0-only.txt`.
+
+Firmware binaries that link this library (the A-line `scs0009` build) are
+distributed under GPL-3.0. The corresponding source is this repository,
+including the vendored library and the build configuration.
+
+## Compatibility
+
+MIT and Apache-2.0 are compatible with GPL-3.0. The GPL-3.0 component remains
+GPL-3.0; the other software components keep their MIT/Apache-2.0 terms.
+CERN-OHL-S-2.0 applies to the hardware design files and does not relicense
+software. Each component keeps its own license when redistributed together.
