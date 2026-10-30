@@ -217,6 +217,7 @@ static const float AUTO_SEQ[6][2] = {
 static const uint16_t AUTO_HOLD = 65;       // 1.3 s at 50 Hz
 static bool fast_log = false;
 static uint32_t fast_log_until = 0;
+static bool twin_log = false;   // 'd': 50 Hz T stream for the MuJoCo live twin
 static int16_t g_raw[6] = {0};
 static int servo_fail_count = 0;
 static uint32_t next_ctrl_us = 0;
@@ -295,21 +296,23 @@ static void auto_next(float next[2], float up_z) {
 //   - a settled pose on another lying axis re-plans (neutral + new
 //     reference) instead of running the wrong sequence to the timeout.
 // The roll_pos sequence (arm swept to +2.0 rad with the elbow at -0.8) is
-// the one that works on the real robot. The roll_neg side cannot reach a
-// far-side plant (the horn re-index limits the shoulder to -1.07 rad), and
-// dragging the forearm on the floor does not transmit enough force on the
-// real surface. roll_neg instead swings the arm over the top and holds: the
-// arm's mass rolls the body over its long axis and holds it at a pitch-like
-// attitude; the pose re-plan then hands over to the pitch sequence, whose
-// kick flips the inverted body onto the +X face and lifts it. A continuous
-// variant that returned the arm itself first was hardware-tested and
-// fails: any arm return rolls the body back to roll_neg before the pitch
-// kick can act.
+// the one that works on the real robot. The servo PWM output is clamped to
+// SERVO_MAX_US, so the arm physically tops out near +1.04 rad even though
+// the config range says +2.07 - the real machine gets up with that reduced
+// travel, i.e. the usable range is nearly symmetric [-1.07, +1.04]. The
+// roll_neg get-up is therefore the MIRROR of the roll_pos press (a pose
+// rotation of 180 deg about the shoulder axis maps q1 -> q1 + pi, so the
+// +2.0 press mirrors to -1.14, just past the -1.07 stop): press the
+// shoulder to -1.07 with the elbow folded the mirrored way and hold; the
+// arm levers the lying body straight up onto its base, no roll-over.
+// (The previous over-the-top roll recipe needed the +X-side travel that
+// the PWM clamp removes; it stalls at a 150 deg equilibrium, see
+// docs/hardware-validation.md 0.4.)
 static const float EXEC_REF0[3][2] = {   // roll_pos
     {2.0f, -0.8f}, {0.0f, -0.8f}, {0.0f, 0.0f}};
-static const float EXEC_REF1[6][2] = {   // roll_neg: over-the-top roll
-    {2.0f, -0.8f}, {2.0f, -0.8f}, {2.0f, -0.8f}, {2.0f, -0.8f},
-    {0.0f, -0.8f}, {0.0f, 0.0f}};
+static const float EXEC_REF1[6][2] = {   // roll_neg: mirrored direct press
+    {-1.07f, 0.8f}, {-1.07f, 0.8f}, {-1.07f, 0.8f}, {-1.07f, 0.8f},
+    {0.0f, 0.8f}, {0.0f, 0.0f}};
 static const float EXEC_REF2[3][2] = {   // pitch_pos
     {-1.07f, 1.55f}, {0.0f, 1.55f}, {0.0f, 0.0f}};
 static const float EXEC_REF3[3][2] = {   // pitch_neg
@@ -745,6 +748,10 @@ static void handle_serial() {
             next_ctrl_us = micros() + CTRL_PERIOD_US;
             Serial.printf("manual: 1/2 shoulder +/-, 3/4 elbow +/-, 0 neutral -> q %.2f %.2f\n",
                           manual_target[0], manual_target[1]);
+        } else if (c == 'd') {
+            twin_log = !twin_log;
+            Serial.printf("twin log %s (50 Hz 'T w x y z q1 q2')\n",
+                          twin_log ? "on" : "off");
         } else if (c == 'l') {
             fast_log = true;
             fast_log_until = millis() + 3000;
@@ -1000,6 +1007,17 @@ void loop() {
                           cmd[0], cmd[1], stand_state,
                           g_raw[0], g_raw[1], g_raw[2], g_raw[3], g_raw[4], g_raw[5]);
         }
+    }
+
+    static uint32_t last_twin_us = 0;
+    if (twin_log && (int32_t)(now - last_twin_us) >= (int32_t)CTRL_PERIOD_US) {
+        last_twin_us = now;
+        // MuJoCo live-twin stream: raw IMU-frame attitude quat (w x y z) +
+        // commanded joint angles. The PC tool (tools/live_twin.py) applies
+        // the IMU_YAW90 body-frame mapping and drives the sim model.
+        Serial.printf("T %+.3f %+.3f %+.3f %+.3f %+.2f %+.2f\n",
+                      q_att[0], q_att[1], q_att[2], q_att[3],
+                      q_obs[0], q_obs[1]);
     }
 
 #ifdef ROBOT_SCS0009

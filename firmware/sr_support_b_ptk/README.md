@@ -68,6 +68,7 @@ Arduino IDE：
 | `v` / `b` | 运行时翻转肩 / 肘方向符号（校准用，重启恢复默认） |
 | `i` / `j` | 运行时翻转 IMU X / Y 轴符号（之后发 `c` 重新校准陀螺） |
 | `l` | 输出 3 s、50 Hz 快速日志（`F` 行：up/gyro/q/state/原始 IMU）；配合 `tools/hw_log.py` |
+| `d` | **MuJoCo 实时镜像**：开关 50 Hz `T` 流（`T w x y z q1 q2`，姿态四元数 + 指令关节角）；配合 `tools/live_twin.py` |
 
 > `1`–`4`/`0`/`m` 进入 manual 模式，50 Hz 按 0.12 rad/步限速；`s`/`r`/`g` 都会退出 manual。
 > IMU 固定 100 Hz 读取；主循环不再无节流读 I²C（否则读取失败、姿态冻结，策略会抖）。
@@ -80,6 +81,16 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 
 > `s` 只是停止策略，舵机仍可能堵转发热；长时间异常请 `x` 或直接断舵机电源。  
 > `x` 后舵机卸力，手臂会因重力落下；确认安全后再用。
+
+### 4.1 MuJoCo 实时镜像（live twin）
+
+`d` 打开的 `T` 流每 20 ms 一行：`T <qw> <qx> <qy> <qz> <q1> <q2>`（原始 IMU 坐标系四元数 + 指令关节角）。电脑端：
+
+```
+.venv/Scripts/python.exe tools/live_twin.py --port COM27
+```
+
+工具会自动发一次 `d`（若已在输出 `T` 行则不发），把实机姿态和手臂实时映射到 `robot_v1.xml` 模型窗口里；无 `T` 流时回退到 4 Hz 状态行或 `l` 快速日志（无四元数，航向由 up 向量最短弧重建，方向可能任意）。`--replay <日志文件>` 可离线回放。注意打开串口可能触发 ESP32 复位（DTR）。
 
 ## 5. 策略（重要）
 

@@ -31,6 +31,19 @@ DEFAULT_FALLEN_POSES = tuple(FALLEN_POSES)
 Q_LO = np.array([-1.07, -1.55], dtype=np.float64)
 Q_HI = np.array([2.07, 1.55], dtype=np.float64)
 
+# Initial servo-joint velocities (rad/s: shoulder, elbow) applied when the
+# limp settle starts. On the real robot the arm carries momentum from the
+# fall; without it the released arm can balance on the base rim instead of
+# falling to the floor. Sign = the open side of each pose (away from the
+# base), so the arm tip lands on the open floor.
+LIMP_KICK = {
+    "roll_pos": (1.0, 0.0),
+    "roll_neg": (-1.0, 0.0),
+    "pitch_pos": (0.0, 1.0),
+    "pitch_neg": (0.0, -1.0),
+}
+LIMP_SETTLE_TIME = 2.0  # s, released-servo settle (the fall is slow)
+
 
 def roll_pitch_to_quat(roll, pitch):
     cr = math.cos(roll / 2.0)
@@ -55,10 +68,17 @@ class B39GetupEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, fallen_poses=None, max_steps: int = 700,
-                 settle_time: float = 0.4):
+                 settle_time: float = 0.4, xml_path=None,
+                 limp_settle: bool = False):
         super().__init__()
-        self.model = mujoco.MjModel.from_xml_path(str(XML))
+        xml = Path(xml_path) if xml_path is not None else XML
+        self.model = mujoco.MjModel.from_xml_path(str(xml))
         self.data = mujoco.MjData(self.model)
+        # limp_settle: release the servos (zero torque: ctrl tracks the joint
+        # position) while the fallen pose settles, so gravity decides the
+        # resting arm pose - the arm falls until it touches the floor, as on
+        # the passive robot. The servos then re-engage at the settled angles.
+        self.limp_settle = bool(limp_settle)
 
         self.phys_dt = float(self.model.opt.timestep)
         self.frame_skip = max(1, int(round(0.02 / self.phys_dt)))
@@ -145,14 +165,41 @@ class B39GetupEnv(gym.Env):
         self.data.qpos[0:3] = [0.0, 0.0, 0.08]
         roll, pitch = FALLEN_POSES[pose_name]
         self.data.qpos[3:7] = roll_pitch_to_quat(roll, pitch)
+        if self.limp_settle:
+            # the arm keeps a little momentum from the fall so it topples off
+            # the base rim instead of balancing on it (direction: away from
+            # the base, per pose)
+            self.data.qvel[self.qvel_adr[0]] = LIMP_KICK.get(pose_name, (0.0, 0.0))[0]
+            self.data.qvel[self.qvel_adr[1]] = LIMP_KICK.get(pose_name, (0.0, 0.0))[1]
         self.target[:] = 0.0
         self.data.ctrl[:] = self.target
         mujoco.mj_forward(self.model, self.data)
-        for _ in range(self.settle_steps):
+        if self.limp_settle:
+            # Zero the actuator gains so the servos are truly limp for the
+            # settle (a ctrl-tracks-qpos servo still adds kp*dt+kv of viscous
+            # damping and freezes the arm mid-air). Restored afterwards.
+            gain = self.model.actuator_gainprm.copy()
+            bias = self.model.actuator_biasprm.copy()
+            self.model.actuator_gainprm[:] = 0.0
+            self.model.actuator_biasprm[:] = 0.0
+            limp_steps = max(1, int(round(LIMP_SETTLE_TIME / self.phys_dt)))
+            for _ in range(limp_steps):
+                mujoco.mj_step(self.model, self.data)
+            self.model.actuator_gainprm[:] = gain
+            self.model.actuator_biasprm[:] = bias
+            # engage the servos at the settled pose (no target jump)
+            self.target[:] = np.clip(self.data.qpos[self.qpos_adr], Q_LO, Q_HI)
             self.data.ctrl[:] = self.target
-            mujoco.mj_step(self.model, self.data)
-        self.target[:] = 0.0
-        self.data.ctrl[:] = self.target
+            for _ in range(self.settle_steps):
+                self.data.ctrl[:] = self.target
+                mujoco.mj_step(self.model, self.data)
+            self.target[:] = np.clip(self.data.qpos[self.qpos_adr], Q_LO, Q_HI)
+        else:
+            for _ in range(self.settle_steps):
+                self.data.ctrl[:] = self.target
+                mujoco.mj_step(self.model, self.data)
+            self.target[:] = 0.0
+            self.data.ctrl[:] = self.target
         self.current_pose_name = pose_name
 
     def reset(self, seed=None, options=None):

@@ -6,15 +6,17 @@ plus random sequences, scored in the 0.25/0.2 ms MuJoCo model with an
 arm-penetration penalty. Waypoints are (shoulder, elbow) target angles in rad.
 
 The roll_pos sequence is the original searched three-waypoint lift, the
-motion that works on the real robot. The roll_neg side cannot plant the arm
-on the far side (the horn re-index limits the shoulder to -1.07 rad), and
-dragging the forearm on the floor does not transmit enough force on the real
-surface, so roll_neg swings the arm over the top and holds: the arm's mass
-rolls the body over its long axis and holds it at a pitch-like attitude; the
-pose re-plan then hands over to the pitch sequence, whose kick flips the
-inverted body onto the +X face and lifts it. A continuous variant that
-returned the arm itself was hardware-tested and fails: any arm return rolls
-the body back to roll_neg before the pitch kick can act.
+motion that works on the real robot. The servo PWM output is clamped to
+SERVO_MAX_US (500..2500 us with the shoulder centered at 1840 us), so the
+arm physically tops out near +1.04 rad even though the config range says
++2.07 - the real machine gets up within that reduced travel, i.e. the
+usable range is nearly symmetric [-1.07, +1.04]. Rotating the working
+roll_pos press by 180 deg about the shoulder axis maps q1 -> q1 + pi, so
++2.0 mirrors to -1.14, just past the -1.07 stop. roll_neg is therefore
+that mirror press: shoulder to -1.07, elbow folded +0.8, hold ~1.6 s; the
+arm levers the lying body straight up onto its base (hardware-tested
+2026-10-30, ~3.5 s end to end). The previous over-the-top roll recipe
+needed the +X-side travel that the PWM clamp does not provide.
 """
 
 from __future__ import annotations
@@ -28,18 +30,16 @@ SEQUENCES = {
         [0.0, 0.0],
     ],
     "roll_neg": [
-        # Swing the arm over the top and hold: the arm's mass rolls the body
-        # over its long axis and holds it at a pitch-like attitude; the
-        # executor's pose re-plan then hands over to the pitch sequence,
-        # which kicks the inverted body onto the +X face and lifts it. A
-        # continuous version that returns the arm itself first was tested on
-        # hardware and fails: any arm return rolls the body back to roll_neg
-        # before the pitch kick can act.
-        [2.0, -0.8],
-        [2.0, -0.8],
-        [2.0, -0.8],
-        [2.0, -0.8],
-        [0.0, -0.8],
+        # 180 deg-rotation mirror of the roll_pos press: shoulder to the
+        # -1.07 stop with the elbow folded the mirrored way (+0.8), hold
+        # ~1.6 s, then retract. The arm levers the lying body straight up
+        # onto its base - no over-the-top roll. Hardware-verified
+        # 2026-10-30 (body upright ~0.8 s after the press, ~3.5 s total).
+        [-1.07, 0.8],
+        [-1.07, 0.8],
+        [-1.07, 0.8],
+        [-1.07, 0.8],
+        [0.0, 0.8],
         [0.0, 0.0],
     ],
     "pitch_pos": [

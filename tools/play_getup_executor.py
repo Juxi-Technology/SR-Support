@@ -32,12 +32,16 @@ def sync_sleep(viewer):
 
 
 def main():
-    env = B39GetupEnv()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--xml", default=None, help="model XML (default: b39)")
+    ap.add_argument("--v1-refs", action="store_true",
+                    help="use the sim v1 reference set (getup_reference_v1)")
+    ap.add_argument("--hold-settle", action="store_true",
+                    help="servos hold q=0 while the pose settles (legacy)")
+    args = ap.parse_args()
+    env = B39GetupEnv(xml_path=args.xml, limp_settle=not args.hold_settle)
     with mujoco.viewer.launch_passive(env.model, env.data) as viewer:
-        viewer.cam.lookat[:] = (0.0, 0.0, 0.10)
-        viewer.cam.distance = 0.65
-        viewer.cam.azimuth = 135
-        viewer.cam.elevation = -18
         cycle = 0
         while viewer.is_running():
             cycle += 1
@@ -45,6 +49,12 @@ def main():
                 if not viewer.is_running():
                     return
                 obs, _ = env.reset(options={"pose": requested})
+                # re-center the camera on the robot for every pose so the
+                # demo stays watchable even if the view was dragged away
+                viewer.cam.lookat[:] = (0.0, 0.0, 0.05)
+                viewer.cam.distance = 0.55
+                viewer.cam.azimuth = 135
+                viewer.cam.elevation = -20
                 sync_sleep(viewer)
                 time.sleep(1.0)
                 up_vec = env.data.xmat[env.foot_body_id].reshape(3, 3)[2]
@@ -52,7 +62,12 @@ def main():
                 print(f"--- cycle {cycle} pose {k + 1}/4 requested={requested} "
                       f"actual={pose} up=({up_vec[0]:+.2f},{up_vec[1]:+.2f},"
                       f"{up_vec[2]:+.2f})", flush=True)
-                ex = GetupExecutor(pose)
+                ex = GetupExecutor(pose, q0=env.target)
+                if args.v1_refs:
+                    from training.b_line.getup_reference_v1 import SEQUENCES_V1
+                    seq = np.asarray(SEQUENCES_V1[pose], dtype=float)
+                    ex.sequence = seq
+                    ex.support = seq[-2]
                 info = {}
                 for t in range(700):
                     action = ex.action(env, obs)

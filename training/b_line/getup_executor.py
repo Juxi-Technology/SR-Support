@@ -37,6 +37,7 @@ class GetupExecutor:
         min_switch_age: int = 25,
         max_switches: int = 5,
         neutral_max: int = 120,
+        q0=None,
     ):
         self.steps_per_wp = int(steps_per_wp)
         self.retract_rate = float(retract_rate)
@@ -56,7 +57,7 @@ class GetupExecutor:
         self.pending_pose = None
         self.retract_up0 = None
         self.retract_ok = True
-        self._load(pose, None)
+        self._load(pose, q0)
 
     def _load(self, pose, q):
         """(Re)start the reference for `pose` from the current target `q`."""
