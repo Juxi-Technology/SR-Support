@@ -1,0 +1,30 @@
+{
+ "\u5e95\u90e8\u9762\u677f": {
+  "volume": 17987.0,
+  "inner_volume": 0.0,
+  "solid_frac": 1.0,
+  "rho_g_cm3": 1.24,
+  "mass_g": 22.3
+ },
+ "\u80a9\u8235\u673a\u56fa\u5b9a\u4ef6": {
+  "volume": 47766.0,
+  "inner_volume": 0.0,
+  "solid_frac": 1.0,
+  "rho_g_cm3": 1.24,
+  "mass_g": 59.23
+ },
+ "\u8098\u8235\u673a\u56fa\u5b9a\u4ef6": {
+  "volume": 8125.0,
+  "inner_volume": 0.0,
+  "solid_frac": 1.0,
+  "rho_g_cm3": 1.24,
+  "mass_g": 10.08
+ },
+ "\u9876\u90e8\u6491\u6746": {
+  "volume": 19526.8,
+  "inner_volume": 0.0,
+  "solid_frac": 1.0,
+  "rho_g_cm3": 1.24,
+  "mass_g": 24.21
+ }
+}

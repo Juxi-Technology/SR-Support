@@ -16,6 +16,7 @@
 - 对 **SelfRisingRobot（无许可证）**仍执行第 2/3/4 节的“不复制”规则；B 线训练也不使用它的 waypoint/代码。  
 - `policy_b.h` 当前是 Juxi 的 **PTK7465 基线策略**，只用于接线/台架；最终策略由本项目按 PTK7452/实际质量重训。  
 - **2026-10-22 更新**：仿真几何改为用户实机的 **SelfRisingRobot 3D 打印件**（`training/b_line/assets/selfrising/`）。这是用户本地副本，**仅用于仿真自有实机，不随产品/公开仓库分发**；SelfRisingRobot 无许可证，商用前仍需作者书面许可或按实测尺寸自行重画。代码、权重、waypoint、奖励函数仍未使用。
+- **2026-10-30 更新**：v1 版（`training/b_line/assets/robot_v1*.xml` + `v1_meshes/`）为**自研设计**（由自有 FreeCAD/STEP 件转换），不含第三方几何，随仓库以 **CERN-OHL-S-2.0** 发布；2026-10-22 条目的 selfrising 资产规则不变。
 - 商用前仍需：CERN-OHL-S 义务确认、Arduino LGPL 评估、专利 FTO。
 
 ---

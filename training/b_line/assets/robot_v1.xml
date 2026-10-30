@@ -1,0 +1,101 @@
+<mujoco model="sr_support_v1">
+  <!-- SR-Support v1 CAD (2026-10-30), own design - built from the 二自由度扶正
+       装置 v1 STEP parts in FreeCAD (no third-party geometry). Hardware
+       license: CERN-OHL-S-2.0, see docs/licensing.md.
+       CAD frame -> MuJoCo: CAD +Y (up) -> sim +Z, CAD X -> sim Y, CAD Z ->
+       sim X. Meshes exported in mm, body-local (scale 0.001).
+       Shoulder axis: sim X through (0,0,0.056); elbow axis: sim Y through
+       0.0401 m above the shoulder. Joint signs match the B-line firmware:
+       shoulder + -> arm toward -Y, elbow + -> forearm toward +X. -->
+  <compiler angle="radian" meshdir="v1_meshes" autolimits="true"/>
+  <option timestep="0.0002" integrator="implicitfast" cone="elliptic" impratio="20">
+    <flag filterparent="disable"/>
+  </option>
+
+  <default>
+    <geom friction="0.9 0.02 0.001" solref="0.004 1" solimp="0.95 0.99 0.001"
+          contype="2" conaffinity="0"/>
+    <joint type="hinge" limited="true" range="-1.07 2.07" damping="0.02" armature="0.0001"/>
+    <position ctrllimited="true" ctrlrange="-1.07 2.07" forcelimited="true"
+              forcerange="-0.333 0.333" kp="50.0" kv="0.5"/>
+    <default class="visual">
+      <geom contype="0" conaffinity="0" group="2" density="0"/>
+    </default>
+  </default>
+
+  <asset>
+    <mesh name="foot_bottom" file="foot_bottom.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="foot_shell" file="foot_shell.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="foot_servo_shoulder" file="foot_servo_shoulder.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm1_bracket" file="arm1_bracket.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm1_servo_elbow" file="arm1_servo_elbow.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm2_strut" file="arm2_strut.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <worldbody>
+    <light name="top" pos="0 0 0.8" dir="0 0 -1" directional="true"/>
+    <geom name="floor" type="plane" size="1 1 0.05" contype="1" conaffinity="3"
+          friction="1.2 0.02 0.001" solref="0.0004 1" rgba="0.55 0.58 0.62 1"/>
+
+    <body name="foot" pos="0 0 0">
+      <freejoint name="root"/>
+      <!-- 92.1 g: printed parts @15% infill/1.2mm walls + 12.2 g shoulder servo -->
+      <inertial pos="-0.000188 0.000142 0.022605" mass="0.09207"
+                fullinertia="8.7518e-05 9.6731e-05 1.2287e-04 -3.8674e-07 4.3405e-07 7.5363e-08"/>
+
+      <geom class="visual" type="mesh" mesh="foot_bottom" rgba="0.25 0.45 0.85 1"/>
+      <geom class="visual" type="mesh" mesh="foot_shell" rgba="0.30 0.68 0.34 0.55"/>
+      <geom class="visual" type="mesh" mesh="foot_servo_shoulder" rgba="0.15 0.15 0.15 1"/>
+
+      <!-- bottom plate (CAD y 0..9.5) -->
+      <geom name="base_plate" group="3" type="box" size="0.044 0.041 0.00475" pos="0 0 0.00475" rgba="0.25 0.45 0.85 1"/>
+      <!-- shell walls (2 mm), CAD y 1.5..68 -->
+      <geom name="wall_xp" group="3" type="box" size="0.001 0.041 0.03325" pos="0.043 0 0.03475" rgba="0.25 0.65 0.30 1"/>
+      <geom name="wall_xn" group="3" type="box" size="0.001 0.041 0.03325" pos="-0.043 0 0.03475" rgba="0.25 0.65 0.30 1"/>
+      <geom name="wall_yp" group="3" type="box" size="0.044 0.001 0.03325" pos="0 0.040 0.03475" rgba="0.25 0.65 0.30 1"/>
+      <geom name="wall_yn" group="3" type="box" size="0.044 0.001 0.03325" pos="0 -0.040 0.03475" rgba="0.25 0.65 0.30 1"/>
+      <!-- tray shelf (CAD y 29.6..32.1) -->
+      <geom name="shelf" group="3" type="box" size="0.0415 0.0385 0.00125" pos="0 0 0.03085" rgba="0.25 0.65 0.30 1"/>
+
+      <body name="arm1" pos="0 0 0.056">
+        <joint name="servo1_joint" axis="1 0 0" range="-1.07 2.07"/>
+        <!-- 20.7 g: bracket @15% infill + 12.2 g elbow servo -->
+        <inertial pos="-0.000096 -0.001633 0.030688" mass="0.02071"
+                  fullinertia="4.5964e-06 4.4073e-06 2.6001e-06 3.2483e-09 -5.4675e-08 2.5114e-08"/>
+
+        <geom class="visual" type="mesh" mesh="arm1_bracket" rgba="0.62 0.32 0.72 1"/>
+        <geom class="visual" type="mesh" mesh="arm1_servo_elbow" rgba="0.15 0.15 0.15 1"/>
+
+        <!-- bracket collision (sim-local, shoulder at origin) -->
+        <geom name="ear_a" group="3" type="box" size="0.002 0.006 0.010" pos="-0.0197 0 0.004" rgba="0.65 0.30 0.75 1"/>
+        <geom name="ear_b" group="3" type="box" size="0.002 0.006 0.010" pos="0.0201 0 0.004" rgba="0.65 0.30 0.75 1"/>
+        <geom name="arm1_plate" group="3" type="box" size="0.006 0.01245 0.002" pos="0 -0.00645 0.020" rgba="0.65 0.30 0.75 1"/>
+        <geom name="arm1_bar" group="3" type="box" size="0.006 0.00245 0.012" pos="0 -0.01645 0.034" rgba="0.65 0.30 0.75 1"/>
+        <geom name="arm1_top" group="3" type="box" size="0.006 0.01245 0.003" pos="0 -0.00645 0.049" rgba="0.65 0.30 0.75 1"/>
+
+        <body name="arm2" pos="0 0 0.0401">
+          <joint name="servo2_joint" axis="0 1 0" range="-1.55 1.55"/>
+          <!-- 20.1 g forearm strut @15% infill -->
+          <inertial pos="0.000000 -0.000499 0.089125" mass="0.02012"
+                    fullinertia="7.4594e-05 7.3371e-05 1.6843e-06 -1.0272e-13 2.8848e-14 -7.6220e-07"/>
+
+          <geom class="visual" type="mesh" mesh="arm2_strut" rgba="0.95 0.60 0.15 1"/>
+
+          <!-- forearm: 12 mm tube + clevis fork at the elbow -->
+          <geom name="arm2_tube" group="3" type="cylinder" size="0.006 0.0855" pos="0 0 0.1155"
+                friction="1.2 0.02 0.001" rgba="0.95 0.60 0.15 1"/>
+          <geom name="arm2_fork" group="3" type="box" size="0.006 0.0234 0.020" pos="0 0 0.014"
+                friction="1.2 0.02 0.001" rgba="0.95 0.60 0.15 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="servo1" joint="servo1_joint" ctrlrange="-1.07 2.07"/>
+    <position name="servo2" joint="servo2_joint" ctrlrange="-1.55 1.55"/>
+  </actuator>
+  <visual>
+    <global offwidth="960" offheight="720"/>
+  </visual>
+</mujoco>

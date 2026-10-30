@@ -26,7 +26,3 @@ docs/research.md
 training/b_line/assets/selfrising/
 training/b_line/assets/robot_selfrising*.xml
 training/b_line/assets/_tmp_*.xml
-
-# v1 CAD-derived model (SelfRisingRobot derivative, internal use only)
-training/b_line/assets/v1_meshes/
-training/b_line/assets/robot_v1*.xml
