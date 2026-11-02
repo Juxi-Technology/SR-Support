@@ -21,6 +21,12 @@
 #include "config.h"
 #include "servo_backend.h"
 
+#include <stdarg.h>
+#if WIFI_TELEMETRY
+#include <WiFi.h>
+#endif
+#include <esp_partition.h>
+
 #ifdef ROBOT_PWM
 #include "policy_b.h"
 #else
@@ -187,6 +193,83 @@ static void up_body(float u[3]) {
     u[0] = ux;
     u[1] = uy;
     u[2] = uz;
+#endif
+}
+
+// -------------------------------------------------- offline telemetry, wifi
+// RAM ring buffer of compact state lines, dumped over serial with 'L':
+// run the robot on battery, then plug in USB and dump the last ~40 s.
+// The same lines also stream to a TCP client at 192.168.4.1:3333 while the
+// WiFi AP is on ('w' toggles it; it is on after boot by default).
+static char sr_log_buf[SR_LOG_RING_BYTES];
+static uint32_t sr_log_w = 0;
+static uint32_t sr_log_total = 0;
+
+static void sr_snap_save();   // flash snapshot (defined with the log dump)
+
+static void sr_log_puts(const char *s) {
+    while (*s) {
+        sr_log_buf[sr_log_w] = *s++;
+        sr_log_w = (sr_log_w + 1u) % SR_LOG_RING_BYTES;
+        ++sr_log_total;
+    }
+}
+
+#if WIFI_TELEMETRY
+static WiFiServer twin_srv(3333);
+#if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
+static NetworkClient twin_cli;
+#else
+static WiFiClient twin_cli;
+#endif
+static bool wifi_on = false;
+
+static void wifi_begin() {
+    if (wifi_on) return;
+    if (WiFi.getMode() == WIFI_OFF) {
+        WiFi.mode(WIFI_AP);
+    }
+    WiFi.softAP(WIFI_AP_SSID, WIFI_AP_PASS);
+    twin_srv.begin();
+    twin_srv.setNoDelay(true);
+    wifi_on = true;
+    Serial.printf("wifi ap '%s' pass '%s' ip %s tcp 3333\n",
+                  WIFI_AP_SSID, WIFI_AP_PASS,
+                  WiFi.softAPIP().toString().c_str());
+}
+
+static void wifi_stop() {
+    if (!wifi_on) return;
+    twin_cli.stop();
+    twin_srv.stop();
+    WiFi.softAPdisconnect(true);
+    // keep the driver initialised: a full WiFi.mode(WIFI_OFF) makes
+    // the next re-init fail inside ESP-IDF (netstack cb reg error)
+    wifi_on = false;
+    Serial.println("wifi off ('w' re-enables)");
+}
+#endif
+
+// One telemetry line: always into the RAM ring, to the wifi client if any.
+static void tel_emit(const char *line) {
+    sr_log_puts(line);
+#if WIFI_TELEMETRY
+    if (wifi_on) {
+#if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
+        NetworkClient nc = twin_srv.accept();
+#else
+        WiFiClient nc = twin_srv.available();
+#endif
+        if (nc) {
+            twin_cli.stop();
+            twin_cli = nc;
+            twin_cli.setNoDelay(true);
+            Serial.println("wifi telemetry client connected");
+        }
+        if (twin_cli && twin_cli.connected()) {
+            twin_cli.write((const uint8_t *)line, strlen(line));
+        }
+    }
 #endif
 }
 
@@ -367,6 +450,11 @@ static void exec_start(int pose) {
     exec_switches = 0;
     exec_cooldown = 0;
     exec_load(pose);
+    {
+        char l[24];
+        snprintf(l, sizeof l, "E start %u\n", (unsigned)pose);
+        tel_emit(l);
+    }
 }
 
 static void exec_step(float next[2], const float u[3]) {
@@ -380,6 +468,8 @@ static void exec_step(float next[2], const float u[3]) {
         exec_cooldown = EXEC_COOLDOWN_TICKS;
         next[0] = next[1] = 0.0f;
         Serial.println("executor timeout");
+        tel_emit("E timeout\n");
+        sr_snap_save();
         return;
     }
     ++exec_age;
@@ -431,6 +521,12 @@ static void exec_step(float next[2], const float u[3]) {
                                   "up=(%.2f,%.2f,%.2f)\n",
                                   EXEC_POSE_NAMES[exec_pose],
                                   EXEC_POSE_NAMES[cand], u[0], u[1], u[2]);
+                    {
+                        char l[24];
+                        snprintf(l, sizeof l, "E replan %u %u\n",
+                                 (unsigned)exec_pose, (unsigned)cand);
+                        tel_emit(l);
+                    }
                     switching = true;
                 }
             } else {
@@ -458,11 +554,19 @@ static void exec_step(float next[2], const float u[3]) {
             exec_target[i] = exec_prev[i] + (wp - exec_prev[i]) * frac;
         }
         if (exec_tick >= EXEC_STEPS_PER_WP) {
-            for (int i = 0; i < 2; ++i) {
-                exec_prev[i] = seq[(int)exec_phase * 2 + i];
+            // roll_neg levers the body up quasi-statically: keep pressing
+            // until the body is upright (bounded by EXEC_TIMEOUT_MS)
+            // instead of a fixed 1.6 s hold. A weaker supply only makes
+            // the lift slower; a torque-starved press still times out.
+            const bool hold_press = (exec_pose == 1) && (exec_phase <= 3) &&
+                                    (u[2] < 0.92f);
+            if (!hold_press) {
+                for (int i = 0; i < 2; ++i) {
+                    exec_prev[i] = seq[(int)exec_phase * 2 + i];
+                }
+                ++exec_phase;
+                exec_tick = 0;
             }
-            ++exec_phase;
-            exec_tick = 0;
         }
     } else {
         // Final phase: retract to neutral at a constant rate. The retract is
@@ -491,6 +595,8 @@ static void exec_step(float next[2], const float u[3]) {
             policy_armed = false;
             exec_cooldown = EXEC_COOLDOWN_TICKS;
             Serial.println("standing -> executor done");
+            tel_emit("E done\n");
+            sr_snap_save();
         }
     } else {
         exec_stand = 0;
@@ -622,6 +728,103 @@ static void control_step() {
     }
     for (int i = 0; i < 2; ++i) cmd[i] = next[i];
     servo::write(cmd);
+    {
+        char l[120];
+        snprintf(l, sizeof l,
+                 "S %lu %u %u %u %.3f %.3f %.3f %.3f %.3f %.3f %.3f %u "
+                 "%.3f %.3f %.3f %.3f\n",
+                 (unsigned long)millis(), (unsigned)exec_pose, exec_phase,
+                 exec_tick, exec_target[0], exec_target[1], u[0], u[1], u[2],
+                 next[0], next[1], exec_switches,
+                 q_att[0], q_att[1], q_att[2], q_att[3]);
+        tel_emit(l);
+    }
+}
+
+// ---- flash snapshot of the ring, survives the USB-connect reset ----
+#define SNAP_MAGIC 0x53474C31u   // "SGL1"
+struct SnapHdr {
+    uint32_t magic;
+    uint32_t len;
+    uint32_t uptime_ms;
+};
+static const esp_partition_t *snap_partition() {
+    const esp_partition_t *q = esp_partition_find_first(
+        ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_SPIFFS, nullptr);
+    if (!q) {
+        q = esp_partition_find_first(ESP_PARTITION_TYPE_DATA,
+                                     ESP_PARTITION_SUBTYPE_ANY, nullptr);
+    }
+    return q;
+}
+
+static void sr_snap_save() {
+    const esp_partition_t *q = snap_partition();
+    if (!q || q->size < SR_LOG_RING_BYTES + 64) {
+        Serial.println("snapshot: no data partition");
+        return;
+    }
+    static uint32_t last_save_ms = 0;
+    if (millis() - last_save_ms < 10000u) return;   // rate limit flash wear
+    last_save_ms = millis();
+    uint32_t n = sr_log_total < SR_LOG_RING_BYTES ? sr_log_total : SR_LOG_RING_BYTES;
+    uint32_t start = (sr_log_total < SR_LOG_RING_BYTES) ? 0u : sr_log_w;
+    SnapHdr h = {SNAP_MAGIC, n, millis()};
+    uint32_t need = ((sizeof h + n + 4095u) / 4096u) * 4096u;
+    esp_partition_erase_range(q, 0, need);
+    esp_partition_write(q, 0, &h, sizeof h);
+    static uint8_t chunk[4096];
+    uint32_t k = 0;
+    while (k < n) {
+        uint32_t m = (n - k < sizeof chunk) ? (n - k) : (uint32_t)sizeof chunk;
+        for (uint32_t i = 0; i < m; ++i) {
+            chunk[i] = (uint8_t)sr_log_buf[(start + k + i) % SR_LOG_RING_BYTES];
+        }
+        uint32_t mw = (m + 3u) & ~3u;
+        esp_partition_write(q, sizeof h + k, chunk, mw);
+        k += m;
+        esp_task_wdt_reset();
+    }
+    Serial.printf("getup log saved to flash (%lu bytes)\n", (unsigned long)n);
+}
+
+static void sr_snap_dump() {
+    const esp_partition_t *q = snap_partition();
+    SnapHdr h = {0, 0, 0};
+    if (q) esp_partition_read(q, 0, &h, sizeof h);
+    if (!q || h.magic != SNAP_MAGIC || h.len > SR_LOG_RING_BYTES) {
+        Serial.println("no saved getup log in flash");
+        return;
+    }
+    Serial.printf("---slog %lu---\n", (unsigned long)h.len);
+    static uint8_t chunk[256];
+    uint32_t k = 0;
+    while (k < h.len) {
+        uint32_t m = (h.len - k < sizeof chunk) ? (h.len - k) : (uint32_t)sizeof chunk;
+        esp_partition_read(q, sizeof h + k, chunk, m);
+        Serial.write(chunk, m);
+        k += m;
+        esp_task_wdt_reset();
+    }
+    Serial.printf("\n---elog---\n");
+}
+
+static void sr_log_dump() {
+    uint32_t n = sr_log_total < SR_LOG_RING_BYTES ? sr_log_total : SR_LOG_RING_BYTES;
+    uint32_t start = (sr_log_total < SR_LOG_RING_BYTES) ? 0u : sr_log_w;
+    Serial.printf("---slog %lu---\n", (unsigned long)n);
+    char chunk[256];
+    uint32_t k = 0;
+    while (k < n) {
+        uint32_t m = (n - k < (uint32_t)sizeof(chunk)) ? (n - k) : (uint32_t)sizeof(chunk);
+        for (uint32_t i = 0; i < m; ++i) {
+            chunk[i] = sr_log_buf[(start + k + i) % SR_LOG_RING_BYTES];
+        }
+        Serial.write((const uint8_t *)chunk, m);
+        k += m;
+        esp_task_wdt_reset();
+    }
+    Serial.printf("\n---elog---\n");
 }
 
 static void handle_serial() {
@@ -660,6 +863,30 @@ static void handle_serial() {
         if (c == 'm' || c == 'M') {
             reading_m = true;
             mlen = 0;
+            continue;
+        }
+        if (c == 'P') {
+            if (exec_running) {
+                Serial.println("log dump refused: executor running");
+            } else {
+                sr_snap_dump();
+            }
+            continue;
+        }
+        if (c == 'L') {
+            if (exec_running) {
+                Serial.println("log dump refused: executor running");
+            } else {
+                sr_log_dump();
+            }
+            continue;
+        }
+        if (c == 'w') {
+#if WIFI_TELEMETRY
+            if (wifi_on) wifi_stop(); else wifi_begin();
+#else
+            Serial.println("wifi telemetry not compiled in");
+#endif
             continue;
         }
         if (c == 's') {
@@ -882,6 +1109,9 @@ void setup() {
         }
         esp_task_wdt_add(NULL);
     }
+#if WIFI_TELEMETRY && WIFI_AP_DEFAULT_ON
+    wifi_begin();
+#endif
 #if AUTORUN_ON_BOOT
     // Standalone mode: run straight away; the fall gate arms the policy only
     // once the robot is actually down and at rest.
@@ -891,6 +1121,15 @@ void setup() {
     fall_ticks = 0;
     running = true;
     Serial.println("autorun on: get-up waits for a fall");
+    {
+        const esp_partition_t *q = snap_partition();
+        SnapHdr h = {0, 0, 0};
+        if (q) esp_partition_read(q, 0, &h, sizeof h);
+        if (h.magic == SNAP_MAGIC && h.len <= SR_LOG_RING_BYTES) {
+            Serial.printf("saved get-up log: %lu bytes (send P to dump)\n",
+                          (unsigned long)h.len);
+        }
+    }
 #endif
 }
 

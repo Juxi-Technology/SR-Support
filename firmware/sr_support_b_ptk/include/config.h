@@ -103,6 +103,15 @@
 #define EXEC_DONE_TICKS 50
 #define EXEC_TIMEOUT_MS 14000
 #define EXEC_COOLDOWN_TICKS 75
+
+// ---- offline telemetry: RAM ring buffer, dumped over serial with 'L' ----
+#define SR_LOG_RING_BYTES 131072   // ~40 s of 50 Hz state lines
+// ---- WiFi AP live telemetry: TCP 3333, 'w' toggles, on by default ----
+#define WIFI_TELEMETRY 1
+#define WIFI_AP_SSID "SR-Support"
+#define WIFI_AP_PASS "srsupport"
+#define WIFI_AP_DEFAULT_ON 1
+
 #define EXEC_SWITCH_TICKS 15      // settled on another axis for 0.3 s -> re-plan
 #define EXEC_SWITCH_UP 0.60f      // re-plan only while the body is still low
 #define EXEC_SWITCH_W 0.8f        // rad/s; re-plan only when the body is at rest

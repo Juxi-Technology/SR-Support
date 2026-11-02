@@ -50,6 +50,13 @@ F_RE = re.compile(
 T_RE = re.compile(
     r"^T\s+([-+0-9.]+)\s+([-+0-9.]+)\s+([-+0-9.]+)\s+([-+0-9.]+)"
     r"\s+([-+0-9.]+)\s+([-+0-9.]+)")
+S_RE = re.compile(
+    r"^S +([0-9]+) +([0-9]+) +([0-9]+) +([0-9]+)"
+    r" +([-+0-9.]+) +([-+0-9.]+)"
+    r" +([-+0-9.]+) +([-+0-9.]+) +([-+0-9.]+)"
+    r" +([-+0-9.]+) +([-+0-9.]+) +([0-9]+)"
+    r" +([-+0-9.]+) +([-+0-9.]+) +([-+0-9.]+) +([-+0-9.]+)")
+
 UP_RE = re.compile(
     r"^up\s+([-+0-9.]+)\s+([-+0-9.]+)\s+([-+0-9.]+).*?\|\s*q\s+"
     r"([-+0-9.]+)\s+([-+0-9.]+)\s*\|")
@@ -95,7 +102,7 @@ class Telemetry:
         self.stamp = 0.0
 
     def feed(self, line: str, now: float) -> bool:
-        quat_live = self.kind == "T" and now - self.stamp < 1.0
+        quat_live = self.kind in ("T", "S") and now - self.stamp < 1.0
         m = T_RE.match(line) if line.startswith("T ") else None
         if m:
             v = [float(x) for x in m.groups()]
@@ -103,6 +110,15 @@ class Telemetry:
             self.q = np.array(v[4:6])
             self.up = None
             self.kind = "T"
+            self.stamp = now
+            return True
+        m = S_RE.match(line) if line.startswith("S ") else None
+        if m:
+            g = m.groups()
+            self.up = np.array([float(x) for x in g[6:9]])
+            self.q = np.array([float(x) for x in g[9:11]])
+            self.quat = q_normalize(np.array([float(x) for x in g[12:16]]))
+            self.kind = "S"
             self.stamp = now
             return True
         m = F_RE.match(line) if line.startswith("F ") else None
@@ -255,6 +271,50 @@ def run_replay(twin, viewer, path, speed):
     print(f"replay done: {n} state lines")
 
 
+def run_tcp(twin, viewer, spec):
+    import socket
+    host, _, port = spec.partition(":")
+    sock = socket.create_connection((host, int(port or 3333)), timeout=3.0)
+    sock.settimeout(0.05)
+    print(f"connected {host}:{port or 3333}", flush=True)
+    tel = Telemetry()
+    buf = ""
+    n = 0
+    t_open = 0.0
+    last_stats = 0.0
+    last_sync = 0.0
+    import time as _time
+    t0 = _time.time()
+    while viewer.is_running():
+        now = _time.time()
+        try:
+            chunk = sock.recv(4096)
+        except socket.timeout:
+            chunk = b""
+        except OSError:
+            print("tcp dropped", flush=True)
+            break
+        updated = False
+        if chunk:
+            buf += chunk.decode("utf-8", "replace")
+            while "\n" in buf:
+                line, buf = buf.split("\n", 1)
+                if tel.feed(line.strip(), now):
+                    updated = True
+        if updated:
+            n += 1
+            twin.apply(tel)
+        if updated or now - last_sync > 0.05:
+            viewer.sync()
+            last_sync = now
+        if now - last_stats > 5.0:
+            last_stats = now
+            age = (now - tel.stamp) if tel.stamp else float("inf")
+            print(f"updates={n:6d} rate~{n / max(now - t0, 1e-6):4.1f}/s "  
+                  f"src={tel.kind} age={age:4.1f}s", flush=True)
+        _time.sleep(0.002)
+    sock.close()
+
 def run_serial(twin, viewer, port, baud, enable):
     import serial
     ser = serial.Serial()
@@ -316,6 +376,7 @@ def main():
     ap.add_argument("--port", default=None, help="serial port, e.g. COM27")
     ap.add_argument("--baud", type=int, default=115200)
     ap.add_argument("--replay", default=None, help="replay a telemetry/log file")
+    ap.add_argument("--tcp", default=None, help="WiFi telemetry host[:port], e.g. 192.168.4.1:3333")
     ap.add_argument("--replay-speed", type=float, default=1.0)
     ap.add_argument("--xml", default=str(XML_V1))
     ap.add_argument("--no-yaw90", action="store_true",
@@ -323,8 +384,8 @@ def main():
     ap.add_argument("--no-enable", action="store_true",
                     help="do not send the 'd' twin-stream toggle")
     args = ap.parse_args()
-    if not args.port and not args.replay:
-        ap.error("need --port or --replay")
+    if not args.port and not args.replay and not args.tcp:
+        ap.error("need --port, --tcp or --replay")
 
     twin = Twin(args.xml, yaw90=not args.no_yaw90)
     with mujoco.viewer.launch_passive(twin.model, twin.data) as viewer:
@@ -334,6 +395,8 @@ def main():
         viewer.cam.elevation = -18
         if args.replay:
             run_replay(twin, viewer, args.replay, args.replay_speed)
+        elif args.tcp:
+            run_tcp(twin, viewer, args.tcp)
         else:
             run_serial(twin, viewer, args.port, args.baud,
                        enable=not args.no_enable)
