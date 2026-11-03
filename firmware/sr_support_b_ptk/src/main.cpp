@@ -141,7 +141,10 @@ static bool imu_init() {
 }
 
 static bool calibrate_gyro(bool with_accel) {
-    const int N = 2000;
+    // Sample at the normal 100 Hz pace: hammering the I2C bus at several
+    // hundred Hz returns corrupted reads (means shrink 5-6x on every axis),
+    // which silently poisoned the accel bias on its first introduction.
+    const int N = 200;
     double sum[3] = {0.0, 0.0, 0.0};
     double asum[3] = {0.0, 0.0, 0.0};
     int n = 0;
@@ -157,7 +160,7 @@ static bool calibrate_gyro(bool with_accel) {
             sum[2] += raw[5];
             ++n;
         }
-        delay(1);
+        delay(10);
     }
     if (n < N / 2) return false;
     for (int i = 0; i < 3; ++i) gyro_bias[i] = (float)(sum[i] / n) * G_SCALE;
@@ -165,10 +168,19 @@ static bool calibrate_gyro(bool with_accel) {
                   gyro_bias[0], gyro_bias[1], gyro_bias[2]);
     if (with_accel) {
         // Level calibration: the robot must STAND on a flat surface, so the
-        // gravity vector rides entirely on +Z.
+        // gravity vector rides entirely on +Z. Reject implausible means
+        // (robot tilted or moving) instead of saving a poisoned bias.
+        float m[3];
         for (int i = 0; i < 3; ++i) {
-            acc_bias[i] = (float)(asum[i] / n) * A_SCALE * g_imu_sign[i];
+            m[i] = (float)(asum[i] / n) * A_SCALE * g_imu_sign[i];
         }
+        const float norm = sqrtf(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+        if (fabsf(norm - GRAVITY) > 1.5f) {
+            Serial.printf("accel cal rejected: |a|=%.2f m/s^2 (robot must "
+                          "stand level and still); bias unchanged\n", norm);
+            return true;
+        }
+        for (int i = 0; i < 3; ++i) acc_bias[i] = m[i];
         acc_bias[2] -= GRAVITY;
         accel_bias_save();
         Serial.printf("accel bias (m/s^2): %.2f %.2f %.2f (saved)\n",
