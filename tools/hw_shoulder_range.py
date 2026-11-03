@@ -1,31 +1,31 @@
-"""Interactive shoulder travel recorder (live robot, operator driven).
+"""Interactive arm zeroing / travel tool (live robot, arrow keys).
 
-The operator drives the shoulder step by step and watches the arm; this
-tool sends the commands and records the marked ends together with the
-4 Hz IMU status lines. Run it in a terminal with the servo battery and
-the USB cable both connected:
+The operator drives the arm with the arrow keys and watches it; this tool
+sends the commands and records the session. Run it in a terminal with the
+servo battery and the USB cable both connected:
 
     .venv/Scripts/python.exe tools/hw_shoulder_range.py
 
-At the prompt:
-    0.30 / -0.55    go to that shoulder angle in rad (elbow stays put)
-    a 0.3 -0.5      absolute shoulder + elbow
-    0.3 -0.5        shorthand for the same
-    e 0.1           elbow only: absolute target (e alone prints it)
-    e+ / e-         elbow step +-0.05      e++ / e--  step +-0.20
-    + / -           step +-0.05 rad
-    ++ / --         step +-0.20 rad
-    m [label]       mark the current commanded angle as a limit
+Arrow keys:
+    up / down       big arm (shoulder)  +-0.05 rad   (Shift: +-0.20)
+    left / right    small arm (elbow)   -+0.05 rad   (Shift: +-0.20)
+
+Single keys:
     z               firmware zero: the CURRENT pose becomes q = 0
-    k               print the firmware PWM centers (shoulder/elbow us)
+                    (both joints; prints the new PWM centers in us)
+    k               print the firmware PWM centers
     n               neutral (0, 0)
+    m               mark the current pose in the session log
     q               quit (goes to neutral first)
 
-Everything lands in logs/shoulder_range_session.txt, including the marks,
-so the real travel can be baked into the firmware afterwards. There is
-no servo position feedback: a marked angle is the command at the moment
-the arm physically stops, which is the achieved angle while stalled.
-Manual-mode software limits come from config.h (Q_SHOULDER_MIN/MAX).
+On terminals without raw-key support the tool falls back to typed
+commands (numbers, e 0.1, z, k, n, m, q).
+
+Everything lands in logs/shoulder_range_session.txt. There is no servo
+position feedback: the centers printed by `z` are baked into config.h
+(SERVO_SHOULDER_CENTER_US / SERVO_CENTER_US) and every get-up waypoint
+is shifted by the same offset so the physical poses stay identical.
+Manual-mode software limits mirror config.h (Q_SHOULDER_MIN/MAX).
 """
 from __future__ import annotations
 
@@ -34,9 +34,18 @@ from datetime import datetime
 
 import serial
 
+try:
+    import msvcrt                     # Windows raw console keys
+    HAVE_ARROWS = True
+except ImportError:
+    HAVE_ARROWS = False
+
 PORT = "COM27"
 BAUD = 115200
 Q_MIN, Q_MAX = -1.85, 1.82       # config.h manual clamp
+STEP = 0.05
+BIG = 0.20
+MOVE_GAP = 0.15                  # s between accepted moves (key repeat)
 
 ser = serial.Serial()
 ser.port = PORT
@@ -54,7 +63,7 @@ buf = ""
 latest_up = "-"
 
 
-def pump(sec: float = 0.8) -> None:
+def pump(sec: float = 0.5) -> None:
     global buf, latest_up
     t0 = time.time()
     while time.time() - t0 < sec:
@@ -81,81 +90,129 @@ def send(cmd: str) -> None:
 
 q1 = 0.0
 q2 = 0.0
-marks: list[tuple[float, float, str]] = []
+marks: list[tuple[float, float]] = []
 
 
-def goto(a: float, b: float | None = None) -> None:
+def goto(a: float | None = None, b: float | None = None) -> None:
     global q1, q2
+    if a is not None:
+        q1 = max(Q_MIN, min(Q_MAX, float(a)))
     if b is not None:
         q2 = float(b)
-    raw = float(a)
-    q1 = max(Q_MIN, min(Q_MAX, raw))
-    if abs(q1 - raw) > 1e-9:
-        print(f"  (commanded {raw:+.3f} clamped to {q1:+.3f} by the "
-              f"firmware manual limit)")
     send(f"m {q1:.3f} {q2:.3f}")
     pump()
     print(f"  shoulder {q1:+.3f} ({q1 * 57.2958:+.0f} deg)  "
           f"elbow {q2:+.3f} ({q2 * 57.2958:+.0f} deg) | {latest_up}")
 
 
+def do_zero() -> None:
+    send("z")
+    pump()
+
+
+def do_mark() -> None:
+    marks.append((q1, q2))
+    send(f"# MARK shoulder={q1:.3f} elbow={q2:.3f}")
+    print(f"  marked: shoulder {q1:+.3f}, elbow {q2:+.3f}")
+
+
 send("m 0.000 0.000")
 pump()
-print("connected. current: shoulder +0.000 rad, elbow +0.000 rad.")
-print("watch the arm; when it physically stops at an end, type: m <label>")
+print("connected. shoulder +0.000, elbow +0.000.")
+if HAVE_ARROWS:
+    print("up/down = big arm +-0.05, left/right = small arm -+0.05,")
+    print("Shift = +-0.20;  z = set zero here,  k = read centers,")
+    print("n = neutral,  m = mark,  q = quit")
+else:
+    print("arrow keys unsupported here; type numbers / z / k / n / m / q")
 
-while True:
-    try:
-        line = input("> ").strip()
-    except (EOFError, KeyboardInterrupt):
-        line = "q"
-    if not line:
-        continue
-    parts = line.replace(",", " ").split()
-    cmd = parts[0].lower()
-    try:
-        if cmd in ("q", "quit", "exit"):
+last_move = 0.0
+
+
+def key_loop() -> None:
+    global last_move
+    while True:
+        ch = msvcrt.getch()
+        if ch in (b"\x00", b"\xe0"):          # extended key: arrows etc.
+            ext = msvcrt.getch()
+            now = time.time()
+            if now - last_move < MOVE_GAP:
+                continue                       # swallow OS key repeat
+            if ext in (b"H", b"Q"):            # up / Shift+up
+                goto(q1 + (BIG if ext == b"Q" else STEP))
+            elif ext in (b"P", b"R"):          # down / Shift+down
+                goto(q1 - (BIG if ext == b"R" else STEP))
+            elif ext in (b"K", b"S"):          # left / Shift+left
+                goto(None, q2 - (BIG if ext == b"S" else STEP))
+            elif ext in (b"M", b"T"):          # right / Shift+right
+                goto(None, q2 + (BIG if ext == b"T" else STEP))
+            last_move = now
+            continue
+        c = ch.decode(errors="replace").lower()
+        if c == "q":
+            return
+        if c == "z":
+            do_zero()
+        elif c == "k":
+            send("k")
+            pump()
+        elif c == "n":
             goto(0.0, 0.0)
-            break
-        if cmd in ("n", "0"):
-            goto(0.0, 0.0)
-        elif cmd in ("+", "-"):
-            goto(q1 + (0.05 if cmd == "+" else -0.05))
-        elif cmd in ("++", "--"):
-            goto(q1 + (0.20 if cmd == "++" else -0.20))
-        elif cmd == "a" and len(parts) >= 3:
-            goto(float(parts[1]), float(parts[2]))
-        elif cmd == "e":
-            if len(parts) >= 2:
-                goto(q1, float(parts[1]))    # absolute elbow, shoulder stays
+        elif c == "m":
+            do_mark()
+
+
+def line_loop() -> None:
+    while True:
+        try:
+            line = input("> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            return
+        if not line:
+            continue
+        parts = line.replace(",", " ").split()
+        cmd = parts[0].lower()
+        try:
+            if cmd in ("q", "quit", "exit"):
+                return
+            if cmd in ("n", "0"):
+                goto(0.0, 0.0)
+            elif cmd in ("+", "-"):
+                goto(q1 + (STEP if cmd == "+" else -STEP))
+            elif cmd in ("++", "--"):
+                goto(q1 + (BIG if cmd == "++" else -BIG))
+            elif cmd == "a" and len(parts) >= 3:
+                goto(float(parts[1]), float(parts[2]))
+            elif cmd == "e":
+                if len(parts) >= 2:
+                    goto(None, float(parts[1]))
+                else:
+                    print(f"  elbow {q2:+.3f} rad")
+            elif cmd == "z":
+                do_zero()
+            elif cmd == "k":
+                send("k")
+                pump()
+            elif cmd == "m":
+                do_mark()
             else:
-                print(f"  elbow {q2:+.3f} rad ({q2 * 57.2958:+.0f} deg)")
-        elif cmd in ("e+", "e-", "e++", "e--"):
-            step = 0.05 if cmd in ("e+", "e-") else 0.20
-            goto(q1, q2 + (step if cmd.endswith("+") else -step))
-        elif cmd == "z":
-            send("z")          # firmware: current pose becomes q = 0
-            pump()
-        elif cmd == "k":
-            send("k")          # firmware: print the current centers
-            pump()
-        elif cmd == "m":
-            label = " ".join(parts[1:]) or f"mark{len(marks) + 1}"
-            marks.append((q1, q2, label))
-            send(f"# MARK shoulder={q1:.3f} elbow={q2:.3f} {label}")
-            print(f"  marked: shoulder {q1:+.3f} rad ({q1 * 57.2958:+.0f} deg)"
-                  f" [{label}]")
-        else:
-            # one number = shoulder target; two numbers = shoulder + elbow
-            goto(float(parts[0]),
-                 float(parts[1]) if len(parts) > 1 else None)
-    except ValueError:
-        print("  ?  examples: 0.3   -1.2   a 0.3 -0.5   m neg_end   q")
+                goto(float(parts[0]),
+                     float(parts[1]) if len(parts) > 1 else None)
+        except ValueError:
+            print("  ?  examples: 0.3   -1.2   0.3 -0.5   z   q")
 
-print("\nmarked limits this session:")
-for a, b, lab in marks:
-    print(f"  shoulder {a:+.3f} rad ({a * 57.2958:+.0f} deg), elbow {b:+.3f}"
-          f"  [{lab}]")
-print("log: logs/shoulder_range_session.txt (send this file's marks over)")
+
+try:
+    if HAVE_ARROWS:
+        key_loop()
+    else:
+        line_loop()
+except KeyboardInterrupt:
+    pass
+goto(0.0, 0.0)
+print("\nmarked poses this session:")
+for a, b in marks:
+    print(f"  shoulder {a:+.3f} rad, elbow {b:+.3f} rad")
+print("log: logs/shoulder_range_session.txt")
 log.close()
 ser.close()

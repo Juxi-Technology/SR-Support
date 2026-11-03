@@ -94,6 +94,25 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 
 工具会自动发一次 `d`（若已在输出 `T` 行则不发），把实机姿态和手臂实时映射到 `robot_v1.xml` 模型窗口里；无 `T` 流时回退到 4 Hz 状态行或 `l` 快速日志（无四元数，航向由 up 向量最短弧重建，方向可能任意）。`--replay <日志文件>` 可离线回放。注意打开串口可能触发 ESP32 复位（DTR）。
 
+### 4.2 零点标定（`z` 命令 + 方向键工具）
+
+换齿、拆装或更换舵机后，按以下步骤重新定零（会把"手臂竖直"变成固件的 q=0）：
+
+1. 电池 + Type-C 都接上，运行：
+
+   ```
+   .venv/Scripts/python.exe tools/hw_shoulder_range.py
+   ```
+
+2. 用**方向键**摆臂：`↑`/`↓` = 大臂 ±0.05 rad，`←`/`→` = 小臂 ±0.05 rad（Shift+方向键 = ±0.20），
+   摆到目测正中竖直；
+3. 按 `z`：当前姿态成为两关节的 q=0，固件打印新的中位值（肩/肘 µs）；`k` 可随时读取中位；
+4. 把这两个 µs 写回 `config.h`（`SERVO_SHOULDER_CENTER_US` / `SERVO_CENTER_US`），并把
+   `EXEC_REF*` 与 `getup_reference_b39.py` 的全部路点按同样的差值平移，重新烧录；
+5. 复测四个方向。
+
+> `z` 只改内存，重启即恢复；确认好用后必须按第 4 步固化，否则扶正序列的物理姿态会漂移。
+
 ## 5. 策略（重要）
 
 - `include/policy_b.h` 现在是 **v7（SR 慢接口）策略**（`training/b_line/models/ppo_selfrising_sr5/final.zip` 导出，5 维观测、目标增量 0.08 rad/step，10→128→128→2，Tanh），按估算质量 97.4 g、硬舵机模型（kp=50/kv=0.5）训练。
