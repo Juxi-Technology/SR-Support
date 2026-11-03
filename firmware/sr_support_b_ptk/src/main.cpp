@@ -26,9 +26,9 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DNSServer.h>
-#include <Preferences.h>
 #include "web_page.h"
 #endif
+#include <Preferences.h>
 #include <esp_partition.h>
 
 #ifdef ROBOT_PWM
@@ -49,6 +49,30 @@ static const float G_SCALE = (2000.0f / 32767.0f) * PI_F / 180.0f;  // rad/s
 // --------------------------------------------------------------------- IMU
 static float g_imu_sign[3] = {1.0f, 1.0f, 1.0f};  // 'i'/'j' axis calibration
 static float gyro_bias[3] = {0.0f, 0.0f, 0.0f};
+// Accelerometer zero offsets (m/s^2, post-sign). Calibrated with 'c' while
+// the robot stands LEVEL on a flat surface and persisted in NVS (a raw
+// offset shifts the accel norm with the attitude; a several-m/s^2 offset
+// pushes lying poses past the Mahony trust gate, freezing the attitude at
+// the gyro-integration error - the tilted-base misbehaviour seen 2026-11-03).
+static float acc_bias[3] = {0.0f, 0.0f, 0.0f};
+
+static void accel_bias_load() {
+    Preferences p;
+    if (!p.begin("imu", true)) return;
+    acc_bias[0] = p.getFloat("ax", 0.0f);
+    acc_bias[1] = p.getFloat("ay", 0.0f);
+    acc_bias[2] = p.getFloat("az", 0.0f);
+    p.end();
+}
+
+static void accel_bias_save() {
+    Preferences p;
+    if (!p.begin("imu", false)) return;
+    p.putFloat("ax", acc_bias[0]);
+    p.putFloat("ay", acc_bias[1]);
+    p.putFloat("az", acc_bias[2]);
+    p.end();
+}
 static float g_gyro[3] = {0.0f, 0.0f, 0.0f};  // bias-corrected, body frame
 static uint32_t last_imu_ok_ms = 0;
 
@@ -84,9 +108,9 @@ static bool imu_read_raw(int16_t raw[6]) {
 static void raw_to_si(const int16_t raw[6], float acc[3], float gyro[3]) {
     // IMU AXES: the module is mounted with its printed +X forward, +Y left
     // and +Z up. The 'i'/'j' commands flip X/Y at runtime for calibration.
-    acc[0] = raw[0] * A_SCALE * g_imu_sign[0];
-    acc[1] = raw[1] * A_SCALE * g_imu_sign[1];
-    acc[2] = raw[2] * A_SCALE * g_imu_sign[2];
+    acc[0] = raw[0] * A_SCALE * g_imu_sign[0] - acc_bias[0];
+    acc[1] = raw[1] * A_SCALE * g_imu_sign[1] - acc_bias[1];
+    acc[2] = raw[2] * A_SCALE * g_imu_sign[2] - acc_bias[2];
     gyro[0] = raw[3] * G_SCALE * g_imu_sign[0] - gyro_bias[0];
     gyro[1] = raw[4] * G_SCALE * g_imu_sign[1] - gyro_bias[1];
     gyro[2] = raw[5] * G_SCALE * g_imu_sign[2] - gyro_bias[2];
@@ -116,14 +140,18 @@ static bool imu_init() {
     return false;
 }
 
-static bool calibrate_gyro() {
+static bool calibrate_gyro(bool with_accel) {
     const int N = 2000;
     double sum[3] = {0.0, 0.0, 0.0};
+    double asum[3] = {0.0, 0.0, 0.0};
     int n = 0;
     uint32_t start = millis();
     while (n < N && (millis() - start) < 5000) {
         int16_t raw[6];
         if (imu_read_raw(raw)) {
+            asum[0] += raw[0];
+            asum[1] += raw[1];
+            asum[2] += raw[2];
             sum[0] += raw[3];
             sum[1] += raw[4];
             sum[2] += raw[5];
@@ -135,6 +163,17 @@ static bool calibrate_gyro() {
     for (int i = 0; i < 3; ++i) gyro_bias[i] = (float)(sum[i] / n) * G_SCALE;
     Serial.printf("gyro bias (rad/s): %.4f %.4f %.4f\n",
                   gyro_bias[0], gyro_bias[1], gyro_bias[2]);
+    if (with_accel) {
+        // Level calibration: the robot must STAND on a flat surface, so the
+        // gravity vector rides entirely on +Z.
+        for (int i = 0; i < 3; ++i) {
+            acc_bias[i] = (float)(asum[i] / n) * A_SCALE * g_imu_sign[i];
+        }
+        acc_bias[2] -= GRAVITY;
+        accel_bias_save();
+        Serial.printf("accel bias (m/s^2): %.2f %.2f %.2f (saved)\n",
+                      acc_bias[0], acc_bias[1], acc_bias[2]);
+    }
     return true;
 }
 
@@ -1140,8 +1179,9 @@ static void handle_serial() {
         } else if (c == 'c') {
             bool was_running = running;
             running = false;
-            Serial.println("calibrating gyro: keep still");
-            calibrate_gyro();
+            Serial.println("calibrating gyro+accel: keep still, robot STANDING "
+                           "level on a flat surface");
+            calibrate_gyro(true);
             running = was_running;
             if (running) next_ctrl_us = micros() + CTRL_PERIOD_US;
             Serial.println(running ? "calibration done; running" : "calibration done; hold");
@@ -1192,7 +1232,12 @@ void setup() {
     // rail is still off (the SCS backend fails to init without servo power).
     if (!imu_init()) fail_blink("IMU not found; check wiring/address 0x23");
     Serial.println("Calibrating gyro: keep the robot still");
-    if (!calibrate_gyro()) fail_blink("gyro calibration failed");
+    if (!calibrate_gyro(false)) fail_blink("gyro calibration failed");
+    accel_bias_load();
+    if (acc_bias[0] == 0.0f && acc_bias[1] == 0.0f && acc_bias[2] == 0.0f) {
+        Serial.println("accel bias not calibrated: stand the robot level "
+                       "and send 'c'");
+    }
 
     uint32_t t0 = millis();
     while (millis() - t0 < 1500) {
