@@ -406,31 +406,30 @@ static void auto_next(float next[2], float up_z) {
 // back. Adaptive per-phase holds and the mid-sequence upright exit live in
 // exec_step (EXEC_R1_HOLD).
 //
-// The press target is -1.45, not the Q_SHOULDER_MIN config value -1.07:
-// the 2026-11-03 flash snapshot showed the body still creeping up during
-// the press hold (torque-marginal, not kinematic) and the wedge plateau at
-// up_z 0.65, while the PWM output has headroom down to -2.10 rad and the
-// model shows no arm/body self-collision down to -1.6 (deeper q1 drives
-// the arm deeper toward the floor monotonically, logs/deep_press_probe).
-// Q_SHOULDER_MIN -1.07 could not be traced to a measured mechanical stop;
-// if one does exist the servo simply stalls at it exactly as the old
-// -1.07 press did.
+// Second hardware round (same day): pressing deeper (-1.45) changed the
+// plateau by nothing - the servo arm tracks only ~30 deg of the commanded
+// sweep on this side (user observation), so the joint is load-saturated
+// well before its stop and extra commanded travel just strains the servo.
+// Targets are back to -1.07; the last software lever is the impact: phase
+// 1 tucks the elbow to 1.2 in the air and phase 2 drives shoulder and
+// elbow down together, so the elbow extension lands at floor contact and
+// adds roughly a third more impact energy to the slam.
 static const float EXEC_REF0[3][2] = {   // roll_pos
     {2.0f, -0.8f}, {0.0f, -0.8f}, {0.0f, 0.0f}};
-static const float EXEC_REF1[13][2] = {  // roll_neg: slam, press, elbow wedges
-    {0.6f, 0.8f},   {0.6f, 0.8f},    // wind-up off the floor, brake
-    {-1.45f, 0.8f},                  // slam into the press (deep: the
-                                     //   -1.07 config min was never a
-                                     //   mechanical stop, see comment)
-    {-1.45f, 0.8f},                  // adaptive press hold
-    {-1.45f, 0.15f},                 // elbow wedge 1 (forearm pushes up)
-    {-1.45f, 0.15f},                 // adaptive hold
-    {-1.45f, 0.8f},                  // re-fold (re-cock the elbow)
-    {-1.45f, 0.15f},                 // elbow wedge 2
-    {-1.45f, 0.15f},                 // adaptive hold
-    {-1.45f, 0.8f},                  // re-fold
-    {-1.45f, 0.15f},                 // elbow wedge 3
-    {-1.45f, 0.15f},                 // final hold
+static const float EXEC_REF1[12][2] = {  // roll_neg: whip-slam, press, wedges
+    {0.6f, 0.8f},                    // wind-up off the floor
+    {0.6f, 1.2f},                    // tuck the elbow in the air (whip load)
+    {-1.07f, 0.15f},                 // WHIP-SLAM: shoulder and elbow strike
+                                     //   together, the extension lands at
+                                     //   floor contact (~+30% impact energy)
+    {-1.07f, 0.15f},                 // adaptive press hold
+    {-1.07f, 0.8f},                  // re-fold (re-cock the elbow)
+    {-1.07f, 0.15f},                 // elbow wedge 1 (forearm pushes up)
+    {-1.07f, 0.8f},                  // re-fold
+    {-1.07f, 0.15f},                 // elbow wedge 2
+    {-1.07f, 0.8f},                  // re-fold
+    {-1.07f, 0.15f},                 // elbow wedge 3
+    {-1.07f, 0.15f},                 // final hold
     {0.0f, 0.0f}};                   // retract
 static const float EXEC_REF2[3][2] = {   // pitch_pos
     {-1.07f, 1.55f}, {0.0f, 1.55f}, {0.0f, 0.0f}};
@@ -439,13 +438,13 @@ static const float EXEC_REF3[3][2] = {   // pitch_neg
 static const float *const EXEC_REFS[4] = {
     (const float *)EXEC_REF0, (const float *)EXEC_REF1,
     (const float *)EXEC_REF2, (const float *)EXEC_REF3};
-static const uint8_t EXEC_REF_N[4] = {3, 13, 3, 3};
+static const uint8_t EXEC_REF_N[4] = {3, 12, 3, 3};
 // Per-phase adaptive-hold caps (ticks) for roll_neg: a capped phase holds
 // while the body is still down (up_z < 0.92) and advances once upright or
 // when the cap expires, so a stalled mechanism hands over to the next one
 // instead of eating the whole timeout.
-static const uint16_t EXEC_R1_HOLD[13] = {
-    0, 0, 0, 40, 0, 30, 0, 0, 30, 0, 0, 100, 0};
+static const uint16_t EXEC_R1_HOLD[12] = {
+    0, 0, 0, 40, 0, 30, 0, 30, 0, 30, 90, 0};
 static const char *const EXEC_POSE_NAMES[4] = {
     "roll_pos", "roll_neg", "pitch_pos", "pitch_neg"};
 

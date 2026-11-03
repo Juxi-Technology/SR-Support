@@ -46,24 +46,24 @@ SEQUENCES = {
         [0.0, 0.0],
     ],
     "roll_neg": [
-        # Mirror press with a second motor: wind-up, slam, adaptive press,
-        # then three elbow wedges with re-folds between them. The press
-        # target is -1.45: -1.07 was a configuration choice, not a
-        # measured mechanical stop (PWM headroom to -2.10, no arm/body
-        # self-collision down to -1.6 in the model). The last row is the
-        # retract trigger, as in every sequence.
+        # Mirror press with a second motor: whip-slam, adaptive press,
+        # then three elbow wedges with re-folds between them. The servo on
+        # this side is load-saturated (tracks only ~30 deg of the commanded
+        # sweep), so deeper press targets add nothing; the slam is what
+        # moves the body, and the elbow tuck (1.2 in the air) + extension
+        # during the same strike lands at floor contact for ~35% more
+        # impact energy. The last row is the retract trigger.
         [0.6, 0.8],      # wind-up off the floor
-        [0.6, 0.8],      # brake
-        [-1.45, 0.8],    # slam into the press
-        [-1.45, 0.8],    # adaptive press hold (<=40 ticks, firmware)
-        [-1.45, 0.15],   # elbow wedge 1
-        [-1.45, 0.15],   # adaptive hold (<=30)
-        [-1.45, 0.8],    # re-fold (re-cock the elbow)
-        [-1.45, 0.15],   # elbow wedge 2
-        [-1.45, 0.15],   # adaptive hold (<=30)
-        [-1.45, 0.8],    # re-fold
-        [-1.45, 0.15],   # elbow wedge 3
-        [-1.45, 0.15],   # final hold (<=100)
+        [0.6, 1.2],      # tuck the elbow in the air
+        [-1.07, 0.15],   # whip-slam (shoulder + elbow strike together)
+        [-1.07, 0.15],   # adaptive press hold (<=40 ticks, firmware)
+        [-1.07, 0.8],    # re-fold (re-cock the elbow)
+        [-1.07, 0.15],   # elbow wedge 1
+        [-1.07, 0.8],    # re-fold
+        [-1.07, 0.15],   # elbow wedge 2
+        [-1.07, 0.8],    # re-fold
+        [-1.07, 0.15],   # elbow wedge 3
+        [-1.07, 0.15],   # final hold (<=90)
         [0.0, 0.0],      # retract
     ],
     "pitch_pos": [
