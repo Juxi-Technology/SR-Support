@@ -81,8 +81,8 @@ def pump(sec: float = 0.06) -> None:
             if not ln:
                 continue
             log.write(ln + "\n")
-            if not ln.startswith(("up ", "S ", "T ", "F ")):
-                replies.append(ln)   # command replies (z, k, ...)
+            if ("zero set" in ln) or ("centers:" in ln):
+                replies.append(ln)   # only zero/center
 
 
 def send(cmd: str) -> None:
@@ -94,8 +94,7 @@ q1 = 0.0                         # shoulder
 q2 = 0.0                         # elbow
 marks: list[tuple[float, float]] = []
 
-HELP = "↑↓ 大臂  ←→ 小臂  Shift=大步  " \
-       "z=定零  k=中位  n=回中  q=退出"
+HELP = "↑↓大臂 ←→小臂 Shift大步 z零 k值 n中 q退"
 BLOCK = 3                        # help line + elbow line + shoulder line
 drawn = False
 
