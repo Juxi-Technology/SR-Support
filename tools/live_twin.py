@@ -206,23 +206,41 @@ class Twin:
 
     def _arm_floor_clamp(self, cmd):
         """Displayed arm pose: the command scaled toward neutral until it
-        just clears the floor (the real servo stalls against it). A neutral
-        arm that still digs in (the model forearm is a few mm deeper than
-        the hardware) is returned as-is; apply() lifts the whole body by
-        the residual so nothing pierces the floor."""
+        just clears the floor (the real servo stalls against it). If even
+        neutral digs in (some lying attitudes put the whole arm under the
+        body), climb to the closest reachable pose whose arm clears the
+        floor - what the floor physically does to the real arm. apply()
+        lifts the whole body only if this climb still cannot clear."""
         tol = -0.002
         if self._set_arm(cmd) >= tol:
             return cmd
-        if self._set_arm(np.zeros(2)) < tol:
-            return np.zeros(2)          # caller lifts by the residual
-        lo, hi = 0.0, 1.0
-        for _ in range(11):
-            mid = 0.5 * (lo + hi)
-            if self._set_arm(mid * cmd) >= tol:
-                lo = mid
-            else:
-                hi = mid
-        q = lo * cmd
+        if self._set_arm(np.zeros(2)) >= tol:
+            lo, hi = 0.0, 1.0
+            for _ in range(11):
+                mid = 0.5 * (lo + hi)
+                if self._set_arm(mid * cmd) >= tol:
+                    lo = mid
+                else:
+                    hi = mid
+            q = lo * cmd
+            self._set_arm(q)
+            return q
+        q = np.zeros(2)
+        for _ in range(8):
+            z0 = self._set_arm(q)
+            if z0 >= tol:
+                break
+            eps = 0.05
+            g = np.zeros(2)
+            for i in range(2):
+                qp = q.copy()
+                qp[i] += eps
+                g[i] = (self._set_arm(qp) - z0) / eps
+            n = float(np.linalg.norm(g))
+            if n < 1e-5:
+                break
+            step = min(0.35, max(0.06, (-z0 + 0.001) / n))
+            q = np.clip(q + g / n * step, -1.7, 1.7)
         self._set_arm(q)
         return q
 
