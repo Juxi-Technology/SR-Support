@@ -29,7 +29,7 @@ from .getup_reference_b39 import getup_sequence_for_pose
 # straight to the retract when the body gets upright mid-sequence.
 HOLD_UP = 0.92
 HOLD_TICKS = {
-    "roll_neg": [0, 0, 0, 0, 40, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 40, 90, 0, 0],
+    "roll_neg": [0, 40, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 40, 90, 0],
 }
 
 

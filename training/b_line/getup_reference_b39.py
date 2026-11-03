@@ -49,29 +49,24 @@ SEQUENCES = {
         [0.0, 0.0],
     ],
     "roll_neg": [
-        # Stage 1 opens like roll_pos: ONE direct sweep to the full
-        # measured travel (-1.55) - but SLOW (4 sub-steps, ~1 rad/s), because
-        # the analog servo keeps only ~40% of its stall torque at the 4 rad/s
-        # slew cap and tracks just ~30 deg of the commanded sweep under load;
-        # at ~1 rad/s it delivers most of its torque and the motion looks
-        # like the live limit sweep. Then two slower elbow-wedge pumps.
-        # Stage 2 retries with the fast whip-slam (elbow tucked 1.2 in the
-        # air, the extension lands at floor contact - impact reaches the
-        # highest up_z, the momentum does what static torque cannot).
-        [-0.65, 0.70],   # slow direct press:
-        [-1.05, 0.70],   #   0.4 rad per 20-tick phase
-        [-1.45, 0.70],
-        [-1.80, 0.70],
+        # Stage 1 opens exactly like roll_pos: one full-speed press (20
+        # ticks) to the travel limit, then elbow-wedge pumps. A slow press
+        # variant was measured to change nothing (the loaded horn barely
+        # rotates either way) and visibly lagged behind the +X side, so
+        # the speed now matches roll_pos. Stage 2 retries with the
+        # whip-slam (elbow tucked in the air, extension lands at floor
+        # contact). Last row = retract trigger.
+        [-1.80, 0.70],   # direct press (same slew as roll_pos)
         [-1.80, 0.70],   # adaptive press hold (<=40 ticks, firmware)
-        [-1.80, 0.35],   # elbow wedge 1 (two slower sub-steps)
+        [-1.80, 0.35],   # elbow wedge 1
         [-1.80, 0.05],
         [-1.80, 0.05],   # adaptive hold (<=30)
         [-1.80, 0.70],   # re-fold (re-cock the elbow)
         [-1.80, 0.35],   # elbow wedge 2
         [-1.80, 0.05],
         [-1.80, 0.05],   # adaptive hold (<=30)
-        [0.35, 0.70],      # stage 2: wind-up
-        [0.35, 1.10],      # tuck the elbow in the air
+        [0.35, 0.70],    # stage 2: wind-up
+        [0.35, 1.10],    # tuck the elbow in the air
         [-1.80, 0.05],   # whip-slam (shoulder + elbow strike together)
         [-1.80, 0.05],   # adaptive press hold (<=40)
         [-1.80, 0.05],   # final hold (<=90)

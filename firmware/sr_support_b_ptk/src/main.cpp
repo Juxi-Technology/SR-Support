@@ -425,26 +425,25 @@ static void auto_next(float next[2], float up_z) {
 // command; the visual stop is the servo's mechanical end).
 static const float EXEC_REF0[3][2] = {   // roll_pos
     {1.750f, -0.90f}, {-0.250f, -0.90f}, {0.0f, 0.0f}};
-static const float EXEC_REF1[19][2] = {  // roll_neg: SLOW full-travel press,
-                                         // wedge pumps, fast whip-slam retry
-    {-0.650f, 0.70f},                 // slow direct press, 4 sub-steps:
-    {-1.050f, 0.70f},                 //   ~1 rad/s like the free sweep, where
-    {-1.450f, 0.70f},                 //   an analog servo still delivers most
-    {-1.80f, 0.70f},                 //   of its stall torque (4 rad/s keeps
-    {-1.80f, 0.70f},                 //   only ~40%)
+static const float EXEC_REF1[15][2] = {  // roll_neg: full-speed press like
+                                         // roll_pos, then wedge pumps and a
+                                         // whip-slam retry
+    {-1.80f, 0.70f},                 // direct press at the same slew as
+                                     //   roll_pos (20 ticks, no slow-down:
+                                     //   the slow press measured identical)
     {-1.80f, 0.70f},                 // adaptive press hold
-    {-1.80f, 0.350f},                 // elbow wedge 1, two slower sub-steps
-    {-1.80f, 0.050f},
-    {-1.80f, 0.050f},                 // adaptive hold
+    {-1.80f, 0.35f},                 // elbow wedge 1
+    {-1.80f, 0.05f},
+    {-1.80f, 0.05f},                 // adaptive hold
     {-1.80f, 0.70f},                 // re-fold (re-cock the elbow)
-    {-1.80f, 0.350f},                 // elbow wedge 2
-    {-1.80f, 0.050f},
-    {-1.80f, 0.050f},                 // adaptive hold
-    {0.350f, 0.70f},                    // stage 2: wind-up
-    {0.350f, 1.10f},                    // tuck the elbow in the air
-    {-1.80f, 0.050f},                 // WHIP-SLAM (full speed: momentum)
-    {-1.80f, 0.050f},                 // adaptive press hold
-    {-1.80f, 0.050f},                 // final hold
+    {-1.80f, 0.35f},                 // elbow wedge 2
+    {-1.80f, 0.05f},
+    {-1.80f, 0.05f},                 // adaptive hold
+    {0.35f, 0.70f},                  // stage 2: wind-up
+    {0.35f, 1.10f},                  // tuck the elbow in the air
+    {-1.80f, 0.05f},                 // WHIP-SLAM (full speed: momentum)
+    {-1.80f, 0.05f},                 // adaptive press hold
+    {-1.80f, 0.05f},                 // final hold
     {0.0f, 0.0f}};                   // retract
 static const float EXEC_REF2[3][2] = {   // pitch_pos
     {-1.320f, 1.450f}, {-0.250f, 1.450f}, {0.0f, 0.0f}};
@@ -453,13 +452,13 @@ static const float EXEC_REF3[3][2] = {   // pitch_neg
 static const float *const EXEC_REFS[4] = {
     (const float *)EXEC_REF0, (const float *)EXEC_REF1,
     (const float *)EXEC_REF2, (const float *)EXEC_REF3};
-static const uint8_t EXEC_REF_N[4] = {3, 19, 3, 3};
+static const uint8_t EXEC_REF_N[4] = {3, 15, 3, 3};
 // Per-phase adaptive-hold caps (ticks) for roll_neg: a capped phase holds
 // while the body is still down (up_z < 0.92) and advances once upright or
 // when the cap expires, so a stalled mechanism hands over to the next one
 // instead of eating the whole timeout.
-static const uint16_t EXEC_R1_HOLD[19] = {
-    0, 0, 0, 0, 40, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 40, 90, 0, 0};
+static const uint16_t EXEC_R1_HOLD[15] = {
+    0, 40, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 40, 90, 0};
 static const char *const EXEC_POSE_NAMES[4] = {
     "roll_pos", "roll_neg", "pitch_pos", "pitch_neg"};
 
