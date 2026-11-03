@@ -205,24 +205,24 @@ class Twin:
         return self._table_min_z(self.arm_geoms)
 
     def _arm_floor_clamp(self, cmd):
-        """Largest step prev->cmd whose arm stays at/above the floor."""
+        """Displayed arm pose: the command scaled toward neutral until it
+        just clears the floor (the real servo stalls against it). A neutral
+        arm that still digs in (the model forearm is a few mm deeper than
+        the hardware) is returned as-is; apply() lifts the whole body by
+        the residual so nothing pierces the floor."""
         tol = -0.002
-        prev = self.disp_q
         if self._set_arm(cmd) >= tol:
             return cmd
-        if self._set_arm(prev) < tol:
-            # already penetrating (orientation jumped under the arm): keep
-            # the command rather than freezing at a wrong pose
-            self._set_arm(cmd)
-            return cmd
+        if self._set_arm(np.zeros(2)) < tol:
+            return np.zeros(2)          # caller lifts by the residual
         lo, hi = 0.0, 1.0
         for _ in range(11):
             mid = 0.5 * (lo + hi)
-            if self._set_arm(prev + mid * (cmd - prev)) >= tol:
+            if self._set_arm(mid * cmd) >= tol:
                 lo = mid
             else:
                 hi = mid
-        q = prev + lo * (cmd - prev)
+        q = lo * cmd
         self._set_arm(q)
         return q
 
@@ -245,6 +245,13 @@ class Twin:
         d.qpos[2] -= dz
         mujoco.mj_forward(m, d)
         self.disp_q = self._arm_floor_clamp(cmd)
+        z = self._table_min_z(self.arm_geoms)
+        if z < -0.002:
+            # The clamped (possibly neutral) arm still dips under the floor:
+            # the real arm rests on it, so float the body by the residual
+            # (a few mm) instead of showing penetration.
+            d.qpos[2] -= (z + 0.002)
+            mujoco.mj_forward(m, d)
 
 
 def run_replay(twin, viewer, path, speed):
