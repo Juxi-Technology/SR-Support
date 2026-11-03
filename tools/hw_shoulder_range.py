@@ -95,7 +95,7 @@ q2 = 0.0                         # elbow
 marks: list[tuple[float, float]] = []
 
 HELP1 = "Up/Dn=BigArm  L/R=SmallArm  Sh:fast"
-HELP2 = "z=Zero k=Centers n=Home m=Mark q=Quit"
+HELP2 = "z=SetCenter  k=Read  n=Home  q=Quit"
 BLOCK = 4                        # 2 help lines + elbow + shoulder
 drawn = False
 
