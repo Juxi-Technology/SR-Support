@@ -13,6 +13,8 @@ At the prompt:
     + / -           step +-0.05 rad
     ++ / --         step +-0.20 rad
     m [label]       mark the current commanded angle as a limit
+    z               firmware zero: the CURRENT pose becomes q = 0
+    k               print the firmware PWM centers (shoulder/elbow us)
     n               neutral (0, 0)
     q               quit (goes to neutral first)
 
@@ -117,6 +119,12 @@ while True:
             goto(q1 + (0.20 if cmd == "++" else -0.20))
         elif cmd == "a" and len(parts) >= 3:
             goto(float(parts[1]), float(parts[2]))
+        elif cmd == "z":
+            send("z")          # firmware: current pose becomes q = 0
+            pump()
+        elif cmd == "k":
+            send("k")          # firmware: print the current centers
+            pump()
         elif cmd == "m":
             label = " ".join(parts[1:]) or f"mark{len(marks) + 1}"
             marks.append((q1, q2, label))

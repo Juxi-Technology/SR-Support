@@ -1073,6 +1073,30 @@ static void handle_serial() {
         } else if (c == 'k') {
             Serial.printf("centers: shoulder %.0f us, elbow %.0f us\n",
                           servo::get_center_us(0), servo::get_center_us(1));
+        } else if (c == 'z') {
+            // Encoder-style zero: jog the arm to the visual center pose
+            // (manual mode), send 'z', and the current pose becomes q = 0
+            // for both joints. The new PWM centers are printed so they can
+            // be baked into config.h (SERVO_*_CENTER_US).
+            if (exec_running) {
+                Serial.println("z: refused while the executor runs; "
+                               "send s first");
+            } else {
+                float sg[2];
+                servo::get_signs(sg);
+                for (int i = 0; i < 2; ++i) {
+                    servo::set_center_us(
+                        i, servo::get_center_us(i) +
+                               sg[i] * cmd[i] * SERVO_US_PER_RAD);
+                    cmd[i] = 0.0f;
+                    qdot_cmd[i] = 0.0f;
+                    manual_target[i] = 0.0f;
+                }
+                Serial.printf("zero set: shoulder %.0f us, elbow %.0f us "
+                              "(current pose is now q = 0)\n",
+                              servo::get_center_us(0),
+                              servo::get_center_us(1));
+            }
         } else if (c == 'c') {
             bool was_running = running;
             running = false;
