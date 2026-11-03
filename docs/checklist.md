@@ -57,6 +57,13 @@
 - [ ] 异常立即 `x`/断电
 - [ ] 不要求站起来（基线是 PTK7465）
 
+## 5.5 中位校准与 WiFi（2026-11 新增，详见 build-guide §9.6/§9.7）
+
+- [ ] 换齿/拆装后：`tools/hw_shoulder_range.py` 方向键摆到目测中位 → 按 `z` → 把打印的 µs 写回 `config.h` 并平移 `EXEC_REF*` / `getup_reference_b39.py` 路点 → 复测四方向
+- [ ] 躺姿姿态或镜像倾角异常时：机器人**站立在水平桌面** → 串口 `c`（陀螺+加速度计零点，存 NVS；打印 `accel bias ... (saved)` 才算成功）
+- [ ] WiFi：连 `SR-Support` / `srsupport` → 打开 `http://192.168.4.1` 状态页 → Home WiFi `Scan`/`Connect` 配网 → 页面显示 `Robot IP`
+- [ ] MuJoCo 无线镜像：状态页 `Twin ON` → `.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333`
+
 ## 6. 测量/重训
 
 - [ ] 整机/零件称重
