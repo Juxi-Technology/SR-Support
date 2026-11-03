@@ -11,6 +11,8 @@ At the prompt:
     0.30 / -0.55    go to that shoulder angle in rad (elbow stays put)
     a 0.3 -0.5      absolute shoulder + elbow
     0.3 -0.5        shorthand for the same
+    e 0.1           elbow only: absolute target (e alone prints it)
+    e+ / e-         elbow step +-0.05      e++ / e--  step +-0.20
     + / -           step +-0.05 rad
     ++ / --         step +-0.20 rad
     m [label]       mark the current commanded angle as a limit
@@ -120,6 +122,14 @@ while True:
             goto(q1 + (0.20 if cmd == "++" else -0.20))
         elif cmd == "a" and len(parts) >= 3:
             goto(float(parts[1]), float(parts[2]))
+        elif cmd == "e":
+            if len(parts) >= 2:
+                goto(q1, float(parts[1]))    # absolute elbow, shoulder stays
+            else:
+                print(f"  elbow {q2:+.3f} rad ({q2 * 57.2958:+.0f} deg)")
+        elif cmd in ("e+", "e-", "e++", "e--"):
+            step = 0.05 if cmd in ("e+", "e-") else 0.20
+            goto(q1, q2 + (step if cmd.endswith("+") else -step))
         elif cmd == "z":
             send("z")          # firmware: current pose becomes q = 0
             pump()
