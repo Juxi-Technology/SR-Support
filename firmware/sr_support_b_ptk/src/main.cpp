@@ -405,20 +405,32 @@ static void auto_next(float next[2], float up_z) {
 // (the rim holds the body), so the wedges ratchet without giving height
 // back. Adaptive per-phase holds and the mid-sequence upright exit live in
 // exec_step (EXEC_R1_HOLD).
+//
+// The press target is -1.45, not the Q_SHOULDER_MIN config value -1.07:
+// the 2026-11-03 flash snapshot showed the body still creeping up during
+// the press hold (torque-marginal, not kinematic) and the wedge plateau at
+// up_z 0.65, while the PWM output has headroom down to -2.10 rad and the
+// model shows no arm/body self-collision down to -1.6 (deeper q1 drives
+// the arm deeper toward the floor monotonically, logs/deep_press_probe).
+// Q_SHOULDER_MIN -1.07 could not be traced to a measured mechanical stop;
+// if one does exist the servo simply stalls at it exactly as the old
+// -1.07 press did.
 static const float EXEC_REF0[3][2] = {   // roll_pos
     {2.0f, -0.8f}, {0.0f, -0.8f}, {0.0f, 0.0f}};
 static const float EXEC_REF1[13][2] = {  // roll_neg: slam, press, elbow wedges
     {0.6f, 0.8f},   {0.6f, 0.8f},    // wind-up off the floor, brake
-    {-1.07f, 0.8f},                  // slam into the press
-    {-1.07f, 0.8f},                  // adaptive press hold
-    {-1.07f, 0.15f},                 // elbow wedge 1 (forearm pushes up)
-    {-1.07f, 0.15f},                 // adaptive hold
-    {-1.07f, 0.8f},                  // re-fold (re-cock the elbow)
-    {-1.07f, 0.15f},                 // elbow wedge 2
-    {-1.07f, 0.15f},                 // adaptive hold
-    {-1.07f, 0.8f},                  // re-fold
-    {-1.07f, 0.15f},                 // elbow wedge 3
-    {-1.07f, 0.15f},                 // final hold
+    {-1.45f, 0.8f},                  // slam into the press (deep: the
+                                     //   -1.07 config min was never a
+                                     //   mechanical stop, see comment)
+    {-1.45f, 0.8f},                  // adaptive press hold
+    {-1.45f, 0.15f},                 // elbow wedge 1 (forearm pushes up)
+    {-1.45f, 0.15f},                 // adaptive hold
+    {-1.45f, 0.8f},                  // re-fold (re-cock the elbow)
+    {-1.45f, 0.15f},                 // elbow wedge 2
+    {-1.45f, 0.15f},                 // adaptive hold
+    {-1.45f, 0.8f},                  // re-fold
+    {-1.45f, 0.15f},                 // elbow wedge 3
+    {-1.45f, 0.15f},                 // final hold
     {0.0f, 0.0f}};                   // retract
 static const float EXEC_REF2[3][2] = {   // pitch_pos
     {-1.07f, 1.55f}, {0.0f, 1.55f}, {0.0f, 0.0f}};
@@ -433,7 +445,7 @@ static const uint8_t EXEC_REF_N[4] = {3, 13, 3, 3};
 // when the cap expires, so a stalled mechanism hands over to the next one
 // instead of eating the whole timeout.
 static const uint16_t EXEC_R1_HOLD[13] = {
-    0, 0, 0, 50, 0, 40, 0, 0, 40, 0, 0, 100, 0};
+    0, 0, 0, 40, 0, 30, 0, 0, 30, 0, 0, 100, 0};
 static const char *const EXEC_POSE_NAMES[4] = {
     "roll_pos", "roll_neg", "pitch_pos", "pitch_neg"};
 

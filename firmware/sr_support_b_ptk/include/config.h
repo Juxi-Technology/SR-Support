@@ -77,7 +77,9 @@
 // 25T spline), so the usable window is asymmetric. These are the command
 // limits the policy and scripted routine use (mirrors the b39h26ri_sr5 sim
 // spec). Mechanical travel is a little wider on the short side.
-#define Q_SHOULDER_MIN (-1.07f)
+#define Q_SHOULDER_MIN (-1.6f)  // manual m-command limit; -1.07 was a
+                                // config choice, not a measured
+                                // stop (roll_neg presses to -1.45)
 #define Q_SHOULDER_MAX (2.07f)
 #define Q_ELBOW_MIN (-0.80f)
 #define Q_ELBOW_MAX (0.80f)

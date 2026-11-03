@@ -18,15 +18,18 @@ the shoulder-only press levers the lying body straight up (~3.5 s total,
 hardware 2026-10-30). On the 5 V rail it stalls at up_z ~0.60, right at
 the base-rim lever limit, so the sequence now adds a second motor and an
 impact: lift the arm off the floor, slam into the press, then pump ELBOW
-WEDGES (shoulder held at -1.07, elbow 0.8 -> 0.15 -> 0.8). A kinematic
-probe of the recorded stall attitude (logs/kick_probe.py) shows that
-extending the elbow drives the forearm tip deeper toward the floor and
-lengthens the contact lever while the shoulder reaction stays zero - the
-floor reaction lifts the body where the static press runs out of torque.
-(Probe: tools/probe_v1_kick_geometry.py.)
+WEDGES (shoulder held at the stop, elbow 0.8 -> 0.15 -> 0.8). A kinematic
+probe of the recorded stall attitude (tools/probe_v1_kick_geometry.py)
+shows that extending the elbow drives the forearm tip deeper toward the
+floor and lengthens the contact lever while the shoulder reaction stays
+zero - the floor reaction lifts the body where the static press runs out
+of torque.
 Re-folding only slides the tip inward (the rim holds the body), so the
-wedges ratchet. The firmware additionally holds capped phases while the
-body is down and exits to the retract as soon as it is upright
+wedges ratchet. Hardware (2026-11-03): the wedges add a
+repeatable +0.05 up_z at the press stall (0.60 -> 0.65), matching the sim,
+but 0.65 is still short of the balance line, so the press target moved to
+-1.45 (see above). The firmware additionally holds capped phases while
+the body is down and exits to the retract as soon as it is upright
 (getup_executor.HOLD_TICKS / HOLD_UP, firmware EXEC_R1_HOLD).
 The previous over-the-top roll recipe needed the +X-side travel that the
 PWM clamp does not provide.
@@ -44,20 +47,23 @@ SEQUENCES = {
     ],
     "roll_neg": [
         # Mirror press with a second motor: wind-up, slam, adaptive press,
-        # then three elbow wedges with re-folds between them. The last row
-        # is the retract trigger, as in every sequence.
+        # then three elbow wedges with re-folds between them. The press
+        # target is -1.45: -1.07 was a configuration choice, not a
+        # measured mechanical stop (PWM headroom to -2.10, no arm/body
+        # self-collision down to -1.6 in the model). The last row is the
+        # retract trigger, as in every sequence.
         [0.6, 0.8],      # wind-up off the floor
         [0.6, 0.8],      # brake
-        [-1.07, 0.8],    # slam into the press
-        [-1.07, 0.8],    # adaptive press hold (<=50 ticks, firmware)
-        [-1.07, 0.15],   # elbow wedge 1
-        [-1.07, 0.15],   # adaptive hold (<=40)
-        [-1.07, 0.8],    # re-fold (re-cock the elbow)
-        [-1.07, 0.15],   # elbow wedge 2
-        [-1.07, 0.15],   # adaptive hold (<=40)
-        [-1.07, 0.8],    # re-fold
-        [-1.07, 0.15],   # elbow wedge 3
-        [-1.07, 0.15],   # final hold (<=100)
+        [-1.45, 0.8],    # slam into the press
+        [-1.45, 0.8],    # adaptive press hold (<=40 ticks, firmware)
+        [-1.45, 0.15],   # elbow wedge 1
+        [-1.45, 0.15],   # adaptive hold (<=30)
+        [-1.45, 0.8],    # re-fold (re-cock the elbow)
+        [-1.45, 0.15],   # elbow wedge 2
+        [-1.45, 0.15],   # adaptive hold (<=30)
+        [-1.45, 0.8],    # re-fold
+        [-1.45, 0.15],   # elbow wedge 3
+        [-1.45, 0.15],   # final hold (<=100)
         [0.0, 0.0],      # retract
     ],
     "pitch_pos": [
