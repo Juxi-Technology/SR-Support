@@ -44,7 +44,7 @@
                 fullinertia="8.7518e-05 9.6731e-05 1.2287e-04 -3.8674e-07 4.3405e-07 7.5363e-08"/>
 
       <geom class="visual" type="mesh" mesh="foot_bottom" rgba="0.25 0.45 0.85 1"/>
-      <geom class="visual" type="mesh" mesh="foot_shell" rgba="0.30 0.68 0.34 0.55"/>
+      <geom class="visual" type="mesh" mesh="foot_shell" rgba="0.30 0.68 0.34 1"/>
       <geom class="visual" type="mesh" mesh="foot_servo_shoulder" rgba="0.15 0.15 0.15 1"/>
 
       <!-- bottom plate (CAD y 0..9.5) -->
