@@ -47,17 +47,26 @@ SEQUENCES = {
     ],
     "roll_neg": [
         # Stage 1 opens like roll_pos: ONE direct sweep to the full
-        # measured travel (-1.55, live shoulder sweep 2026-11-03), no
-        # positive pre-swing, then the wedge pumps. Stage 2 retries with
-        # the whip-slam (elbow tucked 1.2 in the air, extension lands at
-        # floor contact) - the -X servo is load-saturated and tracks only
-        # ~30 deg of the commanded sweep, so the impact is what moves the
-        # body when the static press runs out. Last row = retract trigger.
-        [-1.55, 0.8],    # stage 1: direct press to the travel limit
-        [-1.55, 0.8],    # adaptive press hold (<=40 ticks, firmware)
-        [-1.55, 0.15],   # elbow wedge 1
-        [-1.55, 0.8],    # re-fold (re-cock the elbow)
-        [-1.55, 0.15],   # elbow wedge 2
+        # measured travel (-1.55) - but SLOW (4 sub-steps, ~1 rad/s), because
+        # the analog servo keeps only ~40% of its stall torque at the 4 rad/s
+        # slew cap and tracks just ~30 deg of the commanded sweep under load;
+        # at ~1 rad/s it delivers most of its torque and the motion looks
+        # like the live limit sweep. Then two slower elbow-wedge pumps.
+        # Stage 2 retries with the fast whip-slam (elbow tucked 1.2 in the
+        # air, the extension lands at floor contact - impact reaches the
+        # highest up_z, the momentum does what static torque cannot).
+        [-0.40, 0.80],   # slow direct press:
+        [-0.80, 0.80],   #   0.4 rad per 20-tick phase
+        [-1.20, 0.80],
+        [-1.55, 0.80],
+        [-1.55, 0.80],   # adaptive press hold (<=40 ticks, firmware)
+        [-1.55, 0.45],   # elbow wedge 1 (two slower sub-steps)
+        [-1.55, 0.15],
+        [-1.55, 0.15],   # adaptive hold (<=30)
+        [-1.55, 0.80],   # re-fold (re-cock the elbow)
+        [-1.55, 0.45],   # elbow wedge 2
+        [-1.55, 0.15],
+        [-1.55, 0.15],   # adaptive hold (<=30)
         [0.6, 0.8],      # stage 2: wind-up
         [0.6, 1.2],      # tuck the elbow in the air
         [-1.55, 0.15],   # whip-slam (shoulder + elbow strike together)
