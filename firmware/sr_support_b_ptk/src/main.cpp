@@ -406,6 +406,12 @@ static void auto_next(float next[2], float up_z) {
 // back. Adaptive per-phase holds and the mid-sequence upright exit live in
 // exec_step (EXEC_R1_HOLD).
 //
+// Zero frame: after the 2026-11-03 operator zero the firmware centers are
+// the VISUAL center pulses (shoulder 1681 us = +0.25 rad of the old
+// frame, elbow 1456 us = +0.10 rad), so every waypoint below is the old
+// value shifted by -0.25 (shoulder) / -0.10 (elbow): the physical poses
+// are identical to the verified all-directions run.
+//
 // Second hardware round (same day): pressing deeper (-1.45) changed the
 // plateau by nothing - the servo arm tracks only ~30 deg of the commanded
 // sweep on this side (user observation), so the joint is load-saturated
@@ -418,32 +424,32 @@ static void auto_next(float next[2], float up_z) {
 // (logs/shoulder_limit_sweep.txt, 2026-11-03: the joint accepts -1.6 on
 // command; the visual stop is the servo's mechanical end).
 static const float EXEC_REF0[3][2] = {   // roll_pos
-    {2.0f, -0.8f}, {0.0f, -0.8f}, {0.0f, 0.0f}};
+    {1.750f, -0.90f}, {-0.250f, -0.90f}, {0.0f, 0.0f}};
 static const float EXEC_REF1[19][2] = {  // roll_neg: SLOW full-travel press,
                                          // wedge pumps, fast whip-slam retry
-    {-0.40f, 0.80f},                 // slow direct press, 4 sub-steps:
-    {-0.80f, 0.80f},                 //   ~1 rad/s like the free sweep, where
-    {-1.20f, 0.80f},                 //   an analog servo still delivers most
-    {-1.55f, 0.80f},                 //   of its stall torque (4 rad/s keeps
-    {-1.55f, 0.80f},                 //   only ~40%)
-    {-1.55f, 0.80f},                 // adaptive press hold
-    {-1.55f, 0.45f},                 // elbow wedge 1, two slower sub-steps
-    {-1.55f, 0.15f},
-    {-1.55f, 0.15f},                 // adaptive hold
-    {-1.55f, 0.80f},                 // re-fold (re-cock the elbow)
-    {-1.55f, 0.45f},                 // elbow wedge 2
-    {-1.55f, 0.15f},
-    {-1.55f, 0.15f},                 // adaptive hold
-    {0.6f, 0.8f},                    // stage 2: wind-up
-    {0.6f, 1.2f},                    // tuck the elbow in the air
-    {-1.55f, 0.15f},                 // WHIP-SLAM (full speed: momentum)
-    {-1.55f, 0.15f},                 // adaptive press hold
-    {-1.55f, 0.15f},                 // final hold
+    {-0.650f, 0.70f},                 // slow direct press, 4 sub-steps:
+    {-1.050f, 0.70f},                 //   ~1 rad/s like the free sweep, where
+    {-1.450f, 0.70f},                 //   an analog servo still delivers most
+    {-1.80f, 0.70f},                 //   of its stall torque (4 rad/s keeps
+    {-1.80f, 0.70f},                 //   only ~40%)
+    {-1.80f, 0.70f},                 // adaptive press hold
+    {-1.80f, 0.350f},                 // elbow wedge 1, two slower sub-steps
+    {-1.80f, 0.050f},
+    {-1.80f, 0.050f},                 // adaptive hold
+    {-1.80f, 0.70f},                 // re-fold (re-cock the elbow)
+    {-1.80f, 0.350f},                 // elbow wedge 2
+    {-1.80f, 0.050f},
+    {-1.80f, 0.050f},                 // adaptive hold
+    {0.350f, 0.70f},                    // stage 2: wind-up
+    {0.350f, 1.10f},                    // tuck the elbow in the air
+    {-1.80f, 0.050f},                 // WHIP-SLAM (full speed: momentum)
+    {-1.80f, 0.050f},                 // adaptive press hold
+    {-1.80f, 0.050f},                 // final hold
     {0.0f, 0.0f}};                   // retract
 static const float EXEC_REF2[3][2] = {   // pitch_pos
-    {-1.07f, 1.55f}, {0.0f, 1.55f}, {0.0f, 0.0f}};
+    {-1.320f, 1.450f}, {-0.250f, 1.450f}, {0.0f, 0.0f}};
 static const float EXEC_REF3[3][2] = {   // pitch_neg
-    {-1.07f, -1.55f}, {0.0f, -1.55f}, {0.0f, 0.0f}};
+    {-1.320f, -1.650f}, {-0.250f, -1.650f}, {0.0f, 0.0f}};
 static const float *const EXEC_REFS[4] = {
     (const float *)EXEC_REF0, (const float *)EXEC_REF1,
     (const float *)EXEC_REF2, (const float *)EXEC_REF3};

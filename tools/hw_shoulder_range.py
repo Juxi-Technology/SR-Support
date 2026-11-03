@@ -36,7 +36,7 @@ import serial
 
 PORT = "COM27"
 BAUD = 115200
-Q_MIN, Q_MAX = -1.6, 2.07       # config.h manual clamp
+Q_MIN, Q_MAX = -1.85, 1.82       # config.h manual clamp
 
 ser = serial.Serial()
 ser.port = PORT

@@ -77,12 +77,12 @@
 // 25T spline), so the usable window is asymmetric. These are the command
 // limits the policy and scripted routine use (mirrors the b39h26ri_sr5 sim
 // spec). Mechanical travel is a little wider on the short side.
-#define Q_SHOULDER_MIN (-1.6f)  // manual m-command limit; -1.07 was a
+#define Q_SHOULDER_MIN (-1.85f)  // manual m-command limit; -1.07 was a
                                 // config choice, not a measured
                                 // stop (roll_neg presses to -1.45)
-#define Q_SHOULDER_MAX (2.07f)
-#define Q_ELBOW_MIN (-0.80f)
-#define Q_ELBOW_MAX (0.80f)
+#define Q_SHOULDER_MAX (1.82f)
+#define Q_ELBOW_MIN (-0.90f)
+#define Q_ELBOW_MAX (0.70f)
 
 // ------------------------------------------------- scripted stand routine
 // (legacy; replaced by the deterministic get-up executor below)
@@ -145,11 +145,13 @@
 // toward -Y, elbow +q moves the forearm toward +X (same as the sim joints).
 #define SERVO_SHOULDER_SIGN -1.0f
 #define SERVO_ELBOW_SIGN -1.0f
-#define SERVO_CENTER_US 1520.0f
+#define SERVO_CENTER_US 1456.0f  // visual-center zero
+                                       // (operator zero 2026-11-03)
 // Shoulder zero after the horn re-index (2 teeth, ~29 deg): the vertical arm
 // sits 320 us above the servo's electrical centre, leaving ~119 deg of travel
 // toward the get-up side (us down to 500) and ~60 deg the other way.
-#define SERVO_SHOULDER_CENTER_US 1840.0f
+#define SERVO_SHOULDER_CENTER_US 1681.0f  // visual-center zero
+                                           // (operator zero 2026-11-03)
 #define SERVO_US_PER_RAD 636.62f  // 2000 us / pi
 #define SERVO_MIN_US 500
 #define SERVO_MAX_US 2500

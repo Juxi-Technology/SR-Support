@@ -39,10 +39,13 @@ from __future__ import annotations
 
 import numpy as np
 
+# Zero frame: visual-center zero 2026-11-03 (shoulder 1681 us,
+# elbow 1456 us). Every target is (old value - 0.25 / - 0.10);
+# the physical poses match the verified all-directions run.
 SEQUENCES = {
     "roll_pos": [
-        [2.0, -0.8],
-        [0.0, -0.8],
+        [1.75, -0.90],
+        [-0.25, -0.90],
         [0.0, 0.0],
     ],
     "roll_neg": [
@@ -55,33 +58,33 @@ SEQUENCES = {
         # Stage 2 retries with the fast whip-slam (elbow tucked 1.2 in the
         # air, the extension lands at floor contact - impact reaches the
         # highest up_z, the momentum does what static torque cannot).
-        [-0.40, 0.80],   # slow direct press:
-        [-0.80, 0.80],   #   0.4 rad per 20-tick phase
-        [-1.20, 0.80],
-        [-1.55, 0.80],
-        [-1.55, 0.80],   # adaptive press hold (<=40 ticks, firmware)
-        [-1.55, 0.45],   # elbow wedge 1 (two slower sub-steps)
-        [-1.55, 0.15],
-        [-1.55, 0.15],   # adaptive hold (<=30)
-        [-1.55, 0.80],   # re-fold (re-cock the elbow)
-        [-1.55, 0.45],   # elbow wedge 2
-        [-1.55, 0.15],
-        [-1.55, 0.15],   # adaptive hold (<=30)
-        [0.6, 0.8],      # stage 2: wind-up
-        [0.6, 1.2],      # tuck the elbow in the air
-        [-1.55, 0.15],   # whip-slam (shoulder + elbow strike together)
-        [-1.55, 0.15],   # adaptive press hold (<=40)
-        [-1.55, 0.15],   # final hold (<=90)
+        [-0.65, 0.70],   # slow direct press:
+        [-1.05, 0.70],   #   0.4 rad per 20-tick phase
+        [-1.45, 0.70],
+        [-1.80, 0.70],
+        [-1.80, 0.70],   # adaptive press hold (<=40 ticks, firmware)
+        [-1.80, 0.35],   # elbow wedge 1 (two slower sub-steps)
+        [-1.80, 0.05],
+        [-1.80, 0.05],   # adaptive hold (<=30)
+        [-1.80, 0.70],   # re-fold (re-cock the elbow)
+        [-1.80, 0.35],   # elbow wedge 2
+        [-1.80, 0.05],
+        [-1.80, 0.05],   # adaptive hold (<=30)
+        [0.35, 0.70],      # stage 2: wind-up
+        [0.35, 1.10],      # tuck the elbow in the air
+        [-1.80, 0.05],   # whip-slam (shoulder + elbow strike together)
+        [-1.80, 0.05],   # adaptive press hold (<=40)
+        [-1.80, 0.05],   # final hold (<=90)
         [0.0, 0.0],      # retract
     ],
     "pitch_pos": [
-        [-1.07, 1.55],
-        [0.0, 1.55],
+        [-1.32, 1.45],
+        [-0.25, 1.45],
         [0.0, 0.0],
     ],
     "pitch_neg": [
-        [-1.07, -1.55],
-        [0.0, -1.55],
+        [-1.32, -1.65],
+        [-0.25, -1.65],
         [0.0, 0.0],
     ],
 }
