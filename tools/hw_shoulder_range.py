@@ -10,6 +10,7 @@ the USB cable both connected:
 At the prompt:
     0.30 / -0.55    go to that shoulder angle in rad (elbow stays put)
     a 0.3 -0.5      absolute shoulder + elbow
+    0.3 -0.5        shorthand for the same
     + / -           step +-0.05 rad
     ++ / --         step +-0.20 rad
     m [label]       mark the current commanded angle as a limit
@@ -132,7 +133,9 @@ while True:
             print(f"  marked: shoulder {q1:+.3f} rad ({q1 * 57.2958:+.0f} deg)"
                   f" [{label}]")
         else:
-            goto(float(parts[0]))          # bare number = shoulder target
+            # one number = shoulder target; two numbers = shoulder + elbow
+            goto(float(parts[0]),
+                 float(parts[1]) if len(parts) > 1 else None)
     except ValueError:
         print("  ?  examples: 0.3   -1.2   a 0.3 -0.5   m neg_end   q")
 
