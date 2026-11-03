@@ -117,6 +117,12 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 
 热点：SSID `SR-Support`，密码 `srsupport`，ESP32 地址 `192.168.4.1`（`w` 命令开关，默认开）。
 
+**Twin 流开关**：状态页底部 `Twin ON/OFF` 按钮 = 串口 `d` 命令，MuJoCo 镜像无需串口：
+
+```
+.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333
+```
+
 **配网（让 ESP32 加入家里的 WiFi）**：连上 `SR-Support` 热点后多数手机会自动弹出配网页
 （热点门户）；没有弹出就手动打开 `http://192.168.4.1`，在 **Home WiFi** 卡片点 `Scan` →
 选网络 → 填密码 → `Connect`。成功后：ESP32 以 AP+STA 双模同时留在热点和你家路由器上，

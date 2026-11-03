@@ -230,6 +230,7 @@ static void web_root();
 static void web_data();
 static void web_scan();
 static void web_connect();
+static void web_twin();
 static void web_notfound();
 #if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
 static NetworkClient twin_cli;
@@ -250,6 +251,7 @@ static void wifi_begin() {
     web_srv.on("/data", web_data);
     web_srv.on("/scan", web_scan);
     web_srv.on("/connect", web_connect);
+    web_srv.on("/twin", web_twin);
     web_srv.onNotFound(web_notfound);
     web_srv.begin();
     dns_srv.start(53, "*", WiFi.softAPIP());   // captive portal
@@ -1299,6 +1301,12 @@ static void web_connect() {
     web_srv.send(200, "application/json", "{\"ok\":1}");
 }
 
+static void web_twin() {
+    twin_log = (web_srv.arg("on") == "1");
+    Serial.printf("twin log %s (web)\n", twin_log ? "on" : "off");
+    web_srv.send(200, "application/json", twin_log ? "{\"on\":1}" : "{\"on\":0}");
+}
+
 static void web_notfound() {
     // Captive portal: the OS probe pages hit random hosts; bounce them to
     // the status page so the provision sheet pops up on phones.
@@ -1317,18 +1325,19 @@ static void web_data() {
     up_body(u);
     const char *st = exec_running ? "getup" : (manual ? "manual" : "hold");
     bool sta = (WiFi.status() == WL_CONNECTED);
-    char buf[384];
+    char buf[400];
     snprintf(buf, sizeof buf,
              "{\"ms\":%lu,\"upx\":%.3f,\"upy\":%.3f,\"upz\":%.3f,"
              "\"q1\":%.3f,\"q2\":%.3f,\"exec\":%u,\"pose\":%u,\"ph\":%u,"
              "\"tick\":%u,\"sw\":%u,\"state\":\"%s\",\"sta\":%u,"
-             "\"ssid\":\"%s\",\"ip\":\"%s\"}",
+             "\"ssid\":\"%s\",\"ip\":\"%s\",\"twin\":%u}",
              (unsigned long)millis(), u[0], u[1], u[2], cmd[0], cmd[1],
              exec_running ? 1u : 0u, (unsigned)exec_pose,
              (unsigned)exec_phase, (unsigned)exec_tick,
              (unsigned)exec_switches, st, sta ? 1u : 0u,
              sta ? sta_ssid.c_str() : "",
-             sta ? WiFi.localIP().toString().c_str() : "");
+             sta ? WiFi.localIP().toString().c_str() : "",
+             twin_log ? 1u : 0u);
     web_srv.send(200, "application/json", buf);
 }
 #endif

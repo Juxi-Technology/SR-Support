@@ -48,6 +48,12 @@ button{background:#4f8cff;color:#0d1117;font-weight:600;margin-right:8px}
 <button onclick="scan()">Scan</button>
 <button onclick="join()">Connect</button>
 </div>
+<div class="card">
+<div class="row"><span class="k">Twin stream (TCP 3333)</span>
+<span class="v" id="tw">-</span></div>
+<button onclick="twin(1)">Twin ON</button>
+<button onclick="twin(0)">Twin OFF</button>
+</div>
 <script>
 var P=['roll_pos','roll_neg','pitch_pos','pitch_neg'];
 function $(i){return document.getElementById(i)}
@@ -63,6 +69,7 @@ $('sw').textContent=d.sw;
 $('ms').textContent=Math.round(d.ms/1000)+' s';
 $('sta').textContent=d.sta?('connected: '+d.ssid):'not connected';
 $('ip').textContent=d.ip||'-';
+$('tw').textContent=d.twin?'on':'off';
 }catch(e){$('st').textContent='offline'}}
 async function scan(){var s=$('nets');
 try{var a=await (await fetch('/scan')).json();
@@ -77,6 +84,7 @@ $('sta').textContent='connecting...';
 fetch('/connect?ssid='+encodeURIComponent(s)+'&pass='+encodeURIComponent(p))
 .then(function(r){return r.json()})
 .then(function(d){if(d.err)$('sta').textContent='error: '+d.err})}
+function twin(v){fetch('/twin?on='+v)}
 setInterval(poll,300);poll();
 </script>
 )HTML";
