@@ -22,6 +22,16 @@ import numpy as np
 
 from .getup_reference_b39 import getup_sequence_for_pose
 
+# Firmware parity (firmware/sr_support_b_ptk/src/main.cpp EXEC_R1_HOLD): a
+# capped phase holds its target while the body is still down (up_z below
+# HOLD_UP) and advances once it comes up or when the cap expires, so a
+# stalled mechanism hands over to the next one. The executor also exits
+# straight to the retract when the body gets upright mid-sequence.
+HOLD_UP = 0.92
+HOLD_TICKS = {
+    "roll_neg": [0, 0, 0, 50, 0, 40, 0, 0, 40, 0, 0, 100, 0],
+}
+
 
 class GetupExecutor:
     def __init__(
@@ -62,6 +72,7 @@ class GetupExecutor:
     def _load(self, pose, q):
         """(Re)start the reference for `pose` from the current target `q`."""
         self.sequence = np.asarray(getup_sequence_for_pose(pose), dtype=np.float64)
+        self.hold = HOLD_TICKS.get(pose, [])
         self.pose = pose
         self.support = (self.sequence[-2] * self.support_scale
                         if len(self.sequence) > 1 else np.zeros(2))
@@ -116,15 +127,24 @@ class GetupExecutor:
             cmd = self._neutral_target(q)
             return np.clip((cmd - q) / env.target_delta, -1.0, 1.0).astype(np.float32)
         up = float(up_vec[2])
+        if (self.hold and up > HOLD_UP
+                and self.phase < len(self.sequence) - 1):
+            self.phase = len(self.sequence) - 1
+            self.tick = 0
         if self.phase < len(self.sequence) - 1:
             wp = self.sequence[self.phase]
             self.tick += 1
             frac = min(self.tick / max(self.steps_per_wp, 1), 1.0)
             cmd = (1.0 - frac) * self.prev + frac * wp
             if self.tick >= self.steps_per_wp:
-                self.prev = wp
-                self.phase += 1
-                self.tick = 0
+                cap = (self.hold[self.phase]
+                       if self.phase < len(self.hold) else 0)
+                if cap and up < HOLD_UP and self.tick < cap:
+                    pass  # hold until the body comes up or the cap expires
+                else:
+                    self.prev = wp
+                    self.phase += 1
+                    self.tick = 0
         else:
             # Final phase: retract the arm to neutral at a constant rate. The
             # retract is itself a lift in several poses (the arm pushes the

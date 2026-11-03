@@ -391,11 +391,35 @@ static void auto_next(float next[2], float up_z) {
 // (The previous over-the-top roll recipe needed the +X-side travel that
 // the PWM clamp removes; it stalls at a 150 deg equilibrium, see
 // docs/hardware-validation.md 0.4.)
+//
+// With the servo rail at 5 V the shoulder-only press stalls at about
+// up_z 0.60 (torque-marginal near the base-rim lever); the same press
+// succeeded on the 6 V bench. The sequence therefore adds a second motor
+// and an impact: lift the arm off the floor, slam into the press, then
+// pump ELBOW WEDGES (shoulder held at the stop, elbow 0.8 -> 0.15 -> 0.8
+// re-fold). Kinematic probe at the recorded stall attitude
+// (tools/probe_v1_kick_geometry.py): extending the elbow drives the forearm tip deeper
+// toward the floor and lengthens the contact lever while the shoulder q1
+// reaction is zero, so the floor reaction lifts the body exactly where the
+// static press runs out of torque; the re-fold only slides the tip inward
+// (the rim holds the body), so the wedges ratchet without giving height
+// back. Adaptive per-phase holds and the mid-sequence upright exit live in
+// exec_step (EXEC_R1_HOLD).
 static const float EXEC_REF0[3][2] = {   // roll_pos
     {2.0f, -0.8f}, {0.0f, -0.8f}, {0.0f, 0.0f}};
-static const float EXEC_REF1[6][2] = {   // roll_neg: mirrored direct press
-    {-1.07f, 0.8f}, {-1.07f, 0.8f}, {-1.07f, 0.8f}, {-1.07f, 0.8f},
-    {0.0f, 0.8f}, {0.0f, 0.0f}};
+static const float EXEC_REF1[13][2] = {  // roll_neg: slam, press, elbow wedges
+    {0.6f, 0.8f},   {0.6f, 0.8f},    // wind-up off the floor, brake
+    {-1.07f, 0.8f},                  // slam into the press
+    {-1.07f, 0.8f},                  // adaptive press hold
+    {-1.07f, 0.15f},                 // elbow wedge 1 (forearm pushes up)
+    {-1.07f, 0.15f},                 // adaptive hold
+    {-1.07f, 0.8f},                  // re-fold (re-cock the elbow)
+    {-1.07f, 0.15f},                 // elbow wedge 2
+    {-1.07f, 0.15f},                 // adaptive hold
+    {-1.07f, 0.8f},                  // re-fold
+    {-1.07f, 0.15f},                 // elbow wedge 3
+    {-1.07f, 0.15f},                 // final hold
+    {0.0f, 0.0f}};                   // retract
 static const float EXEC_REF2[3][2] = {   // pitch_pos
     {-1.07f, 1.55f}, {0.0f, 1.55f}, {0.0f, 0.0f}};
 static const float EXEC_REF3[3][2] = {   // pitch_neg
@@ -403,7 +427,13 @@ static const float EXEC_REF3[3][2] = {   // pitch_neg
 static const float *const EXEC_REFS[4] = {
     (const float *)EXEC_REF0, (const float *)EXEC_REF1,
     (const float *)EXEC_REF2, (const float *)EXEC_REF3};
-static const uint8_t EXEC_REF_N[4] = {3, 6, 3, 3};
+static const uint8_t EXEC_REF_N[4] = {3, 13, 3, 3};
+// Per-phase adaptive-hold caps (ticks) for roll_neg: a capped phase holds
+// while the body is still down (up_z < 0.92) and advances once upright or
+// when the cap expires, so a stalled mechanism hands over to the next one
+// instead of eating the whole timeout.
+static const uint16_t EXEC_R1_HOLD[13] = {
+    0, 0, 0, 50, 0, 40, 0, 0, 40, 0, 0, 100, 0};
 static const char *const EXEC_POSE_NAMES[4] = {
     "roll_pos", "roll_neg", "pitch_pos", "pitch_neg"};
 
@@ -545,8 +575,17 @@ static void exec_step(float next[2], const float u[3]) {
     }
     const float *seq = EXEC_REFS[exec_pose];
     const uint8_t n = EXEC_REF_N[exec_pose];
+    // roll_neg got upright mid-sequence: skip the remaining hammer / wedge
+    // stages (they would knock the standing body over) and retract now.
+    if (exec_pose == 1 && u[2] > 0.92f && exec_phase < (uint8_t)(n - 1)) {
+        exec_phase = (uint8_t)(n - 1);
+        exec_tick = 0;
+    }
     if (exec_phase < (uint8_t)(n - 1)) {
-        if (exec_tick < EXEC_STEPS_PER_WP) ++exec_tick;
+        // exec_tick keeps counting past EXEC_STEPS_PER_WP while a capped
+        // roll_neg phase holds; frac is clamped, so the extra ticks only
+        // feed the EXEC_R1_HOLD cap check.
+        ++exec_tick;
         float frac = (float)exec_tick / (float)EXEC_STEPS_PER_WP;
         if (frac > 1.0f) frac = 1.0f;
         for (int i = 0; i < 2; ++i) {
@@ -554,13 +593,15 @@ static void exec_step(float next[2], const float u[3]) {
             exec_target[i] = exec_prev[i] + (wp - exec_prev[i]) * frac;
         }
         if (exec_tick >= EXEC_STEPS_PER_WP) {
-            // roll_neg levers the body up quasi-statically: keep pressing
-            // until the body is upright (bounded by EXEC_TIMEOUT_MS)
-            // instead of a fixed 1.6 s hold. A weaker supply only makes
-            // the lift slower; a torque-starved press still times out.
-            const bool hold_press = (exec_pose == 1) && (exec_phase <= 3) &&
-                                    (u[2] < 0.92f);
-            if (!hold_press) {
+            // Capped roll_neg phases wait for the body to come up
+            // (up_z < 0.92) but hand over to the next mechanism when the
+            // cap expires; all other phases advance every 20 ticks.
+            bool hold = false;
+            if (exec_pose == 1 && u[2] < 0.92f) {
+                const uint16_t cap = EXEC_R1_HOLD[exec_phase];
+                hold = (cap > 0) && (exec_tick < cap);
+            }
+            if (!hold) {
                 for (int i = 0; i < 2; ++i) {
                     exec_prev[i] = seq[(int)exec_phase * 2 + i];
                 }
