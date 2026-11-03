@@ -70,6 +70,8 @@ def pump(sec: float = 0.8) -> None:
             log.write(ln + "\n")
             if ln.startswith("up "):
                 latest_up = ln.split("|")[0].strip()
+            elif not ln.startswith(("S ", "T ", "F ")):
+                print("  [robot]", ln)   # command replies (z, k, ...)
 
 
 def send(cmd: str) -> None:
@@ -93,7 +95,8 @@ def goto(a: float, b: float | None = None) -> None:
               f"firmware manual limit)")
     send(f"m {q1:.3f} {q2:.3f}")
     pump()
-    print(f"  shoulder {q1:+.3f} rad ({q1 * 57.2958:+.0f} deg) | {latest_up}")
+    print(f"  shoulder {q1:+.3f} ({q1 * 57.2958:+.0f} deg)  "
+          f"elbow {q2:+.3f} ({q2 * 57.2958:+.0f} deg) | {latest_up}")
 
 
 send("m 0.000 0.000")
