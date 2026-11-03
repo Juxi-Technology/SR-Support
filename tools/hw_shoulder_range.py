@@ -1,15 +1,15 @@
 """Interactive arm zeroing / travel tool (live robot, arrow keys).
 
 The operator drives the arm with the arrow keys and watches it; the
-console keeps a small in-place display (key help + elbow/shoulder
-values) that updates without scrolling. Run it in a terminal with the
-servo battery and the USB cable both connected:
+console keeps a small in-place English display (two help lines, then
+the SmallArm/BigArm values) that updates without scrolling. Run it in a
+terminal with the servo battery and the USB cable both connected:
 
     .venv/Scripts/python.exe tools/hw_shoulder_range.py
 
 Arrow keys:
-    up / down       big arm (shoulder)  +-0.05 rad   (Shift: +-0.20)
-    left / right    small arm (elbow)   -+0.05 rad   (Shift: +-0.20)
+    up / down       BigArm (shoulder)  +-0.05 rad   (Shift: +-0.20)
+    left / right    SmallArm (elbow)   -+0.05 rad   (Shift: +-0.20)
 
 Single keys:
     z               firmware zero: the CURRENT pose becomes q = 0
@@ -82,7 +82,7 @@ def pump(sec: float = 0.06) -> None:
                 continue
             log.write(ln + "\n")
             if ("zero set" in ln) or ("centers:" in ln):
-                replies.append(ln)   # only zero/center
+                replies.append(ln)   # only zero/center confirmations
 
 
 def send(cmd: str) -> None:
@@ -94,20 +94,22 @@ q1 = 0.0                         # shoulder
 q2 = 0.0                         # elbow
 marks: list[tuple[float, float]] = []
 
-HELP = "↑↓大臂 ←→小臂 Shift大步 z零 k值 n中 q退"
-BLOCK = 3                        # help line + elbow line + shoulder line
+HELP1 = "Up/Dn=BigArm  L/R=SmallArm  Sh:fast"
+HELP2 = "z=Zero k=Centers n=Home m=Mark q=Quit"
+BLOCK = 4                        # 2 help lines + elbow + shoulder
 drawn = False
 
 
 def render() -> None:
-    """Redraw the 3-line block in place (no scrolling)."""
+    """Redraw the block in place (no scrolling)."""
     global drawn
     if drawn:
-        sys.stdout.write("\x1b[3A")          # up over the block
+        sys.stdout.write("\x1b[4A")          # up over the block
     lines = (
-        HELP,
-        f"小臂: {q2:+.3f} rad ({q2 * 57.2958:+4.0f} deg)",
-        f"大臂: {q1:+.3f} rad ({q1 * 57.2958:+4.0f} deg)",
+        HELP1,
+        HELP2,
+        f"SmallArm: {q2:+.3f} rad ({q2 * 57.2958:+4.0f} deg)",
+        f"BigArm:   {q1:+.3f} rad ({q1 * 57.2958:+4.0f} deg)",
     )
     for ln in lines:
         sys.stdout.write("\x1b[2K" + ln + "\n")
@@ -121,7 +123,7 @@ def flush_replies() -> None:
     if not replies:
         return
     if drawn:
-        sys.stdout.write("\x1b[3A\x1b[J")     # up over the block, clear below
+        sys.stdout.write("\x1b[4A\x1b[J")     # up over the block, clear below
     for ln in replies:
         print("  [robot]", ln)
     replies.clear()
@@ -249,7 +251,7 @@ try:
 except KeyboardInterrupt:
     pass
 if drawn:
-    sys.stdout.write("\x1b[3A\x1b[J")
+    sys.stdout.write("\x1b[4A\x1b[J")
 send("m 0.000 0.000")
 pump(0.5)
 flush_replies()
