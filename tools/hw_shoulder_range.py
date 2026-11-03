@@ -1,7 +1,8 @@
 """Interactive arm zeroing / travel tool (live robot, arrow keys).
 
-The operator drives the arm with the arrow keys and watches it; this tool
-sends the commands and records the session. Run it in a terminal with the
+The operator drives the arm with the arrow keys and watches it; the
+console keeps a small in-place display (key help + elbow/shoulder
+values) that updates without scrolling. Run it in a terminal with the
 servo battery and the USB cable both connected:
 
     .venv/Scripts/python.exe tools/hw_shoulder_range.py
@@ -29,6 +30,8 @@ Manual-mode software limits mirror config.h (Q_SHOULDER_MIN/MAX).
 """
 from __future__ import annotations
 
+import os
+import sys
 import time
 from datetime import datetime
 
@@ -45,12 +48,12 @@ BAUD = 115200
 Q_MIN, Q_MAX = -1.85, 1.82       # config.h manual clamp
 STEP = 0.05
 BIG = 0.20
-MOVE_GAP = 0.15                  # s between accepted moves (key repeat)
+MOVE_GAP = 0.07                  # s between accepted moves (key repeat)
 
 ser = serial.Serial()
 ser.port = PORT
 ser.baudrate = BAUD
-ser.timeout = 0.05
+ser.timeout = 0.01
 ser.dtr = False
 ser.rts = False
 ser.open()
@@ -60,11 +63,12 @@ log = open("logs/shoulder_range_session.txt", "a", encoding="utf-8")
 log.write(f"\n# session {datetime.now():%Y-%m-%d %H:%M:%S}\n")
 
 buf = ""
-latest_up = "-"
+replies: list[str] = []          # [robot] lines waiting to be printed
 
 
-def pump(sec: float = 0.5) -> None:
-    global buf, latest_up
+def pump(sec: float = 0.06) -> None:
+    """Short non-blocking read; command replies are queued, not printed."""
+    global buf
     t0 = time.time()
     while time.time() - t0 < sec:
         d = ser.read(4096)
@@ -77,10 +81,8 @@ def pump(sec: float = 0.5) -> None:
             if not ln:
                 continue
             log.write(ln + "\n")
-            if ln.startswith("up "):
-                latest_up = ln.split("|")[0].strip()
-            elif not ln.startswith(("S ", "T ", "F ")):
-                print("  [robot]", ln)   # command replies (z, k, ...)
+            if not ln.startswith(("up ", "S ", "T ", "F ")):
+                replies.append(ln)   # command replies (z, k, ...)
 
 
 def send(cmd: str) -> None:
@@ -88,9 +90,44 @@ def send(cmd: str) -> None:
     log.write(f">>> {cmd}\n")
 
 
-q1 = 0.0
-q2 = 0.0
+q1 = 0.0                         # shoulder
+q2 = 0.0                         # elbow
 marks: list[tuple[float, float]] = []
+
+HELP = "↑↓ 大臂  ←→ 小臂  Shift=大步  " \
+       "z=定零  k=中位  n=回中  q=退出"
+BLOCK = 3                        # help line + elbow line + shoulder line
+drawn = False
+
+
+def render() -> None:
+    """Redraw the 3-line block in place (no scrolling)."""
+    global drawn
+    if drawn:
+        sys.stdout.write("\x1b[3A")          # up over the block
+    lines = (
+        HELP,
+        f"小臂: {q2:+.3f} rad ({q2 * 57.2958:+4.0f} deg)",
+        f"大臂: {q1:+.3f} rad ({q1 * 57.2958:+4.0f} deg)",
+    )
+    for ln in lines:
+        sys.stdout.write("\x1b[2K" + ln + "\n")
+    sys.stdout.flush()
+    drawn = True
+
+
+def flush_replies() -> None:
+    """Print queued firmware replies above the persistent block."""
+    global drawn
+    if not replies:
+        return
+    if drawn:
+        sys.stdout.write("\x1b[3A\x1b[J")     # up over the block, clear below
+    for ln in replies:
+        print("  [robot]", ln)
+    replies.clear()
+    drawn = False
+    render()
 
 
 def goto(a: float | None = None, b: float | None = None) -> None:
@@ -100,38 +137,39 @@ def goto(a: float | None = None, b: float | None = None) -> None:
     if b is not None:
         q2 = float(b)
     send(f"m {q1:.3f} {q2:.3f}")
-    pump()
-    print(f"  shoulder {q1:+.3f} ({q1 * 57.2958:+.0f} deg)  "
-          f"elbow {q2:+.3f} ({q2 * 57.2958:+.0f} deg) | {latest_up}")
+    pump(0.06)
+    flush_replies()
+    render()
 
 
 def do_zero() -> None:
     send("z")
-    pump()
+    pump(0.8)
+    flush_replies()
 
 
 def do_mark() -> None:
     marks.append((q1, q2))
     send(f"# MARK shoulder={q1:.3f} elbow={q2:.3f}")
-    print(f"  marked: shoulder {q1:+.3f}, elbow {q2:+.3f}")
+    replies.append(f"marked shoulder {q1:+.3f}, elbow {q2:+.3f}")
+    flush_replies()
 
 
 send("m 0.000 0.000")
-pump()
-print("connected. shoulder +0.000, elbow +0.000.")
-if HAVE_ARROWS:
-    print("up/down = big arm +-0.05, left/right = small arm -+0.05,")
-    print("Shift = +-0.20;  z = set zero here,  k = read centers,")
-    print("n = neutral,  m = mark,  q = quit")
-else:
-    print("arrow keys unsupported here; type numbers / z / k / n / m / q")
-
-last_move = 0.0
+pump(0.5)
+if os.name == "nt":
+    os.system("")                # enable ANSI escapes in legacy consoles
+print("connected.  batteries + USB ok; watch the arm and jog with the arrows.")
+render()
 
 
 def key_loop() -> None:
-    global last_move
+    last_move = 0.0
     while True:
+        if not msvcrt.kbhit():
+            pump(0.02)           # keep reading serial while idle
+            time.sleep(0.01)
+            continue
         ch = msvcrt.getch()
         if ch in (b"\x00", b"\xe0"):          # extended key: arrows etc.
             ext = msvcrt.getch()
@@ -146,7 +184,7 @@ def key_loop() -> None:
                 goto(None, q2 - (BIG if ext == b"S" else STEP))
             elif ext in (b"M", b"T"):          # right / Shift+right
                 goto(None, q2 + (BIG if ext == b"T" else STEP))
-            last_move = now
+            last_move = time.time()
             continue
         c = ch.decode(errors="replace").lower()
         if c == "q":
@@ -155,7 +193,8 @@ def key_loop() -> None:
             do_zero()
         elif c == "k":
             send("k")
-            pump()
+            pump(0.8)
+            flush_replies()
         elif c == "n":
             goto(0.0, 0.0)
         elif c == "m":
@@ -192,7 +231,8 @@ def line_loop() -> None:
                 do_zero()
             elif cmd == "k":
                 send("k")
-                pump()
+                pump(0.8)
+                flush_replies()
             elif cmd == "m":
                 do_mark()
             else:
@@ -209,8 +249,12 @@ try:
         line_loop()
 except KeyboardInterrupt:
     pass
-goto(0.0, 0.0)
-print("\nmarked poses this session:")
+if drawn:
+    sys.stdout.write("\x1b[3A\x1b[J")
+send("m 0.000 0.000")
+pump(0.5)
+flush_replies()
+print("marked poses this session:")
 for a, b in marks:
     print(f"  shoulder {a:+.3f} rad, elbow {b:+.3f} rad")
 print("log: logs/shoulder_range_session.txt")
