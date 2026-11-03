@@ -25,6 +25,8 @@
 #if WIFI_TELEMETRY
 #include <WiFi.h>
 #include <WebServer.h>
+#include <DNSServer.h>
+#include <Preferences.h>
 #include "web_page.h"
 #endif
 #include <esp_partition.h>
@@ -220,8 +222,15 @@ static void sr_log_puts(const char *s) {
 #if WIFI_TELEMETRY
 static WiFiServer twin_srv(3333);
 static WebServer web_srv(80);
+static DNSServer dns_srv;
+static Preferences wifi_prefs;
+static String sta_ssid, sta_pass;
+static bool sta_prev = false;
 static void web_root();
 static void web_data();
+static void web_scan();
+static void web_connect();
+static void web_notfound();
 #if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
 static NetworkClient twin_cli;
 #else
@@ -231,15 +240,28 @@ static bool wifi_on = false;
 
 static void wifi_begin() {
     if (wifi_on) return;
-    if (WiFi.getMode() == WIFI_OFF) {
-        WiFi.mode(WIFI_AP);
-    }
+    // AP + STA so the provisioning page can put the robot onto the home
+    // WiFi from the SR-Support hotspot, and both stay reachable after.
+    WiFi.mode(WIFI_AP_STA);
     WiFi.softAP(WIFI_AP_SSID, WIFI_AP_PASS);
     twin_srv.begin();
     twin_srv.setNoDelay(true);
     web_srv.on("/", web_root);
     web_srv.on("/data", web_data);
+    web_srv.on("/scan", web_scan);
+    web_srv.on("/connect", web_connect);
+    web_srv.onNotFound(web_notfound);
     web_srv.begin();
+    dns_srv.start(53, "*", WiFi.softAPIP());   // captive portal
+    WiFi.setAutoReconnect(true);
+    WiFi.persistent(false);
+    wifi_prefs.begin("wifi", false);
+    sta_ssid = wifi_prefs.getString("ssid", "");
+    sta_pass = wifi_prefs.getString("pass", "");
+    if (sta_ssid.length() > 0) {
+        WiFi.begin(sta_ssid.c_str(), sta_pass.c_str());
+        Serial.printf("sta: joining '%s'\n", sta_ssid.c_str());
+    }
     wifi_on = true;
     Serial.printf("wifi ap '%s' pass '%s' ip %s web80 tcp3333\n",
                   WIFI_AP_SSID, WIFI_AP_PASS,
@@ -251,6 +273,8 @@ static void wifi_stop() {
     twin_cli.stop();
     twin_srv.stop();
     web_srv.stop();
+    dns_srv.stop();
+    WiFi.disconnect(false, false);   // drop the STA link, keep the driver
     WiFi.softAPdisconnect(true);
     // keep the driver initialised: a full WiFi.mode(WIFI_OFF) makes
     // the next re-init fail inside ESP-IDF (netstack cb reg error)
@@ -1235,19 +1259,76 @@ void setup() {
 #if WIFI_TELEMETRY
 static void web_root() { web_srv.send_P(200, "text/html", WEB_PAGE); }
 
+static void web_scan() {
+    if (exec_running) {
+        web_srv.send(200, "application/json", "{\"err\":\"busy\"}");
+        return;
+    }
+    int n = WiFi.scanNetworks();
+    String js = "[";
+    int shown = 0;
+    for (int i = 0; i < n && shown < 12; ++i) {
+        if (shown) js += ",";
+        js += "{\"s\":\"" + WiFi.SSID(i) + "\",\"r\":" +
+              String(WiFi.RSSI(i)) + "}";
+        ++shown;
+    }
+    js += "]";
+    WiFi.scanDelete();
+    web_srv.send(200, "application/json", js);
+}
+
+static void web_connect() {
+    if (exec_running) {
+        web_srv.send(200, "application/json", "{\"err\":\"busy\"}");
+        return;
+    }
+    String ssid = web_srv.arg("ssid");
+    String pass = web_srv.arg("pass");
+    if (ssid.length() == 0) {
+        web_srv.send(200, "application/json", "{\"err\":\"ssid\"}");
+        return;
+    }
+    sta_ssid = ssid;
+    sta_pass = pass;
+    wifi_prefs.putString("ssid", ssid);
+    wifi_prefs.putString("pass", pass);
+    WiFi.disconnect(false, false);
+    WiFi.begin(ssid.c_str(), pass.c_str());
+    Serial.printf("sta: joining '%s'\n", ssid.c_str());
+    web_srv.send(200, "application/json", "{\"ok\":1}");
+}
+
+static void web_notfound() {
+    // Captive portal: the OS probe pages hit random hosts; bounce them to
+    // the status page so the provision sheet pops up on phones.
+    String host = web_srv.hostHeader();
+    if (host != WiFi.softAPIP().toString()) {
+        web_srv.sendHeader("Location",
+                           "http://" + WiFi.softAPIP().toString() + "/");
+        web_srv.send(302, "text/plain", "");
+    } else {
+        web_srv.send(404, "text/plain", "not found");
+    }
+}
+
 static void web_data() {
     float u[3];
     up_body(u);
     const char *st = exec_running ? "getup" : (manual ? "manual" : "hold");
-    char buf[224];
+    bool sta = (WiFi.status() == WL_CONNECTED);
+    char buf[384];
     snprintf(buf, sizeof buf,
              "{\"ms\":%lu,\"upx\":%.3f,\"upy\":%.3f,\"upz\":%.3f,"
              "\"q1\":%.3f,\"q2\":%.3f,\"exec\":%u,\"pose\":%u,\"ph\":%u,"
-             "\"tick\":%u,\"sw\":%u,\"state\":\"%s\"}",
+             "\"tick\":%u,\"sw\":%u,\"state\":\"%s\",\"sta\":%u,"
+             "\"ssid\":\"%s\",\"ip\":\"%s\"}",
              (unsigned long)millis(), u[0], u[1], u[2], cmd[0], cmd[1],
              exec_running ? 1u : 0u, (unsigned)exec_pose,
              (unsigned)exec_phase, (unsigned)exec_tick,
-             (unsigned)exec_switches, st);
+             (unsigned)exec_switches, st, sta ? 1u : 0u,
+             sta ? sta_ssid.c_str() : "",
+             sta ? WiFi.localIP().toString().c_str() : "");
     web_srv.send(200, "application/json", buf);
 }
 #endif
@@ -1255,7 +1336,25 @@ static void web_data() {
 void loop() {
     esp_task_wdt_reset();
 #if WIFI_TELEMETRY
-    if (wifi_on) web_srv.handleClient();
+    if (wifi_on) {
+        web_srv.handleClient();
+        dns_srv.processNextRequest();
+        static uint32_t last_sta_ms = 0;
+        if ((uint32_t)(millis() - last_sta_ms) >= 1000) {
+            last_sta_ms = millis();
+            const bool c = (WiFi.status() == WL_CONNECTED);
+            if (c != sta_prev) {
+                sta_prev = c;
+                if (c) {
+                    Serial.printf("sta connected '%s' ip %s\n",
+                                  sta_ssid.c_str(),
+                                  WiFi.localIP().toString().c_str());
+                } else if (sta_ssid.length() > 0) {
+                    Serial.println("sta disconnected");
+                }
+            }
+        }
+    }
 #endif
     uint32_t now = micros();
     static uint32_t last_imu_us = 0;
