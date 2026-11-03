@@ -46,24 +46,23 @@ SEQUENCES = {
         [0.0, 0.0],
     ],
     "roll_neg": [
-        # Mirror press with a second motor: whip-slam, adaptive press,
-        # then three elbow wedges with re-folds between them. The servo on
-        # this side is load-saturated (tracks only ~30 deg of the commanded
-        # sweep), so deeper press targets add nothing; the slam is what
-        # moves the body, and the elbow tuck (1.2 in the air) + extension
-        # during the same strike lands at floor contact for ~35% more
-        # impact energy. The last row is the retract trigger.
-        [0.6, 0.8],      # wind-up off the floor
+        # Stage 1 opens like roll_pos: ONE direct sweep to the full
+        # measured travel (-1.55, live shoulder sweep 2026-11-03), no
+        # positive pre-swing, then the wedge pumps. Stage 2 retries with
+        # the whip-slam (elbow tucked 1.2 in the air, extension lands at
+        # floor contact) - the -X servo is load-saturated and tracks only
+        # ~30 deg of the commanded sweep, so the impact is what moves the
+        # body when the static press runs out. Last row = retract trigger.
+        [-1.55, 0.8],    # stage 1: direct press to the travel limit
+        [-1.55, 0.8],    # adaptive press hold (<=40 ticks, firmware)
+        [-1.55, 0.15],   # elbow wedge 1
+        [-1.55, 0.8],    # re-fold (re-cock the elbow)
+        [-1.55, 0.15],   # elbow wedge 2
+        [0.6, 0.8],      # stage 2: wind-up
         [0.6, 1.2],      # tuck the elbow in the air
-        [-1.07, 0.15],   # whip-slam (shoulder + elbow strike together)
-        [-1.07, 0.15],   # adaptive press hold (<=40 ticks, firmware)
-        [-1.07, 0.8],    # re-fold (re-cock the elbow)
-        [-1.07, 0.15],   # elbow wedge 1
-        [-1.07, 0.8],    # re-fold
-        [-1.07, 0.15],   # elbow wedge 2
-        [-1.07, 0.8],    # re-fold
-        [-1.07, 0.15],   # elbow wedge 3
-        [-1.07, 0.15],   # final hold (<=90)
+        [-1.55, 0.15],   # whip-slam (shoulder + elbow strike together)
+        [-1.55, 0.15],   # adaptive press hold (<=40)
+        [-1.55, 0.15],   # final hold (<=90)
         [0.0, 0.0],      # retract
     ],
     "pitch_pos": [
