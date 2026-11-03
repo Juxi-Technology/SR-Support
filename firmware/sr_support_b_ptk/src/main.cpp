@@ -24,6 +24,8 @@
 #include <stdarg.h>
 #if WIFI_TELEMETRY
 #include <WiFi.h>
+#include <WebServer.h>
+#include "web_page.h"
 #endif
 #include <esp_partition.h>
 
@@ -217,6 +219,9 @@ static void sr_log_puts(const char *s) {
 
 #if WIFI_TELEMETRY
 static WiFiServer twin_srv(3333);
+static WebServer web_srv(80);
+static void web_root();
+static void web_data();
 #if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
 static NetworkClient twin_cli;
 #else
@@ -232,8 +237,11 @@ static void wifi_begin() {
     WiFi.softAP(WIFI_AP_SSID, WIFI_AP_PASS);
     twin_srv.begin();
     twin_srv.setNoDelay(true);
+    web_srv.on("/", web_root);
+    web_srv.on("/data", web_data);
+    web_srv.begin();
     wifi_on = true;
-    Serial.printf("wifi ap '%s' pass '%s' ip %s tcp 3333\n",
+    Serial.printf("wifi ap '%s' pass '%s' ip %s web80 tcp3333\n",
                   WIFI_AP_SSID, WIFI_AP_PASS,
                   WiFi.softAPIP().toString().c_str());
 }
@@ -242,6 +250,7 @@ static void wifi_stop() {
     if (!wifi_on) return;
     twin_cli.stop();
     twin_srv.stop();
+    web_srv.stop();
     WiFi.softAPdisconnect(true);
     // keep the driver initialised: a full WiFi.mode(WIFI_OFF) makes
     // the next re-init fail inside ESP-IDF (netstack cb reg error)
@@ -1223,8 +1232,31 @@ void setup() {
 #endif
 }
 
+#if WIFI_TELEMETRY
+static void web_root() { web_srv.send_P(200, "text/html", WEB_PAGE); }
+
+static void web_data() {
+    float u[3];
+    up_body(u);
+    const char *st = exec_running ? "getup" : (manual ? "manual" : "hold");
+    char buf[224];
+    snprintf(buf, sizeof buf,
+             "{\"ms\":%lu,\"upx\":%.3f,\"upy\":%.3f,\"upz\":%.3f,"
+             "\"q1\":%.3f,\"q2\":%.3f,\"exec\":%u,\"pose\":%u,\"ph\":%u,"
+             "\"tick\":%u,\"sw\":%u,\"state\":\"%s\"}",
+             (unsigned long)millis(), u[0], u[1], u[2], cmd[0], cmd[1],
+             exec_running ? 1u : 0u, (unsigned)exec_pose,
+             (unsigned)exec_phase, (unsigned)exec_tick,
+             (unsigned)exec_switches, st);
+    web_srv.send(200, "application/json", buf);
+}
+#endif
+
 void loop() {
     esp_task_wdt_reset();
+#if WIFI_TELEMETRY
+    if (wifi_on) web_srv.handleClient();
+#endif
     uint32_t now = micros();
     static uint32_t last_imu_us = 0;
     static uint32_t last_imu_ok_us = 0;
