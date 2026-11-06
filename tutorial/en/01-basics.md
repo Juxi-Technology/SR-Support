@@ -45,7 +45,7 @@ SR-Support is a 2-DOF (shoulder + elbow) active self-righting device:
 | Sensor | Juxi ICM42670P IMU module | 1 | 3.3 V supply |
 | Adapter | Passive servo adapter board | 1 | GPIO → 3-pin headers, shared V+/GND, no PCA9685 |
 | Wiring | USB-C data cable, Dupont wires, servo extensions | several | — |
-| Power | Servo supply 5 V / ≥5 A | 1 | Separate from the ESP32, common ground; **verified for all four get-up directions** |
+| Power | Servo supply 5 V / ≥5 A | 1 | One 5 V supply feeds the ESP32 and the servos through a 1-to-2 cable (common ground); **verified for all four get-up directions** |
 
 ---
 

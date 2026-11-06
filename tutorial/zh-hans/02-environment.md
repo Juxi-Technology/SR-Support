@@ -31,7 +31,7 @@ description: 开工前准备：创建并激活项目 .venv、获取预编译固�
 
   | 文件 | 用途 |
   |---|---|
-  | `sr_support_b_ptk_factory.bin` | 主固件（烧到 0x0；装配找中也用它，串口发 `e`） |
+  | `sr_support_b_ptk_factory.bin` | 主固件（烧到 0x0；装配找中也用它：上电到固件零点，`e` 可选） |
   | `SHA256SUMS` | 校验和 |
 
 ## 2.3 创建并激活虚拟环境（.venv）

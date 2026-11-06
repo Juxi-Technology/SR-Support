@@ -33,7 +33,7 @@ description: Before starting - create and activate the project .venv, get the pr
 
   | File | Purpose |
   |---|---|
-  | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0; also used for assembly centering via serial `e`) |
+  | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0; also used for assembly centering: power up to the firmware zero, `e` optional) |
   | `SHA256SUMS` | checksums |
 
 ## 2.3 Create and activate the virtual environment (.venv)
