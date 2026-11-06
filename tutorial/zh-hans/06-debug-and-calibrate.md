@@ -23,6 +23,8 @@ description: 遥测格式、IMU 与舵机检查、陀螺+加速度计标定、�
 pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
 
+（串口工具/串口助手（含 Windows UartAssist 下载）见 [03 页 3.3](./03-build-flash)。）
+
 打开串口会复位 ESP32；复位后应看到启动日志，随后每 250 ms 一行遥测：
 
 ```text
@@ -59,9 +61,6 @@ python tools/hw_watch.py --port COM27
 窗口固定显示 up/倾角、角速度、关节角、模式与最后一条事件；在 `cmd>` 输入命令回车即发送，
 事件同时写入 `logs/hw_watch.log`。跑完整扶正、需要保留每一行时，仍用 `pio device monitor`
 或 `tools/hw_monitor.py`（后者每 5 秒把摘要写入日志）。
-
-**Windows 图形串口助手（可选）**：UartAssist 的官方下载链接与串口设置见
-[03 页 3.3](./03-build-flash)；macOS/Linux 用上面的 `pio device monitor` 或 `tools/hw_watch.py`。
 
 **串口命令怎么发**：保持监视器打开，直接输入命令并回车（单字符命令不用加引号）。
 本页会用到的命令：

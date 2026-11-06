@@ -45,7 +45,9 @@ description: 四个倒下方向的自扶正操作方法、预期动作时间、�
 python tools/hw_monitor.py COM27
 ```
 
-（在 `SR-Support` 目录、已激活 `.venv` 的终端里运行，见 [02 页](./02-environment)。）
+（在 `SR-Support` 目录、已激活 `.venv` 的终端里运行，见 [02 页](./02-environment)。
+运行前先关闭串口助手/其他监视器；串口工具/串口助手（含 Windows UartAssist 下载）见
+[03 页 3.3](./03-build-flash)。）
 
 - 持续读取串口，每 5 秒汇总一次遥测，事件与摘要追加到 `logs/hw_monitor.log`；
 - 自动记录事件：`getup start`、`executor re-plan`、`standing`、`executor timeout`、

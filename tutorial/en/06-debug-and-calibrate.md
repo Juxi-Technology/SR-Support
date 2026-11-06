@@ -26,6 +26,9 @@ In the `SR-Support` folder with `.venv` activated, open the serial port (`COM27`
 pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
 
+(Serial tools / the Windows UartAssist download are on
+[page 03, section 3.3](./03-build-flash).)
+
 Opening the port resets the ESP32; you should see the boot log and then one telemetry line
 every 250 ms:
 
@@ -65,10 +68,6 @@ It redraws up/tilt, angular velocity, joint angles, mode and the last event in p
 `logs/hw_watch.log`. For a full get-up run where every raw line matters, keep using
 `pio device monitor` or `tools/hw_monitor.py` (the latter writes a summary to the log every
 5 s).
-
-**Windows GUI serial assistant (optional)**: the UartAssist official download link and COM
-settings are on [page 03, section 3.3](./03-build-flash); on macOS/Linux use
-`pio device monitor` or `tools/hw_watch.py` above.
 
 **How to send serial commands**: keep the monitor open and type the command followed by
 Enter (single-character commands need no quotes). Commands used on this page:

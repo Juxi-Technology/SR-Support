@@ -33,6 +33,9 @@ q=0——`z` 不依赖 IMU，任意姿态、任意齿位都能定零。
    python tools/hw_shoulder_range.py
    ```
 
+   运行前先关闭串口助手/其他监视器（会占用串口）；串口工具/串口助手（含 Windows
+   UartAssist 下载）见 [03 页 3.3](./03-build-flash)。
+
    界面常驻四行、原地刷新：
 
    ```

@@ -39,6 +39,9 @@ corresponding center pulse widths.
    python tools/hw_shoulder_range.py
    ```
 
+   Close any serial assistant/monitor first (they hold the port); serial tools / the
+   Windows UartAssist download are on [page 03, section 3.3](./03-build-flash).
+
    A persistent four-line display updates in place:
 
    ```

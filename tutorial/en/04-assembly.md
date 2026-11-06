@@ -21,7 +21,8 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 1. **Wire and flash first**: wire both servos, the IMU, servo power and the common ground per
    the table in 4.4 (mechanical parts not mounted yet; the main firmware needs the IMU to
    boot), then flash the main firmware per [page 03, section 3.1](./03-build-flash);
-2. **Power on to the firmware zero**: open the 115200 serial port and power up; after boot the
+2. **Power on to the firmware zero**: open the 115200 serial port (serial tools / the
+   UartAssist download are on [page 03, section 3.3](./03-build-flash)) and power up; after boot the
    firmware drives both servos to q=0 (center pulses 1681 / 1456 µs). When the log shows
    `servo start q: 0.00 0.00 rad` and `ready; send g to run` (or `autorun on: ...`), the
    servos are at the zero;
