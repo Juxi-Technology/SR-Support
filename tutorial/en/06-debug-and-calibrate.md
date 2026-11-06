@@ -43,6 +43,18 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 | `qd` | Joint command rates |
 | Mode | `run` / `hold` / `manual` / `auto` |
 
+If the scrolling stream is hard to read, use the fixed-line live window (commands still work):
+
+```bash
+python tools/hw_watch.py --port COM27
+```
+
+It redraws up/tilt, angular velocity, joint angles, mode and the last event in place; type at
+`cmd>` and press Enter to send a command, and events are also appended to
+`logs/hw_watch.log`. For a full get-up run where every raw line matters, keep using
+`pio device monitor` or `tools/hw_monitor.py` (the latter writes a summary to the log every
+5 s).
+
 **How to send serial commands**: keep the monitor open and type the command followed by
 Enter (single-character commands need no quotes). Commands used on this page:
 
