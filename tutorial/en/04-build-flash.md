@@ -24,9 +24,8 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 
 4. Press RST when done and read the log as in 4.3.
 
-> The assembly centering helper works the same way:
-> `firmware/releases/servo_center_ptk.bin`, also at `0x0`
-> (see [page 03, section 3.2](./03-assembly)).
+> Assembly centering needs no second image: after flashing this one, send `e` on the serial
+> port and both servos output 1520 µs (see [page 03, section 3.2](./03-assembly)).
 
 ## 4.2 Build and flash from source (developers)
 
@@ -81,6 +80,7 @@ up ... | w ... | q ... | qd ... | run
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
 | `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 06](./06-zero-tool)) |
+| `e` | Electrical center: both servos to 1520 µs (horn installation; independent of the baked zero; see [page 03, 3.2](./03-assembly)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
 | `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 09](./09-wifi-twin)) |
 | `v` / `b` | Flip shoulder / elbow sign |

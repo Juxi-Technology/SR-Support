@@ -8,7 +8,7 @@
 | [`releases/`](releases/) | **预编译固件（客户直接烧录）**：主固件与装配找中 bin + `SHA256SUMS` | 发布产物 |
 | [`sr_support_b_ptk/`](sr_support_b_ptk/) | **当前主固件**：ESP32-S3 + PTK7452MG（180° PWM）+ Juxi IMU + 无源直连转接板；参考序列执行器、四方向自扶正、WiFi 状态页/配网/MuJoCo 镜像、方向键零点校准 | **已实机验证（四方向通过）** |
 | [`i2c_scanner/`](i2c_scanner/) | IMU 地址/接线诊断（GPIO6/7，扫 0x23） | 诊断工具 |
-| [`servo_center_ptk/`](servo_center_ptk/) | 装配前舵机中位辅助（PlatformIO 工程，不需要 IMU） | 辅助工具 |
+| [`servo_center_ptk/`](servo_center_ptk/) | 旧装配找中辅助（已被主固件 `e` 命令覆盖，保留参考） | 参考 |
 | [`servo_test_ptk/`](servo_test_ptk/) | PTK 舵机单路测试 | 辅助工具 |
 | [`imu_module_i2c_test/`](imu_module_i2c_test/) | Juxi IMU I²C 读取测试 | 参考 |
 

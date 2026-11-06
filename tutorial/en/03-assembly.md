@@ -19,12 +19,13 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 ## 3.2 Servo preparation (electrical center and horn index)
 
-1. **Electrical center (before assembly)**: connect only the two servo signals (GPIO4/5) plus
-   servo power and common ground, then flash the centering helper
-   `firmware/releases/servo_center_ptk.bin` (flash at `0x0`, method in
-   [page 04, section 4.1](./04-build-flash); it uses no IMU and is only for mechanical
-   centering). To build it from source: `pio run -d firmware/servo_center_ptk -t upload`.
-   Both servos output 1520 µs; install the horns facing up;
+1. **Electrical center (before assembly)**: wire both servos, the IMU, servo power and the
+   common ground first per the table in 3.4 (mechanical parts not mounted yet; the main
+   firmware needs the IMU to boot), then flash the main firmware
+   `firmware/releases/sr_support_b_ptk_factory.bin` (at `0x0`, method in
+   [page 04, section 4.1](./04-build-flash)). Open the 115200 serial port and send `e` after
+   boot: both servos output the 1520 µs electrical center (the log prints
+   `electrical center: servos -> 1520 us ...`); install the horns facing up;
 2. **Re-index the shoulder horn** by about 2 teeth (~29°) on the 25T spline so that the firmware
    center pulse (current baked value **1681 µs**, `SERVO_SHOULDER_CENTER_US`) corresponds to a
    vertical arm at `q=0`; the elbow follows the same logic (**1456 µs**, `SERVO_CENTER_US`);

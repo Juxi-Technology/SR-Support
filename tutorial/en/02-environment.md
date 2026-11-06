@@ -31,8 +31,7 @@ description: Before starting - get the prebuilt firmware and an official flash t
 
   | File | Purpose |
   |---|---|
-  | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0) |
-  | `servo_center_ptk.bin` | bench centering helper (flash at 0x0) |
+  | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0; also used for assembly centering via serial `e`) |
   | `SHA256SUMS` | checksums |
 
   GitHub Releases: <https://github.com/Juxi-Technology/SR-Support/releases> (repository

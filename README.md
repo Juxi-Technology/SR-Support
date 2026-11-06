@@ -27,7 +27,7 @@ SR-Support/
 │  ├─ releases/             # ★ 预编译固件（客户直接烧录，无需 PlatformIO）
 │  ├─ sr_support_b_ptk/     # ★ 当前主固件
 │  ├─ i2c_scanner/          # IMU 地址诊断
-│  ├─ servo_center_ptk/     # 装配中位辅助
+│  ├─ servo_center_ptk/     # 旧装配找中（主固件 e 命令已替代，保留参考）
 │  ├─ servo_test_ptk/       # 舵机单路测试
 │  └─ imu_module_i2c_test/  # IMU 读取测试
 ├─ hardware/v1/             # ★ 当前模型：robot_v1.xml + meshes（STL）

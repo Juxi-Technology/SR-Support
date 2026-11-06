@@ -1187,6 +1187,29 @@ static void handle_serial() {
                               servo::get_center_us(0),
                               servo::get_center_us(1));
             }
+        } else if (c == 'e') {
+            // Electrical-center bench pose: drive both servos to 1520 us so
+            // the horns can be installed at the servo's electrical center
+            // before the arm is zeroed. Works with whatever zero is baked in;
+            // the joint targets are computed from the current centers/signs.
+            running = false;
+            manual = true;
+            auto_mode = false;
+            stand_state = 0;
+            stand_hold = 0;
+            exec_running = false;
+            exec_cooldown = 0;
+            float sg[2];
+            servo::get_signs(sg);
+            for (int i = 0; i < 2; ++i) {
+                manual_target[i] = (1520.0f - servo::get_center_us(i)) /
+                                   (sg[i] * SERVO_US_PER_RAD);
+                qdot_cmd[i] = 0.0f;
+            }
+            Serial.printf("electrical center: servos -> 1520 us "
+                          "(q targets %.2f %.2f rad); install the horns, "
+                          "then send m 0 0\n",
+                          manual_target[0], manual_target[1]);
         } else if (c == 'c') {
             bool was_running = running;
             running = false;

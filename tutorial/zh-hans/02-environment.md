@@ -29,8 +29,7 @@ description: 开工前准备：获取预编译固件与官方烧录工具（Flas
 
   | 文件 | 用途 |
   |---|---|
-  | `sr_support_b_ptk_factory.bin` | 主固件（烧到 0x0） |
-  | `servo_center_ptk.bin` | 装配找中辅助（烧到 0x0） |
+  | `sr_support_b_ptk_factory.bin` | 主固件（烧到 0x0；装配找中也用它，串口发 `e`） |
   | `SHA256SUMS` | 校验和 |
 
   GitHub Releases：<https://github.com/Juxi-Technology/SR-Support/releases>（需仓库权限；
