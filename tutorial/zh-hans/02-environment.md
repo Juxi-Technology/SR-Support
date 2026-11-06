@@ -5,8 +5,9 @@ description: 开工前准备：创建并激活项目 .venv、获取预编译固�
 
 # 02 环境准备（虚拟环境、烧录工具与固件）
 
-> 本页在开工前完成。**后续所有命令都在已激活 `.venv` 的终端里执行**（2.3）；只烧
-> 预编译固件不需要 PlatformIO、不需要编译，改代码才需要开发者环境（2.5）。
+> 本页在开工前完成。**命令默认在仓库根目录执行**（即包含 `firmware/`、`tools/` 的那一层）；
+> **所有 Python 命令都在已激活 `.venv` 的终端里执行**（2.3）。只烧预编译固件不需要
+> PlatformIO、不需要编译，改代码才需要开发者环境（2.5）。
 
 ## 2.1 前提
 
@@ -58,6 +59,16 @@ source .venv/bin/activate
 激活成功后提示符前会出现 **`(.venv)`**。本页其余命令和教程后续所有命令都要在这个
 **已激活的终端**里执行；关掉终端再打开时需要重新激活。忘记激活时 `pip` / `python`
 会指向系统环境，安装或运行都会出问题。
+
+> **目录要求（重要）**：`.venv` 必须位于**仓库根目录**（与 `firmware/`、`tools/`
+> 同级）。上面的创建与激活命令都是**相对路径**，所以必须在仓库根目录执行——新开终端
+> 也要先 `cd` 回仓库根目录再激活；或者用绝对路径激活，如
+> `C:\path\SR-Support\.venv\Scripts\Activate.ps1` /
+> `source /path/SR-Support/.venv/bin/activate`。
+>
+> 激活之后可以 `cd` 到任意子目录，`python` / `pip` / `pio` 仍然指向该 `.venv`；但教程里的
+> `tools/...`、`firmware/...`、`hardware/v1/...` 都是相对路径，**请在仓库根目录执行**。
+> `.venv` 与创建时的路径绑定：仓库移动或改名后，删除 `.venv` 重新创建即可。
 
 ## 2.4 烧录工具（所有客户，二选一）
 
@@ -153,7 +164,7 @@ python tools/env_check.py
 
 ## 2.8 环境验证清单
 
-- [ ] 终端提示符是 `(.venv)`；
+- [ ] 终端位于**仓库根目录**且提示符是 `(.venv)`（`pwd` / `Get-Location` 确认）；
 - [ ] `firmware/releases/sr_support_b_ptk_factory.bin` 存在且校验通过
       （`sha256sum -c firmware/releases/SHA256SUMS`）；
 - [ ] `python -m esptool version` 正常，或 Flash Download Tool 能打开；

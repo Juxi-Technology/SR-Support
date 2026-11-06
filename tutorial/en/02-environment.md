@@ -5,9 +5,10 @@ description: Before starting - create and activate the project .venv, get the pr
 
 # 02 Environment setup (venv, flash tools and firmware)
 
-> Do this page before starting. **Every command in this and later pages runs in the terminal
-> with the `.venv` activated** (2.3). Flashing the prebuilt firmware needs no PlatformIO and
-> no compilation; the developer environment (2.5) is only for changing the code.
+> Do this page before starting. **Commands assume the repository root** (the folder that
+> contains `firmware/` and `tools/`), and **every Python command runs in the terminal with
+> `.venv` activated** (2.3). Flashing the prebuilt firmware needs no PlatformIO and no
+> compilation; the developer environment (2.5) is only for changing the code.
 
 ## 2.1 Requirements
 
@@ -61,6 +62,18 @@ After activation the prompt shows **`(.venv)`**. Every command below and on the 
 tutorial pages runs in this **activated terminal**; re-activate after opening a new window.
 Without activation `pip` / `python` point at the system installation and installs or runs
 will fail.
+
+> **Directory requirement (important)**: `.venv` must live in the **repository root** (next
+> to `firmware/` and `tools/`). The create/activate commands above use **relative paths**, so
+> they must be run from the repository root - after opening a new terminal, `cd` back there
+> before activating, or use an absolute path such as
+> `C:\path\SR-Support\.venv\Scripts\Activate.ps1` /
+> `source /path/SR-Support/.venv/bin/activate`.
+>
+> Once activated you can `cd` into any subfolder and `python` / `pip` / `pio` still point at
+> that `.venv`; but the tutorial's `tools/...`, `firmware/...` and `hardware/v1/...` paths are
+> relative, so **run them from the repository root**. The venv is bound to the path where it
+> was created: after moving or renaming the repository, delete `.venv` and recreate it.
 
 ## 2.4 Flash tools (all customers - pick one)
 
@@ -161,7 +174,8 @@ With no board plugged in, `[--] no serial port found` is informational and does 
 
 ## 2.8 Checklist
 
-- [ ] the terminal prompt shows `(.venv)`;
+- [ ] the terminal is in the **repository root** and the prompt shows `(.venv)` (check with
+      `pwd` / `Get-Location`);
 - [ ] `firmware/releases/sr_support_b_ptk_factory.bin` exists and verifies
       (`sha256sum -c firmware/releases/SHA256SUMS`);
 - [ ] `python -m esptool version` works, or Flash Download Tool opens;
