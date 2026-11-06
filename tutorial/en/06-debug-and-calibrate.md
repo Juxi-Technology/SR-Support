@@ -35,13 +35,24 @@ autorun on: get-up waits for a fall
 up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 ```
 
-| Field | Meaning |
-|---|---|
-| `up` | World up vector in body coordinates (x forward, y left, z up) |
-| `w` | Angular velocity (rad/s) |
-| `q` | Current joint commands (shoulder, elbow, rad) |
-| `qd` | Joint command rates |
-| Mode | `run` / `hold` / `manual` / `auto` |
+| Field | Meaning | How to read it |
+|---|---|---|
+| `up` | World up vector in body coordinates (x forward, y left, z up) | upright `(0,0,1)`, tilt≈0°; lying poses in 6.5 (e.g. `(-1,0,0)`=pitch_pos) |
+| `w` | Angular velocity (rad/s) | ≈0 when still; non-zero while getting up/rolling; the fall gate needs `|w|<0.9` |
+| `q` | Current joint **command** angles (shoulder, elbow, rad; no feedback) | q=0 is arm vertical; shoulder + → big arm toward −Y, elbow + → forearm toward +X |
+| `qd` | Joint command rates | rarely needed |
+| `mode` | Run mode | `run` / `hold` / `manual` / `auto` |
+
+Example readings (`hw_watch` window):
+
+```text
+up  x+0.00 y+0.00 z+1.00 tilt  0.0   # upright
+up  x-1.00 y+0.00 z+0.00            # pitch_pos: top points +X
+w   +0.0 +0.0 +0.0 rad/s |w| 0.0    # still
+q   sh +0.00 el +0.00 mode hold     # arm vertical, idle
+```
+
+`tilt` is the angle between the up vector and vertical (from `up_z`); 0° means fully upright.
 
 If the scrolling stream is hard to read, use the fixed-line live window (commands still work):
 
