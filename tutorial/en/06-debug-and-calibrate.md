@@ -91,26 +91,45 @@ prints the up/gyro ranges and the tilt range, which reveals a stuck or mis-orien
 
 ## 6.2 IMU checks and calibration
 
-1. First do the mechanical orientation check on [page 04, section 4.5](./04-assembly)
-   (shoulder shaft toward IMU −Y, elbow shaft toward IMU +X), then keep the robot still and
-   upright; confirm `up≈(0, 0, 1)` and `w≈0`;
-2. Stand the robot LEVEL on a flat surface and keep it still; send `c`:
+`c` does two things:
+
+1. **Gyro zero bias**: averages 200 still samples (about 2 s) into the zero-rate offset; this
+   is used for the current power cycle and is redone automatically on every boot;
+2. **Accelerometer zero**: from the same samples it averages the gravity vector, requiring the
+   robot to stand level (gravity entirely on +Z), sanity-checks it and stores it in NVS
+   (reloaded on boot).
+
+Procedure (servo power is not required):
+
+1. Stand the robot upright on a LEVEL table, hands off, cables not pulling;
+2. Type `c` and press Enter in the serial monitor or the `hw_watch` `cmd>`:
 
    ```text
    c
    ```
 
-   `calibrating gyro+accel...` is printed; the accel bias is stored in NVS and reloaded on
-   boot. Success prints `accel bias ... (saved)`; `accel cal rejected` means the robot was
-   not level or not still - retry. The factory has already done this per unit; redo it only
-   after replacing/re-mounting the IMU or when the lying pose is off (step 5);
-3. Tilt slowly left/right and forward/back; the x/y components of `up` must follow the real
-   tilt with no jumps;
-4. If the x or y direction is reversed, send `i` / `j` to flip the IMU axis signs, then `c`
-   again;
-5. Lying check: after placing the robot and waiting 2 s, `up` must be stable and match the real
-   pose (e.g. lying on the −Y side gives `up≈(0,−1,0)` with the base face flat). A persistent
-   5°+ tilt while lying usually means the accel bias is uncalibrated - redo step 2.
+3. Keep still for about 2 s; success prints:
+
+   ```text
+   gyro bias (rad/s): ...
+   accel bias (m/s^2): ... (saved)
+   ```
+
+4. `accel cal rejected: |a|=...` means the robot was not level or not still (the gravity norm
+   is more than 1.5 m/s² away from 9.8); the bias is left unchanged - place it again and
+   resend `c`.
+
+Verification:
+
+- Tilt slowly left/right and forward/back: the x/y components of `up` must follow smoothly;
+  if a direction is reversed, send `i` / `j` to flip the IMU axis sign and run `c` again;
+- Place the robot down and wait 2 s: `up` must match the lying-pose table in 6.5 (e.g.
+  `(0,-1,0)` = roll_neg) with the base face flat;
+- A persistent 5°+ tilt while lying usually means the accel zero is off - redo this section.
+
+> Finished units are calibrated at the factory (stored in NVS); redo this only after
+> replacing/re-mounting the IMU or when the lying pose is visibly tilted. `c` only calibrates
+> the IMU - it does not change the servo zero (that is [page 05](./05-zero-tool)).
 
 ## 6.3 Servo checks and direction self-test
 
