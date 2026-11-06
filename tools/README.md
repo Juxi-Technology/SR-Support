@@ -7,7 +7,7 @@
 | 工具 | 用途 |
 |---|---|
 | [`live_twin.py`](live_twin.py) | **MuJoCo 实时镜像**：串口 `--port COM27` 或 WiFi `--tcp <Robot IP>:3333`；`--replay` 离线回放 |
-| [`hw_shoulder_range.py`](hw_shoulder_range.py) | **方向键零点校准**（`z` 定零 / `k` 读中位），见教程第 06 页 |
+| [`hw_shoulder_range.py`](hw_shoulder_range.py) | **方向键零点校准**（`z` 定零 / `k` 读中位），见教程第 05 页 |
 | [`tcp_log.py`](tcp_log.py) | WiFi 遥测流落盘（`logs/wifi_*.txt`） |
 | [`hw_monitor.py`](hw_monitor.py) | 串口监控：事件记录 + 5 秒遥测摘要 + 舵机越界检查（`logs/hw_monitor.log`） |
 | [`hw_log.py`](hw_log.py) | `l` 快速日志采集（3 s 50 Hz，含原始 IMU） |

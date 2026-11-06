@@ -37,17 +37,17 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 > calibration - **do not count teeth**: mount the horns at the firmware zero with the arm
 > vertical. Alternatively (equivalent, optional) send `e` to put both servos at the 1520 µs
 > electrical center and mount there (see the command table on [page 03](./03-build-flash));
-> either way the [page 06](./06-zero-tool) `z` command does the final precise zero.
+> either way the [page 05](./05-zero-tool) `z` command does the final precise zero.
 
 > Mounting at the firmware zero is only a **coarse centering** (the horn spline is discrete).
 > The precise zero must be set after full assembly and main-firmware flashing
-> ([page 03](./03-build-flash)) with the [page 06 zero tool](./06-zero-tool): declare the
+> ([page 03](./03-build-flash)) with the [page 05 zero tool](./05-zero-tool): declare the
 > visually vertical pose q=0 (`z` does not use the IMU and works in any pose), then bake the
 > printed pulses into `config.h` and reflash. Even if the horn was not mounted perfectly, this
 > zeroing fixes it; only when one side lacks travel (the pulse clamps at 500/2500 µs) do you
 > need to pull the horn and re-index. The horn index sets how the travel splits between the two
 > sides; the firmware manual limits (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not
-> widen them. After zeroing, shift all sequence waypoints as described on page 06, otherwise
+> widen them. After zeroing, shift all sequence waypoints as described on page 05, otherwise
 > the physical get-up poses drift.
 
 ## 4.3 Base and arm assembly
@@ -114,5 +114,5 @@ when mounting the horns or wiring.
 These two directions are the body's shoulder and elbow axes; if they do not match the
 hardware, the IMU or a servo mount is installed the wrong way - fix it before powering up.
 
-After power-up, re-check on [page 05](./05-debug-and-checks): upright gives `up≈(0, 0, 1)`;
-the four lying poses are listed in the table in 5.4.
+After power-up, re-check on [page 06](./06-debug-and-calibrate): upright gives `up≈(0, 0, 1)`;
+the four lying poses are listed in the table in 6.5.

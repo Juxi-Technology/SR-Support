@@ -1,15 +1,15 @@
 ---
-title: 08 Self-righting usage and monitoring
+title: 07 Self-righting usage and monitoring
 description: How to operate SR-Support in each fallen direction, expected motion times, serial events and monitoring logs.
 ---
 
-# 08 Self-righting usage and monitoring
+# 07 Self-righting usage and monitoring
 
 > Every finished unit is tested in all four directions before shipping. For the first use,
-> still verify each direction once per section 8.2 to make sure the unit is healthy after
+> still verify each direction once per section 7.2 to make sure the unit is healthy after
 > transport.
 
-## 8.1 Procedure
+## 7.1 Procedure
 
 1. Power up with the robot upright and wait for `autorun on: get-up waits for a fall`;
 2. Knock the robot over in any direction, **release it and keep it still for about 0.5 s**;
@@ -18,7 +18,7 @@ description: How to operate SR-Support in each fallen direction, expected motion
 5. If a run exceeds 14 s the firmware prints `executor timeout`; after a 1.5 s cooldown the
    fall gate re-triggers and retries.
 
-## 8.2 Expected behavior per direction
+## 7.2 Expected behavior per direction
 
 | Pose | Mechanism | Real-robot time |
 |---|---|---|
@@ -32,7 +32,7 @@ description: How to operate SR-Support in each fallen direction, expected motion
 > comparable in speed. An occasional `executor re-plan roll_neg -> ...` just means that press
 > failed and the fallback retry kicked in - that is the normal safety net.
 
-## 8.3 Executor logic (in firmware)
+## 7.3 Executor logic (in firmware)
 
 - 20 ticks (0.4 s) per reference waypoint, linear interpolation; output slew limit 0.08 rad/tick;
 - After the waypoints, retract the arm to neutral at 0.033 rad/tick;
@@ -44,7 +44,7 @@ description: How to operate SR-Support in each fallen direction, expected motion
   the body comes upright mid-sequence the executor jumps straight to the retract so the later
   stages cannot knock the standing robot over.
 
-## 8.4 Monitoring and logs
+## 7.4 Monitoring and logs
 
 ```bash
 python tools/hw_monitor.py COM27
@@ -72,7 +72,7 @@ executor pose=roll_neg ph=3 tick=9 tgt=(2.00,-0.80) up=(0.58,-0.24,-0.77) q=(2.0
 
 > Opening the monitor resets the ESP32; close it before flashing.
 
-## 8.5 Record keeping
+## 7.5 Record keeping
 
 For every test record the pose, whether it ended with `done`, the duration, the number of
 switches and any violations. `logs/hw_monitor.log` is the authoritative record.

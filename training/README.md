@@ -19,4 +19,4 @@ python tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
 ```
 
 执行器/参考序列与仿真细节见 [`b_line/README.md`](b_line/README.md)（PPO 训练管线已随 2026-11 瘦身移除）。
-来源与许可：根目录 `LICENSE`、[`../third_party/juxi-2dof/`](../third_party/juxi-2dof/)、教程 11-reference。
+来源与许可：根目录 `LICENSE`、[`../third_party/juxi-2dof/`](../third_party/juxi-2dof/)、教程 10-reference。

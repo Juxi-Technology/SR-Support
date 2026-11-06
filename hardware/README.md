@@ -29,4 +29,4 @@ hardware/
 - 许可：v1 模型为自研设计，**CERN-OHL-S-2.0**；Juxi B 线旧 CAD、SelfRisingRobot STL 副本
   均已随 2026-11 瘦身从仓库移除，不再分发。
 
-许可与使用说明见 [`../tutorial/zh-hans/11-reference.md`](../tutorial/zh-hans/11-reference.md) 与根目录 `LICENSE`。
+许可与使用说明见 [`../tutorial/zh-hans/10-reference.md`](../tutorial/zh-hans/10-reference.md) 与根目录 `LICENSE`。

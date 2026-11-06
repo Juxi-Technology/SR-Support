@@ -1,9 +1,9 @@
 ---
-title: 06 Zero-calibration (arrow keys; required for DIY builds)
+title: 05 Zero-calibration (arrow keys; required for DIY builds)
 description: Jog the arm to the visual center with arrow keys and declare it q=0; required for every DIY build, and after re-indexing a horn or re-assembly.
 ---
 
-# 06 Zero-calibration (arrow keys; required for DIY builds)
+# 05 Zero-calibration (arrow keys; required for DIY builds)
 
 The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so a
 stock unit needs nothing here. A **DIY build must do this page**: a hand-assembled arm will
@@ -22,15 +22,15 @@ the visual center after retracting.
 > 2 teeth on the shoulder) and zero again.
 
 Timing: after the robot is fully assembled and the main firmware is flashed (the DIY path
-runs 03 → 04 → 05 → 06).
+runs 03 → 04 → 05).
 
-## 6.1 Principle
+## 5.1 Principle
 
 The firmware defines q=0 as the visual center: arm vertical, both links in one line. The `z`
 command is an encoder-style zero: it makes the **current** joint positions q=0 and prints the
 corresponding center pulse widths.
 
-## 6.2 Procedure
+## 5.2 Procedure
 
 1. Connect both the battery and USB (servos powered) and run this in the `SR-Support` folder
    with `.venv` activated:
@@ -59,7 +59,7 @@ corresponding center pulse widths.
 4. Sanity check: press `n` (home), jog a little, home again - the arm must return to the visual
    center you just defined.
 
-## 6.3 Baking (mandatory once satisfied)
+## 5.3 Baking (mandatory once satisfied)
 
 `z` only touches RAM; a reboot restores the old zero. When happy:
 
@@ -67,11 +67,11 @@ corresponding center pulse widths.
    (`SERVO_SHOULDER_CENTER_US` / `SERVO_CENTER_US`);
 2. Shift every waypoint of `EXEC_REF*` and `training/b_line/getup_reference_b39.py` by the same
    offsets (shoulder/elbow each −Δ rad);
-3. Reflash and re-test all four directions ([page 08](./08-self-righting)).
+3. Reflash and re-test all four directions ([page 07](./07-self-righting)).
 
 > A mis-press is harmless: zero again to overwrite.
 
-## 6.4 Related commands
+## 5.4 Related commands
 
 | Command | Function |
 |---|---|

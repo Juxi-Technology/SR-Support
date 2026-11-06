@@ -88,10 +88,10 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 s 50 Hz fast log |
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
-| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 06](./06-zero-tool)) |
+| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 05](./05-zero-tool)) |
 | `e` | Electrical center (optional): both servos to 1520 µs for mounting the horns at the electrical center; the usual way is to power up to the firmware zero and mount there (see [page 04, 4.2](./04-assembly)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
-| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 09](./09-wifi-twin)) |
+| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 08](./08-wifi-twin)) |
 | `v` / `b` | Flip shoulder / elbow sign |
 | `i` / `j` | Flip IMU X / Y sign |
 | `h` | Stand-homing toggle (legacy policy path) |

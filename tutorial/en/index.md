@@ -1,6 +1,6 @@
 ---
 title: SR-Support Self-Righting Robot Tutorial
-description: Complete tutorial for the SR-Support 2-DOF self-righting device, from basics and environment setup to assembly, firmware, calibration, self-righting usage and troubleshooting.
+description: Complete tutorial for the SR-Support 2-DOF self-righting device, from basics and environment setup to flashing, assembly, zeroing, calibration, self-righting usage and troubleshooting.
 ---
 
 # SR-Support Self-Righting Robot Tutorial
@@ -18,13 +18,12 @@ verified build.
 | 02 | [Environment setup](./02-environment) | Create/activate `.venv`, prebuilt firmware + flash tools (Flash Download Tool / esptool), computer-side tools and MuJoCo env, optional PlatformIO, serial port | **do this first** |
 | 03 | [Flash the main firmware](./03-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
 | 04 | [Assembly: print, build, wire](./04-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
-| 05 | [Debug and checks](./05-debug-and-checks) | Whole-robot check after flashing/assembly: telemetry, IMU, servos, four lying poses, fall gate | debug page |
-| 06 | [Zero-calibration](./06-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; skippable for stock units |
-| 07 | [Calibration](./07-calibrate) | Gyro+accel calibration, direction self-test, zero check, fall-gate check | |
-| 08 | [Self-righting usage and monitoring](./08-self-righting) | Four fall directions, expected motion, monitoring and logs | |
-| 09 | [WiFi and the simulation twin](./09-wifi-twin) | Status page, home-WiFi provisioning, wireless MuJoCo twin | optional |
-| 10 | [Troubleshooting](./10-troubleshooting) | Common symptoms and fixes | reference |
-| 11 | [Reference: model, parameters, licensing](./11-reference) | Model files (XML/STL), parameters, reference sequences, licensing | reference |
+| 05 | [Zero-calibration](./05-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; skippable for stock units |
+| 06 | [Debug and calibration](./06-debug-and-calibrate) | Whole-robot check and calibration: telemetry, IMU, servos, center check, four lying poses, fall gate | |
+| 07 | [Self-righting usage and monitoring](./07-self-righting) | Four fall directions, expected motion, monitoring and logs | |
+| 08 | [WiFi and the simulation twin](./08-wifi-twin) | Status page, home-WiFi provisioning, wireless MuJoCo twin | optional |
+| 09 | [Troubleshooting](./09-troubleshooting) | Common symptoms and fixes | reference |
+| 10 | [Reference: model, parameters, licensing](./10-reference) | Model files (XML/STL), parameters, reference sequences, licensing | reference |
 
 ## Factory state of a finished unit (two reading paths)
 
@@ -32,11 +31,11 @@ This tutorial serves two audiences - pick the path that matches yours:
 
 | Reader | Factory state | Recommended path |
 |---|---|---|
-| **Finished-unit user** | Assembled and wired, firmware flashed, **calibrated** (servo zeros and IMU accel zeros baked), **tested** (all four get-up directions verified per unit) | Go straight to [08 usage](./08-self-righting) and [09 WiFi/twin](./09-wifi-twin) (optional); keep [10](./10-troubleshooting)/[11](./11-reference) for reference. **Pages 02/03/04/06/07 are only needed for firmware upgrades, servo/IMU replacement or horn re-mounting**; to use the twin/telemetry tools on page 09, first install the computer-side tools from page 02. |
-| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [02](./02-environment) → [03 flash](./03-build-flash) → [04 assembly](./04-assembly) → [05](./05-debug-and-checks) → [06 zeroing (required)](./06-zero-tool) → [07](./07-calibrate) → [08](./08-self-righting) end to end. Both servo zeroing (06) and IMU calibration (07) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
+| **Finished-unit user** | Assembled and wired, firmware flashed, **calibrated** (servo zeros and IMU accel zeros baked), **tested** (all four get-up directions verified per unit) | Go straight to [07 usage](./07-self-righting) and [08 WiFi/twin](./08-wifi-twin) (optional); keep [09](./09-troubleshooting)/[10](./10-reference) for reference. **Pages 02/03/04/05/06 are only needed for firmware upgrades, servo/IMU replacement or horn re-mounting**; to use the twin/telemetry tools on page 08, first install the computer-side tools from page 02. |
+| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [02](./02-environment) → [03 flash](./03-build-flash) → [04 assembly](./04-assembly) → [05 zeroing (required)](./05-zero-tool) → [06 debug/calibration](./06-debug-and-calibrate) → [07](./07-self-righting) end to end. Both zeroing (05) and calibration (06) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
 
 > Recommended first-use check for a finished unit: power up upright → confirm `up≈(0,0,1)` →
-> tip it once in each of the four directions per [page 08](./08-self-righting) and
+> tip it once in each of the four directions per [page 07](./07-self-righting) and
 > confirm it stands up.
 
 ## Prerequisites
@@ -51,9 +50,9 @@ This tutorial serves two audiences - pick the path that matches yours:
 
 All four fallen directions have been verified on the real robot, each as a **direct get-up**
 (no roll-over needed), taking about 1–6 s; no servo envelope violations were recorded. The
-kit also ships an arrow-key zero calibration tool ([page 06](./06-zero-tool)), a WiFi status
+kit also ships an arrow-key zero calibration tool ([page 05](./05-zero-tool)), a WiFi status
 page with home-network provisioning, and a wireless MuJoCo live twin
-([page 09](./09-wifi-twin)).
+([page 08](./08-wifi-twin)).
 
 ## Safety
 

@@ -1,13 +1,13 @@
 ---
-title: 09 WiFi and the simulation twin
+title: 08 WiFi and the simulation twin
 description: Status page, home-network provisioning, the wireless MuJoCo live twin and WiFi telemetry logging.
 ---
 
-# 09 WiFi and the simulation twin
+# 08 WiFi and the simulation twin
 
 This step is optional and not required for self-righting itself.
 
-## 9.1 Hotspot and status page
+## 8.1 Hotspot and status page
 
 Hotspot: SSID `SR-Support`, password `srsupport`, address `192.168.4.1` (`w` toggles it; on by
 default at boot).
@@ -17,7 +17,7 @@ The page refreshes every 300 ms: state, up vector and uprightness bar, joint com
 pose/phase, Home WiFi state and the twin-stream switch. If the browser uses a proxy, add an
 exception for this address.
 
-## 9.2 Provisioning (join the home WiFi)
+## 8.2 Provisioning (join the home WiFi)
 
 On the status page use the Home WiFi card: `Scan` → pick a network → enter the password →
 `Connect`. On success the ESP32 runs AP+STA:
@@ -28,7 +28,7 @@ On the status page use the Home WiFi card: `Scan` → pick a network → enter t
 
 2.4 GHz only; scans/connects are refused while a get-up is running.
 
-## 9.3 Wireless MuJoCo live twin
+## 8.3 Wireless MuJoCo live twin
 
 Press `Twin ON` on the status page (same as serial `d`), then:
 
@@ -44,7 +44,7 @@ python tools/live_twin.py --tcp <Robot IP>:3333
 - The USB cable is only needed for flashing and log dumps;
 - Replay a recorded log offline with `--replay <file>`.
 
-## 9.4 WiFi telemetry logging
+## 8.4 WiFi telemetry logging
 
 ```bash
 python tools/tcp_log.py
@@ -52,7 +52,7 @@ python tools/tcp_log.py
 
 Saves the hotspot telemetry stream to `logs/wifi_<time>.txt` for offline replay and analysis.
 
-## 9.5 Simulation and training reference
+## 8.5 Simulation and training reference
 
 The repo ships the MuJoCo model and training code (`training/b_line/`) for replay and
-retraining; the model files are described on [page 11](./11-reference).
+retraining; the model files are described on [page 10](./10-reference).

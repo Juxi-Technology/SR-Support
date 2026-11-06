@@ -1,13 +1,13 @@
 ---
-title: 09 WiFi 与仿真镜像
+title: 08 WiFi 与仿真镜像
 description: 状态页、家庭网络配网、MuJoCo 无线实时镜像与 WiFi 遥测落盘。
 ---
 
-# 09 WiFi 与仿真镜像
+# 08 WiFi 与仿真镜像
 
 本步为可选功能，不影响自扶正本身。
 
-## 9.1 热点与状态页
+## 8.1 热点与状态页
 
 热点：SSID `SR-Support`，密码 `srsupport`，地址 `192.168.4.1`（`w` 开关，上电默认开）。
 
@@ -15,7 +15,7 @@ description: 状态页、家庭网络配网、MuJoCo 无线实时镜像与 WiFi 
 刷新：运行状态、up 向量与直立度条、两关节指令角、扶正姿态/阶段、Home WiFi 状态、
 Twin 流开关。浏览器有系统代理时，把该地址加入代理例外。
 
-## 9.2 配网（让 ESP32 加入家里的 WiFi）
+## 8.2 配网（让 ESP32 加入家里的 WiFi）
 
 状态页 Home WiFi 卡片：`Scan` → 选网络 → 输密码 → `Connect`。成功后 AP+STA 双模：
 
@@ -25,7 +25,7 @@ Twin 流开关。浏览器有系统代理时，把该地址加入代理例外。
 
 仅支持 2.4 GHz 网络；扶正动作执行期间会拒绝扫描/配网。
 
-## 9.3 MuJoCo 无线实时镜像
+## 8.3 MuJoCo 无线实时镜像
 
 状态页按 `Twin ON`（等价串口 `d`），然后：
 
@@ -41,7 +41,7 @@ python tools/live_twin.py --tcp <Robot IP>:3333
 - 有线串口只在烧录和导出日志时需要；
 - 离线回放历史日志：`--replay <日志文件>`。
 
-## 9.4 WiFi 遥测落盘
+## 8.4 WiFi 遥测落盘
 
 ```bash
 python tools/tcp_log.py
@@ -49,7 +49,7 @@ python tools/tcp_log.py
 
 把热点的遥测流保存为 `logs/wifi_<时间>.txt`，可事后离线回放分析。
 
-## 9.5 仿真与训练参考
+## 8.5 仿真与训练参考
 
 项目自带 MuJoCo 仿真模型与训练代码（`training/b_line/`），用于复盘与重训；
-模型文件说明见 [11 参考页](./11-reference)。
+模型文件说明见 [10 参考页](./10-reference)。
