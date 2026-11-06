@@ -5,6 +5,16 @@ description: Telemetry format, IMU attitude checks and calibration, servo direct
 
 # 05 Debug and checks
 
+This page is the **whole-robot functional check after flashing / assembly**, not just the IMU:
+
+- 5.1 understand the serial telemetry;
+- 5.2 check the IMU (mounting orientation, bias);
+- 5.3 check the servos (direction, center, travel);
+- 5.4 check the four lying poses and the fall gate.
+
+The formal calibration procedure (gyro + accel zero, direction self-test, zero check,
+fall-gate check) is on [page 07](./07-calibrate).
+
 ## 5.1 Telemetry format
 
 The firmware prints one telemetry line every 250 ms (the monitor summarizes it every 5 s):

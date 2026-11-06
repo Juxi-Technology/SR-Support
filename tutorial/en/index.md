@@ -18,7 +18,7 @@ verified build.
 | 02 | [Environment setup](./02-environment) | Create/activate `.venv`, prebuilt firmware + flash tools (Flash Download Tool / esptool), computer-side tools and MuJoCo env, optional PlatformIO, serial port | **do this first** |
 | 03 | [Flash the main firmware](./03-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
 | 04 | [Assembly: print, build, wire](./04-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
-| 05 | [Debug and checks](./05-debug-and-checks) | Telemetry, IMU/servo checks, four lying poses, fall gate | debug page |
+| 05 | [Debug and checks](./05-debug-and-checks) | Whole-robot check after flashing/assembly: telemetry, IMU, servos, four lying poses, fall gate | debug page |
 | 06 | [Zero-calibration](./06-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; skippable for stock units |
 | 07 | [Calibration](./07-calibrate) | Gyro+accel calibration, direction self-test, zero check, fall-gate check | |
 | 08 | [Self-righting usage and monitoring](./08-self-righting) | Four fall directions, expected motion, monitoring and logs | |
