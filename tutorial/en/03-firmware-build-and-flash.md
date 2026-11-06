@@ -25,7 +25,8 @@ description: Build and flash the SR-Support B-line firmware with PlatformIO, ser
 > Close anything holding the serial port (serial monitor, `tools/hw_monitor.py`) before
 > flashing, otherwise you get `could not open port` / `Access is denied`.
 
-A successful build uses about RAM 7.3% and Flash 11.7%.
+A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
+builds without WiFi were about 7% / 12%).
 
 ## 3.3 Serial monitor
 
@@ -50,7 +51,7 @@ up ... | w ... | q ... | qd ... | run
 | `x` | Emergency release: detach PWM; re-arm with `r` |
 | `r` | Re-initialize PWM and center |
 | `t` | Servo self-test (small motion) |
-| `c` | Recalibrate gyro bias (keep still) |
+| `c` | Calibrate gyro + **accel zero offsets** (robot must STAND LEVEL and still; stored in NVS) |
 | `m <q1> <q2>` | Manual joint targets in rad |
 | `1/2` | Manual shoulder ±0.5 rad |
 | `3/4` | Manual elbow ±0.5 rad |
@@ -58,6 +59,9 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 s 50 Hz fast log |
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
+| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; baking procedure in 4.5) |
+| `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
+| `w` | Toggle WiFi (hotspot + status page/provisioning, see 5.6) |
 | `v` / `b` | Flip shoulder / elbow sign |
 | `i` / `j` | Flip IMU X / Y sign |
 | `h` | Stand-homing toggle (legacy policy path) |

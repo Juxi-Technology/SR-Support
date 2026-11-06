@@ -17,16 +17,19 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 1. Before mounting, command both servos to 1520 µs (electrical center);
 2. **Re-index the shoulder horn** by about 2 teeth (~29°) on the 25T spline so the vertical arm
-   corresponds to the firmware zero `q=0`; after re-indexing the shoulder zero is about
-   **1840 µs** (`SERVO_SHOULDER_CENTER_US`);
-3. Keep the elbow at its default center: **1520 µs** (`SERVO_CENTER_US`);
+   corresponds to the firmware zero `q=0`. After re-indexing, define the visual center as q=0
+   with the arrow-key tool in 4.5 and write the printed pulse back to
+   `SERVO_SHOULDER_CENTER_US` (current unit's baked value: **1681 µs**);
+3. The elbow zero follows the same 4.5 procedure (current baked value: **1456 µs**,
+   `SERVO_CENTER_US`);
 4. Mount the horns, tighten, and check the full travel by hand for binding;
 5. Direction convention (matches the simulator): `shoulder +q` moves the big arm toward **−Y**,
    `elbow +q` moves the forearm toward **+X**; firmware defaults are
    `SERVO_SHOULDER_SIGN=-1`, `SERVO_ELBOW_SIGN=-1`.
 
-> The re-index makes the travel asymmetric (~61° / 119°); this is mechanical. The firmware joint
-> limits `Q_SHOULDER_MIN=-1.07` and `Q_SHOULDER_MAX=+2.07` must match — do not widen them.
+> The horn index sets how the travel splits between the two sides; the firmware manual limits
+> (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not widen them. After zeroing, shift
+> all sequence waypoints as described in 4.5, otherwise the physical get-up poses drift.
 
 ## 2.3 Base and arm assembly
 

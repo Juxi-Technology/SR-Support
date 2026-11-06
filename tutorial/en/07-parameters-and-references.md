@@ -25,31 +25,35 @@ description: SR-Support firmware parameters, the four reference sequences, verif
 | `EXEC_MIN_SWITCH_AGE` | 25 | Earliest tick for a switch |
 | `EXEC_MAX_SWITCHES` | 5 | Max switches per run |
 | `EXEC_NEUTRAL_MAX` | 120 | Max neutral-retract ticks |
-| `SERVO_SHOULDER_CENTER_US` | 1840 | Shoulder zero pulse (re-indexed horn) |
-| `SERVO_CENTER_US` | 1520 | Elbow zero pulse |
+| `SERVO_SHOULDER_CENTER_US` | 1681 | Shoulder zero pulse (visual-center value baked 2026-11; re-zero per 4.5) |
+| `SERVO_CENTER_US` | 1456 | Elbow zero pulse (same) |
 | `SERVO_US_PER_RAD` | 636.62 | 2000 µs / π |
-| `Q_SHOULDER_MIN/MAX` | −1.07 / +2.07 rad | Shoulder travel |
-| `Q_ELBOW_MIN/MAX` | ±0.80 rad | Manual/policy range (executor uses ±1.55 mechanically) |
+| `Q_SHOULDER_MIN/MAX` | −1.85 / +1.82 rad | Shoulder manual-command limits |
+| `Q_ELBOW_MIN/MAX` | −0.90 / +0.70 rad | Manual range (executor uses ±1.55 mechanically) |
 | `SERVO_SHOULDER_SIGN/ELBOW_SIGN` | −1 / −1 | Servo direction |
 | `IMU_YAW90` | 1 | IMU mounted 90° rotated |
+| `MAHONY_KP` / `ACCEL_TRUST_BAND` | 6.0 / 2.5 m/s² | Attitude filter: accel-correction gain / trust band |
+| `WIFI_AP_SSID` / `WIFI_AP_PASS` | SR-Support / srsupport | Hotspot (`w` toggles it; on at boot) |
 
-## 7.2 Reference sequences (shoulder, elbow; rad)
+## 7.2 Reference sequences (shoulder, elbow; rad; value-for-value with `training/b_line/getup_reference_b39.py`)
 
 | Pose | Sequence |
 |---|---|
-| `roll_pos` | `[2.0,-0.8] → [0,-0.8] → [0,0]` |
-| `roll_neg` | `[2.0,-0.8] ×4 (hold) → [0,-0.8] → [0,0]` |
-| `pitch_pos` | `[-1.07,1.55] → [0,1.55] → [0,0]` |
-| `pitch_neg` | `[-1.07,-1.55] → [0,-1.55] → [0,0]` |
+| `roll_pos` | `[1.75,-0.90] → [-0.25,-0.90] → retract` |
+| `roll_neg` | `[-1.80,0.70]` full-speed direct press (hold ≤40 ticks) → wedge pumps `[-1.80,0.35] → [-1.80,0.05]` ×2 (each hold ≤30) → fallback: `[0.35,0.70] → [0.35,1.10] → [-1.80,0.05]` (whip-slam, hold ≤40) → final hold ≤90 → retract |
+| `pitch_pos` | `[-1.32,1.45] → [-0.25,1.45] → retract` |
+| `pitch_neg` | `[-1.32,-1.65] → [-0.25,-1.65] → retract` |
 
-## 7.3 Verified status (2026-10-27)
+## 7.3 Verified status (2026-11-06)
 
-- All four directions verified on the real robot: `pitch_neg` ~3 s, `pitch_pos` ~5–6 s,
-  `roll_pos` ~3 s, `roll_neg` 5–14 s (roll over the top + pose re-plan);
-- No servo envelope violations in any test;
-- `roll_neg` is a hardware-specific sequence: the 1× simulation model differs in friction and
-  arm mass (the real arm behaves like ~2× mass), so this direction does not reproduce in
-  simulation. This is a known model gap, not a code mismatch.
+- All four directions verified on the real robot, each as a **direct get-up** (no roll-over),
+  about 1–6 s; no servo envelope violations;
+- `roll_neg` final recipe: full-travel direct press + elbow-wedge pumps ×2, whip-slam retry as
+  fallback (the earlier roll-over + re-plan scheme is retired);
+- The attitude pipeline was corrected with accel-bias calibration (see 4.2); lying poses now
+  match the real robot;
+- `roll_neg` still does not reproduce in the 1× mass simulation model (arm mass/friction
+  differ); that is a known model gap - the hardware firmware is validated on hardware.
 
 ## 7.4 Licensing
 

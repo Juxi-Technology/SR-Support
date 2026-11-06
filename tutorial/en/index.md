@@ -28,11 +28,12 @@ any direction it plants its two-joint arm on the ground, rolls and levers itself
 - 6 V / ≥5 A servo power supply and a USB-C data cable;
 - PlatformIO (recommended) or Arduino tooling on your computer.
 
-## Verified status (2026-10-27)
+## Verified status (2026-11-06)
 
-All four fallen directions have been verified on the real robot: the two pitch directions take
-about 3–6 s; the shoulder-swing direction (`roll_neg`) rolls over the top and re-plans to the
-pitch reference, taking 5–14 s. No servo envelope violations were recorded.
+All four fallen directions have been verified on the real robot, each as a **direct get-up**
+(no roll-over needed), taking about 1–6 s; no servo envelope violations were recorded. The
+kit also ships an arrow-key zero calibration tool (`tools/hw_shoulder_range.py` + `z`, see 4.5),
+a WiFi status page with home-network provisioning, and a wireless MuJoCo live twin (see 5.6).
 
 ## Safety
 
