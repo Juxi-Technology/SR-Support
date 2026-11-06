@@ -1,7 +1,7 @@
 """Capture the firmware's 50 Hz fast log for bring-up/diagnosis.
 
-  .venv-pio/Scripts/python.exe tools/hw_log.py                 # hold, 3 s
-  .venv-pio/Scripts/python.exe tools/hw_log.py --policy        # send g, log 3 s, then s
+  python tools/hw_log.py                 # hold, 3 s
+  python tools/hw_log.py --policy        # send g, log 3 s, then s
 
 The log is saved under logs/ and a short summary (IMU sample repeats, q range,
 up range) is printed. Use it to check the IMU output rate and whether the

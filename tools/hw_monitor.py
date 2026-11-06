@@ -7,7 +7,7 @@ Flags any commanded joint angle outside the legal servo envelope:
   shoulder  [-1.07, +2.07] rad  (180 deg total after the horn re-index)
   elbow     [-1.55, +1.55] rad  (177.6 deg total)
 
-Run:  .venv-pio/Scripts/python.exe tools/hw_monitor.py [PORT]
+Run:  python tools/hw_monitor.py [PORT]
 Stop: close the window / Ctrl-C.
 """
 

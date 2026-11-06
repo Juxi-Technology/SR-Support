@@ -7,8 +7,8 @@ center used while installing the horns, flash the bench sketch
 ``firmware/servo_center_ptk`` instead.  DTR/RTS are set before opening so the
 ESP32-S3 is not reset.
 
-Run with the PlatformIO Python (pyserial is installed there):
-  .venv-pio/Scripts/python.exe tools/servo_center.py --port COM27
+Run with the project venv activated (pyserial is installed there):
+  python tools/servo_center.py --port COM27
 """
 
 from __future__ import annotations

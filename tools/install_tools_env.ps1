@@ -1,10 +1,11 @@
-# Install the computer-side tool dependencies into a project-local venv (Windows).
+# Install the computer-side tool dependencies into the project .venv (Windows).
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File tools\install_tools_env.ps1
 #
-# This creates .venv next to the repository root and installs tools/requirements.txt
-# (pyserial, numpy, mujoco, gymnasium). It does not touch the system Python and does
-# not install PlatformIO - see install_platformio.ps1 for that (separate .venv-pio).
+# This creates .venv if needed and installs tools/requirements.txt
+# (pyserial, numpy, mujoco, gymnasium). It does not touch the system Python
+# and does not install PlatformIO - install_platformio.ps1 adds that to the
+# same .venv.
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
@@ -32,5 +33,6 @@ Write-Host "Installing tool dependencies ..."
 & $Python -m pip install -r (Join-Path $Root "tools\requirements.txt")
 
 Write-Host ""
-Write-Host "Done. Run tools with:"
-Write-Host "  $Python tools\live_twin.py --tcp <Robot IP>:3333"
+Write-Host "Done. Activate the venv, then run tools with plain python:"
+Write-Host "  .\.venv\Scripts\Activate.ps1"
+Write-Host "  python tools\live_twin.py --tcp <Robot IP>:3333"

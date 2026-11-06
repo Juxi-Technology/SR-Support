@@ -4,7 +4,7 @@ Sends manual joint targets over serial and checks the IMU after each step.
 This is the sequence that worked on the assembled SelfRisingRobot print on
 2026-10-22; it assumes the robot is lying on its side (body +X up, up_z ~ 0).
 
-  .venv-pio/Scripts/python.exe tools/hw_right.py --port COM27
+  python tools/hw_right.py --port COM27
 
 It is a bring-up/demo aid, not the final controller. Stop if the arm binds or
 a servo stalls (the PTK has no position feedback).

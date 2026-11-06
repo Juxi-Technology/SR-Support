@@ -8,11 +8,13 @@
 
 ## 常用命令
 
+先按教程 02 页创建并激活项目 `.venv`，然后：
+
 ```bash
 pip install -r training/b_line/requirements.txt
 
 # 回放/验证四姿态扶正（MuJoCo 窗口）
-.venv/Scripts/python.exe tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
+python tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
 
 ```
 

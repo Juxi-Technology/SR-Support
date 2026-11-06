@@ -64,7 +64,7 @@ foreach ($Idf in $IdfCandidates) {
         Write-Meta
         if (-not (Test-Path $Gcc)) { throw "Copy finished but $Gcc is missing." }
         Write-Host "Installed: $Gcc"
-        Write-Host "Next: .venv-pio\Scripts\pio.exe run -d firmware/sr_support_b_ptk"
+        Write-Host "Next: pio run -d firmware/sr_support_b_ptk"
         exit 0
     }
 }
@@ -95,4 +95,4 @@ if (-not (Test-Path $Gcc)) {
 
 Write-Host ""
 Write-Host "Installed: $Gcc"
-Write-Host "Next: .venv-pio\Scripts\pio.exe run -d firmware/sr_support_b_ptk"
+Write-Host "Next: pio run -d firmware/sr_support_b_ptk"

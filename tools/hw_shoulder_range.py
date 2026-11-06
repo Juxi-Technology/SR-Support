@@ -5,7 +5,7 @@ console keeps a small in-place English display (two help lines, then
 the SmallArm/BigArm values) that updates without scrolling. Run it in a
 terminal with the servo battery and the USB cable both connected:
 
-    .venv/Scripts/python.exe tools/hw_shoulder_range.py
+    python tools/hw_shoulder_range.py
 
 Arrow keys:
     up / down       BigArm (shoulder)  +-0.05 rad   (Shift: +-0.20)

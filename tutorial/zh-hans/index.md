@@ -14,7 +14,7 @@ SR-Support 是一个基于 2 自由度手臂的低成本主动自扶正装置：
 | # | 页面 | 内容 | 备注 |
 |---|---|---|---|
 | 01 | [基础知识](./01-basics) | 工作原理、整机参数与 BOM | 先读 |
-| 02 | [环境准备](./02-environment) | 预编译固件 + 烧录工具（Flash Download Tool / esptool）、电脑端工具与 MuJoCo 环境、可选 PlatformIO、确认串口 | **开工前完成** |
+| 02 | [环境准备](./02-environment) | 创建并激活 `.venv`、预编译固件 + 烧录工具（Flash Download Tool / esptool）、电脑端工具与 MuJoCo 环境、可选 PlatformIO、确认串口 | **开工前完成** |
 | 03 | [散件组装：打印、装配与接线](./03-assembly) | 打印件、舵盘齿位与中位、接线表、IMU 安装 | 成品可跳过 |
 | 04 | [第一步：烧录主固件](./04-build-flash) | 预编译 bin 烧录（推荐给客户）或 PlatformIO 源码构建、串口命令、上电行为 | 成品可跳过 |
 | 05 | [调试与检查](./05-debug-and-checks) | 遥测格式、IMU/舵机检查、四躺姿与跌倒门 | 调试页 |

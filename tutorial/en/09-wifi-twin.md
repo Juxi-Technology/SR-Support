@@ -33,10 +33,11 @@ On the status page use the Home WiFi card: `Scan` → pick a network → enter t
 Press `Twin ON` on the status page (same as serial `d`), then:
 
 ```bash
-.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333
+python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
-(The tool environment is set up on [page 02](./02-environment).)
+(Create and activate `.venv` first as on [page 02](./02-environment); the tool environment is
+set up there too.)
 
 - The window mirrors the real attitude live and keeps the body on the floor;
 - The arm is held at its floor-contact angle like the stalled servo (no floor penetration);
@@ -46,7 +47,7 @@ Press `Twin ON` on the status page (same as serial `d`), then:
 ## 9.4 WiFi telemetry logging
 
 ```bash
-.venv/Scripts/python.exe tools/tcp_log.py
+python tools/tcp_log.py
 ```
 
 Saves the hotspot telemetry stream to `logs/wifi_<time>.txt` for offline replay and analysis.

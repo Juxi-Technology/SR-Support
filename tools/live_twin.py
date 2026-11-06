@@ -20,9 +20,9 @@ rests on the floor (a pressing arm pose may dip below the floor plane: the
 servo stalls against the real floor, the commanded angle does not).
 
 Usage:
-  .venv/Scripts/python.exe tools/live_twin.py --port COM27
-  .venv/Scripts/python.exe tools/live_twin.py --replay logs/hw_fast_20261022_180610.txt
-  .venv/Scripts/python.exe tools/live_twin.py --port COM27 --xml hardware/v1/robot_v1.xml
+  python tools/live_twin.py --port COM27
+  python tools/live_twin.py --replay logs/hw_fast_20261022_180610.txt
+  python tools/live_twin.py --port COM27 --xml hardware/v1/robot_v1.xml
 
 Note: opening the port can reset the ESP32 (DTR), as with the other hw
 tools. The twin is read-only apart from the single 'd' toggle it may send.

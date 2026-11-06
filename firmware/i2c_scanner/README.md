@@ -14,11 +14,11 @@ B 线 IMU 不识别时先用这个 sketch，确认 I²C 总线上有没有设备
 ## 烧录/查看
 
 ```bash
-.venv-pio/Scripts/pio.exe run -d firmware/i2c_scanner -t upload --upload-port COMx
+pio run -d firmware/i2c_scanner -t upload --upload-port COMx
 ```
 
 ```bash
-.venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COMx
+pio device monitor --rts 0 --dtr 0 -b 115200 -p COMx
 ```
 
 预期：

@@ -27,15 +27,15 @@
 
 ## 3. 安装脚本
 
-- [`install_platformio.ps1`](install_platformio.ps1)：项目内 `.venv-pio` 安装 PlatformIO（烧录用）；
+- [`install_platformio.ps1`](install_platformio.ps1)：项目内 `.venv` 安装 PlatformIO（与工具共用）；
 - [`install_tools_env.ps1`](install_tools_env.ps1)：项目内 `.venv` 安装电脑端工具依赖
   （pyserial/numpy/mujoco/gymnasium）；
 - [`env_check.py`](env_check.py)：**环境自检**：实际加载并步进 MuJoCo 模型、列出串口
   （安装后用，`env check: PASS` 即正常；教程 02 页）；
 - [`install_xtensa_toolchain.ps1`](install_xtensa_toolchain.ps1)：工具链下载卡住时的修复脚本。
 
-虚拟环境不是硬性要求：也可以自行 `pip install -r tools/requirements.txt`，把命令里的
-`.venv\Scripts\python.exe` 换成 `python`。
+所有 Python 命令都在**已激活 `.venv`** 的终端里执行（创建与激活见教程 02 页）：
+先 `pip install -r tools/requirements.txt`，再用 `python tools/xxx.py`。
 
 
 

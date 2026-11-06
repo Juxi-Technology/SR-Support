@@ -1,12 +1,13 @@
 ---
-title: 02 Environment setup (flash tools, tools and MuJoCo)
-description: Before starting - the prebuilt firmware and an official flash tool (Flash Download Tool / esptool), the computer-side tools and MuJoCo environment, optional PlatformIO, and the serial port.
+title: 02 Environment setup (venv, flash tools and firmware)
+description: Before starting - create and activate the project .venv, get the prebuilt firmware and an official flash tool (Flash Download Tool / esptool), optional PlatformIO, the computer-side tools and MuJoCo, and the serial port.
 ---
 
-# 02 Environment setup (flash tools, tools and MuJoCo)
+# 02 Environment setup (venv, flash tools and firmware)
 
-> Do this page before starting. Flashing the prebuilt firmware needs **no PlatformIO and no
-> compilation**; the developer environment (2.4) is only for changing or rebuilding the code.
+> Do this page before starting. **Every command in this and later pages runs in the terminal
+> with the `.venv` activated** (2.3). Flashing the prebuilt firmware needs no PlatformIO and
+> no compilation; the developer environment (2.5) is only for changing the code.
 
 ## 2.1 Requirements
 
@@ -33,9 +34,38 @@ description: Before starting - the prebuilt firmware and an official flash tool 
   | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0; also used for assembly centering via serial `e`) |
   | `SHA256SUMS` | checksums |
 
-## 2.3 Flash tools (all customers - pick one)
+## 2.3 Create and activate the virtual environment (.venv)
+
+All computer-side Python tools (esptool, PlatformIO, the MuJoCo tools) go into the **same**
+project-local `.venv`. Run this from the repository root:
+
+**Windows (PowerShell)**
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+- Without Python 3.12, use `py -3 -m venv .venv` (3.10+ works);
+- If PowerShell refuses to run scripts, run
+  `Set-ExecutionPolicy -Scope Process Bypass` in this window and activate again.
+
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+After activation the prompt shows **`(.venv)`**. Every command below and on the later
+tutorial pages runs in this **activated terminal**; re-activate after opening a new window.
+Without activation `pip` / `python` point at the system installation and installs or runs
+will fail.
+
+## 2.4 Flash tools (all customers - pick one)
 
 A prebuilt image is one bin flashed at 0x0 - **no PlatformIO, no toolchain download**.
+Make sure the prompt shows `(.venv)`.
 
 **A. Windows GUI: Espressif Flash Download Tool**
 
@@ -67,51 +97,44 @@ python -m esptool --chip esp32s3 -p COM27 -b 460800 write_flash 0x0 firmware/rel
 
 If connecting fails, enter download mode: hold **BOOT**, tap **RST**, release **BOOT**.
 
-## 2.4 PlatformIO (developers only - building from source)
+## 2.5 PlatformIO (developers only - building from source)
 
 > Skip this unless you change the code. **Note**: PlatformIO (including the VS Code
 > PlatformIO extension) downloads the espressif32 platform and the Xtensa toolchain on first
 > use (~1 GB from the PlatformIO registry and GitHub). On many networks in China this is slow
 > or fails and needs a proxy/VPN; the VS Code extension does not avoid the download.
 
-- Windows: `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`
-  (needs Python 3.10+ and the `py` launcher; the script tries 3.12, then falls back to `py -3`);
-- Linux/macOS: `pip install platformio`, and replace `.venv-pio/Scripts/pio.exe` below with `pio`;
-- Verify: `pio --version`.
+With `(.venv)` active:
 
-## 2.5 Computer-side tools and MuJoCo environment (twin / zeroing / logs)
+```bash
+pip install platformio
+```
+
+On Windows you can also run `tools/install_platformio.ps1`, which installs into this same
+`.venv`. Verify:
+
+```bash
+pio --version
+```
+
+## 2.6 Computer-side tools and MuJoCo environment (twin / zeroing / logs)
 
 Not needed for flashing. Install it when you use the arrow-key zero tool, the MuJoCo live twin
-(`tools/live_twin.py`), the simulation replay or the log tools. Everything goes into the
-project-local `.venv`: pyserial, numpy, MuJoCo (3.1+) and gymnasium.
-
-**Windows**
+(`tools/live_twin.py`), the simulation replay or the log tools. With `(.venv)` active, install
+the dependencies (pyserial, numpy, MuJoCo 3.1+, gymnasium):
 
 ```bash
-powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1
+pip install -r tools/requirements.txt
 ```
 
-**Linux / macOS**
-
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r tools/requirements.txt
-```
-
-> **Activate the venv or not?** This tutorial does **not** activate it: every command spells
-> out the interpreter (Windows `.venv\Scripts\python.exe`, Linux/macOS `.venv/bin/python`), so
-> each line can be copied as-is and Windows PowerShell's default block on `Activate.ps1` does
-> not matter. If you prefer activating: `.venv\Scripts\Activate.ps1` on Windows or
-> `source .venv/bin/activate` on Linux/macOS; once the prompt shows `(.venv)`, replace the
-> interpreter path in later commands with `python` / `pip` (e.g. `python tools/env_check.py`).
-
-On a slow network in China append the Tsinghua mirror
+On Windows you can also run `tools/install_tools_env.ps1` (creates/reuses `.venv` and installs
+the same set). On a slow network in China append the Tsinghua mirror
 `-i https://pypi.tuna.tsinghua.edu.cn/simple`; the first install downloads a few hundred MB.
 
 **Check: run the environment self-test (it loads and steps MuJoCo, not just imports)**
 
 ```bash
-.venv/Scripts/python.exe tools/env_check.py
+python tools/env_check.py
 ```
 
 The last line must be `env check: PASS`, with output like:
@@ -121,16 +144,14 @@ The last line must be `env check: PASS`, with output like:
 [ok] model hardware\v1\robot_v1.xml: nq=9 nv=8 dt=0.0002s, 200 steps stable ...
 ```
 
-On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python` (or just
-`python tools/env_check.py` when the venv is active). With no board plugged in,
-`[--] no serial port found` is an informational line and does not affect PASS.
+With no board plugged in, `[--] no serial port found` is informational and does not affect PASS.
 
 > On Linux, a GLFW/OpenGL error when the MuJoCo window opens means missing system libraries:
 > install `libgl1` and `libglew-dev` (e.g. `sudo apt install libgl1 libglew-dev`). The
 > Windows/macOS MuJoCo wheels bundle what they need. The `training/b_line` simulation and
 > replay use the same environment - nothing extra to install.
 
-## 2.6 Connect the board and confirm the serial port
+## 2.7 Connect the board and confirm the serial port
 
 1. Connect over USB-C; on Windows read the COM number in Device Manager, on Linux it is
    usually `/dev/ttyACM0` (add your user to the `dialout` group), on macOS usually
@@ -138,13 +159,14 @@ On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python` (or ju
 2. Remember the port - every `COM27` in later pages is this value;
 3. A serial monitor or `hw_monitor.py` holds the port; close it before flashing.
 
-## 2.7 Checklist
+## 2.8 Checklist
 
+- [ ] the terminal prompt shows `(.venv)`;
 - [ ] `firmware/releases/sr_support_b_ptk_factory.bin` exists and verifies
       (`sha256sum -c firmware/releases/SHA256SUMS`);
 - [ ] `python -m esptool version` works, or Flash Download Tool opens;
 - [ ] the board's serial port is visible;
 - [ ] (developers) `pio --version` works;
-- [ ] `tools/env_check.py` prints `env check: PASS`.
+- [ ] `python tools/env_check.py` prints `env check: PASS`.
 
 Only continue once the items you need pass.

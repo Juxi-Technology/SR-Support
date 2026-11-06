@@ -1,11 +1,11 @@
 """Hardware bring-up check for the B-line robot over the USB serial port.
 
-Examples (from the repository root, PlatformIO Python has pyserial):
-  .venv-pio/Scripts/python.exe tools/hw_check.py
-  .venv-pio/Scripts/python.exe tools/hw_check.py --center
-  .venv-pio/Scripts/python.exe tools/hw_check.py --self-test
-  .venv-pio/Scripts/python.exe tools/hw_check.py --manual 1
-  .venv-pio/Scripts/python.exe tools/hw_check.py --tilt 15
+Examples (from the repository root with the project venv activated):
+  python tools/hw_check.py
+  python tools/hw_check.py --center
+  python tools/hw_check.py --self-test
+  python tools/hw_check.py --manual 1
+  python tools/hw_check.py --tilt 15
 
 --tilt logs the IMU for N seconds; tilt/pick up the robot by hand while it
 runs, then read the printed up-vector and gyro ranges.

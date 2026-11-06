@@ -7,9 +7,9 @@
 //   IMU SCL -> CH4 signal (GPIO7)
 //
 // Build/upload:
-//   .venv-pio/Scripts/pio.exe run -d firmware/i2c_scanner -t upload --upload-port COMx
+//   pio run -d firmware/i2c_scanner -t upload --upload-port COMx
 // Monitor (avoid auto-reset):
-//   .venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COMx
+//   pio device monitor --rts 0 --dtr 0 -b 115200 -p COMx
 //
 // Expected for the Juxi 6-axis module: found 0x23.
 // If you see 0x68/0x69, it is likely an MPU6050-class module, not this firmware.

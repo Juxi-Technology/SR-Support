@@ -30,10 +30,10 @@ Twin 流开关。浏览器有系统代理时，把该地址加入代理例外。
 状态页按 `Twin ON`（等价串口 `d`），然后：
 
 ```bash
-.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333
+python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
-（工具环境见 [02 页](./02-environment)。）
+（先按 [02 页](./02-environment) 创建并激活 `.venv`；工具环境也在那里安装。）
 
 - 窗口中的模型按实机姿态实时显示，身体自动贴地；
 - 手臂接触地面时会被"挡住"在接触角（模拟实机堵转），不会穿地；
@@ -43,7 +43,7 @@ Twin 流开关。浏览器有系统代理时，把该地址加入代理例外。
 ## 9.4 WiFi 遥测落盘
 
 ```bash
-.venv/Scripts/python.exe tools/tcp_log.py
+python tools/tcp_log.py
 ```
 
 把热点的遥测流保存为 `logs/wifi_<时间>.txt`，可事后离线回放分析。

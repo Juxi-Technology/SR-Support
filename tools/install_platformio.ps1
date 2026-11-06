@@ -1,15 +1,16 @@
-# Install PlatformIO Core into a project-local venv (Windows).
+# Install PlatformIO Core into the project .venv (Windows).
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File tools\install_platformio.ps1
 #
-# This creates .venv-pio next to the repository root, installs PlatformIO,
-# and prints the version. It does not modify the system Python.
+# This creates .venv if needed (the same venv used by the computer-side
+# tools), installs PlatformIO there and prints the version. It does not
+# modify the system Python.
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
-$Venv = Join-Path $Root ".venv-pio"
+$Venv = Join-Path $Root ".venv"
 $Python = Join-Path $Venv "Scripts\python.exe"
 $Pio = Join-Path $Venv "Scripts\pio.exe"
 
@@ -36,8 +37,8 @@ Write-Host "PlatformIO version:"
 & $Pio --version
 
 Write-Host ""
-Write-Host "Next:"
-Write-Host "  $Pio device list"
-Write-Host "  $Pio run -d firmware/sr_support_b_ptk"
-Write-Host "  $Pio run -d firmware/sr_support_b_ptk -t upload --upload-port COMx"
-Write-Host "  $Pio device monitor -b 115200 -p COMx"
+Write-Host "Next (activate the venv first: .\.venv\Scripts\Activate.ps1):"
+Write-Host "  pio device list"
+Write-Host "  pio run -d firmware/sr_support_b_ptk"
+Write-Host "  pio run -d firmware/sr_support_b_ptk -t upload --upload-port COMx"
+Write-Host "  pio device monitor -b 115200 -p COMx"

@@ -26,10 +26,10 @@ DIY 组装则**必做本页**：手动装配后手臂几乎不可能正好落在
 
 ## 6.2 操作步骤
 
-1. 电池 + Type-C 都接上（舵机要有电），运行：
+1. 电池 + Type-C 都接上（舵机要有电），在**已激活 `.venv`** 的终端里运行：
 
    ```bash
-   .venv/Scripts/python.exe tools/hw_shoulder_range.py
+   python tools/hw_shoulder_range.py
    ```
 
    界面常驻三行、原地刷新：

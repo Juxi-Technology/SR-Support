@@ -3,9 +3,8 @@
 Unlike a bare ``import`` test, this actually loads the robot model, steps the
 MuJoCo engine and lists the serial ports, so a broken install fails here.
 
-Run from anywhere with the project venv:
-  .venv/Scripts/python.exe tools/env_check.py
-  .venv/bin/python tools/env_check.py          # Linux / macOS
+Run from anywhere with the project venv activated (see tutorial page 02):
+  python tools/env_check.py
 
 Exit code 0 = PASS, 1 = FAIL.
 """

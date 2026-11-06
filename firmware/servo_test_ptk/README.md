@@ -18,11 +18,11 @@
 | `p` | 打印状态 |
 
 ```bash
-.venv-pio/Scripts/pio.exe run -d firmware/servo_test_ptk -t upload --upload-port COMx
+pio run -d firmware/servo_test_ptk -t upload --upload-port COMx
 ```
 
 ```bash
-.venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COMx
+pio device monitor --rts 0 --dtr 0 -b 115200 -p COMx
 ```
 
 > 测试时清空关节扫掠面、手扶底座；异常立即断 6V。  

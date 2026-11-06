@@ -15,7 +15,7 @@ verified build.
 | # | Page | Content | Note |
 |---|---|---|---|
 | 01 | [Basics](./01-basics) | Working principle, specs, BOM | read first |
-| 02 | [Environment setup](./02-environment) | Prebuilt firmware + flash tools (Flash Download Tool / esptool), computer-side tools and MuJoCo env, optional PlatformIO, serial port | **do this first** |
+| 02 | [Environment setup](./02-environment) | Create/activate `.venv`, prebuilt firmware + flash tools (Flash Download Tool / esptool), computer-side tools and MuJoCo env, optional PlatformIO, serial port | **do this first** |
 | 03 | [Assembly: print, build, wire](./03-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
 | 04 | [Step 1: flash the main firmware](./04-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
 | 05 | [Debug and checks](./05-debug-and-checks) | Telemetry, IMU/servo checks, four lying poses, fall gate | debug page |

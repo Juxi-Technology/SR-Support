@@ -29,21 +29,20 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 
 ## 4.2 Build and flash from source (developers)
 
-Environment: [page 02, section 2.4](./02-environment). Project:
+Environment: [page 02, section 2.5](./02-environment). Project:
 `firmware/sr_support_b_ptk/` (environment `ptk7452`).
 
 ```bash
 # Build
-.venv-pio/Scripts/pio.exe run -d firmware/sr_support_b_ptk
+pio run -d firmware/sr_support_b_ptk
 
 # Flash (replace COM27 with your port)
-.venv-pio/Scripts/pio.exe run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
+pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-On Linux/macOS replace `.venv-pio/Scripts/pio.exe` with `pio`.
-
-> Close anything holding the serial port (serial monitor, `tools/hw_monitor.py`) before
-> flashing, otherwise you get `could not open port` / `Access is denied`.
+> Run these in the terminal with `.venv` activated (page 02, section 2.3). Close anything
+> holding the serial port (serial monitor, `tools/hw_monitor.py`) before flashing, otherwise
+> you get `could not open port` / `Access is denied`.
 
 A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
 builds without WiFi were about 7% / 12%).
@@ -51,7 +50,7 @@ builds without WiFi were about 7% / 12%).
 ## 4.3 Serial monitor
 
 ```bash
-.venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
+pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
 
 Opening the port resets the ESP32. After reset you should see:

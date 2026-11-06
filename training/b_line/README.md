@@ -17,14 +17,16 @@
 
 ## 常用命令
 
+先按教程 02 页创建并激活项目 `.venv`，然后：
+
 ```bash
 pip install -r training/b_line/requirements.txt
 
 # 四姿态回放（MuJoCo 窗口）
-.venv/Scripts/python.exe tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
+python tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
 
 # 躺姿验证 + 扶正回放 + 拼图
-.venv/Scripts/python.exe tools/verify_v1_lying_poses.py
+python tools/verify_v1_lying_poses.py
 ```
 
 模型/质量更新：逐件称重后修改 `hardware/v1/meshes/print_mass_model.json` 与

@@ -3,8 +3,8 @@
 The firmware opens a WiFi AP (SSID 'SR-Support', password 'srsupport') and
 streams the 50 Hz state lines on TCP port 3333. Join that network, then:
 
-  .venv/Scripts/python.exe tools/tcp_log.py                # writes logs/wifi_telemetry.txt
-  .venv/Scripts/python.exe tools/tcp_log.py 192.168.4.1 3333 logs/my_test.txt
+  python tools/tcp_log.py                # writes logs/wifi_telemetry.txt
+  python tools/tcp_log.py 192.168.4.1 3333 logs/my_test.txt
 
 Ctrl-C stops the capture; every line is flushed so the file is safe if the
 robot resets.

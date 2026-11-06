@@ -38,7 +38,7 @@
 ## 3. 编译/烧录
 
 > **工具结论：PlatformIO（Arduino framework），不是 ESP-IDF。** 底层是 `esptool`，PlatformIO 会自动调用；不需要 `idf.py`。  
-> 本机已装 Core 6.2.0 到项目内 `.venv-pio`；命令可用 `.venv-pio/Scripts/pio.exe`；首次使用运行 `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1` 安装。
+> 本机已装 Core 6.2.0 到项目内 `.venv`（与电脑端工具共用）；先激活 `.venv`，再直接用 `pio ...`；首次使用运行 `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1` 安装。
 
 PlatformIO（推荐）：
 
@@ -93,7 +93,7 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 `d` 打开的 `T` 流每 20 ms 一行：`T <qw> <qx> <qy> <qz> <q1> <q2>`（原始 IMU 坐标系四元数 + 指令关节角）。电脑端：
 
 ```
-.venv/Scripts/python.exe tools/live_twin.py --port COM27
+python tools/live_twin.py --port COM27
 ```
 
 工具会自动发一次 `d`（若已在输出 `T` 行则不发），把实机姿态和手臂实时映射到 `robot_v1.xml` 模型窗口里；无 `T` 流时回退到 4 Hz 状态行或 `l` 快速日志（无四元数，航向由 up 向量最短弧重建，方向可能任意）。`--replay <日志文件>` 可离线回放。注意打开串口可能触发 ESP32 复位（DTR）。
@@ -105,7 +105,7 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 1. 电池 + Type-C 都接上，运行：
 
    ```
-   .venv/Scripts/python.exe tools/hw_shoulder_range.py
+   python tools/hw_shoulder_range.py
    ```
 
 2. 用**方向键**摆臂：`↑`/`↓` = 大臂 ±0.05 rad，`←`/`→` = 小臂 ±0.05 rad（Shift+方向键 = ±0.20），
@@ -124,7 +124,7 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 **Twin 流开关**：状态页底部 `Twin ON/OFF` 按钮 = 串口 `d` 命令，MuJoCo 镜像无需串口：
 
 ```
-.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333
+python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
 **配网（让 ESP32 加入家里的 WiFi）**：连上 `SR-Support` 热点后多数手机会自动弹出配网页
@@ -140,7 +140,7 @@ up ux uy uz | w wx wy wz | q q1 q2 | qd dq1 dq2 | run/hold/manual
 - **MuJoCo 无线实时镜像**：无需串口，`d` 打开 T 流后：
 
   ```
-  .venv/Scripts/python.exe tools/live_twin.py --tcp 192.168.4.1:3333
+  python tools/live_twin.py --tcp 192.168.4.1:3333
   ```
 
   电脑需先连上 `SR-Support` 热点（此时电脑一般无外网，GitHub 等操作会失败，属正常）。

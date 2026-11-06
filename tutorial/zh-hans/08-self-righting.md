@@ -42,8 +42,10 @@ description: 四个倒下方向的自扶正操作方法、预期动作时间、�
 ## 8.4 监控与日志
 
 ```bash
-.venv-pio/Scripts/python.exe tools/hw_monitor.py COM27
+python tools/hw_monitor.py COM27
 ```
+
+（终端需已激活 `.venv`，见 [02 页](./02-environment)。）
 
 - 每秒读取串口，把事件与 5 秒遥测追加到 `logs/hw_monitor.log`；
 - 自动记录事件：`getup start`、`executor re-plan`、`standing`、`executor timeout`、

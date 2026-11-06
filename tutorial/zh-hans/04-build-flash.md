@@ -28,20 +28,19 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 
 ## 4.2 从源码构建与烧录（开发者）
 
-环境见 [02 页 2.4](./02-environment)。工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）。
+环境见 [02 页 2.5](./02-environment)。工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）。
 
 ```bash
 # 构建
-.venv-pio/Scripts/pio.exe run -d firmware/sr_support_b_ptk
+pio run -d firmware/sr_support_b_ptk
 
 # 烧录（COM27 换成实际串口）
-.venv-pio/Scripts/pio.exe run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
+pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-Linux/macOS 把 `.venv-pio/Scripts/pio.exe` 换成 `pio`。
-
-> 烧录前必须关闭占用串口的程序（串口监视器、`tools/hw_monitor.py` 等），否则会报
-> `could not open port` / `Access is denied`。
+> 命令在已激活 `.venv` 的终端里执行（02 页 2.3）。烧录前必须关闭占用串口的程序
+> （串口监视器、`tools/hw_monitor.py` 等），否则会报 `could not open port` /
+> `Access is denied`。
 
 构建成功时资源占用约 RAM 56%、Flash 30%（含 WiFi 与网页服务；不含 WiFi 的早期版本
 约 7%/12%）。
@@ -49,7 +48,7 @@ Linux/macOS 把 `.venv-pio/Scripts/pio.exe` 换成 `pio`。
 ## 4.3 串口监视
 
 ```bash
-.venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
+pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
 
 打开串口会触发 ESP32 复位；复位后应看到：
