@@ -71,8 +71,19 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 > entry <https://cmsoft.cn/resource/download/101>. Select the COM port, **115200, 8N1, no
 > flow control**, enable "send newline"; watch the boot log/telemetry in the receive pane and
 > type commands in the send box. Download it from the official link only (third-party sites
-> often bundle adware); do not commit the exe to this repository. On macOS/Linux use the
-> `pio` command above.
+> often bundle adware); do not commit the exe to this repository.
+
+**Linux / macOS serial viewers (pick one)**:
+
+- Preferred: the `pio device monitor` command above (installed with the project, cross-platform);
+- Lightweight CLI: `python -m serial.tools.miniterm /dev/ttyACM0 115200`
+  (`/dev/tty.usbmodem*` on macOS; quit with `Ctrl-]`); the built-in
+  `screen /dev/ttyACM0 115200` also works (quit with `Ctrl-A`, then `K`);
+- GUI: **CoolTerm** (free, Windows/macOS/Linux, official site
+  <https://freeware.the-meiers.org>); on Linux you can also `sudo apt install cutecom`.
+
+> On Linux add your user to the `dialout` group: `sudo usermod -aG dialout $USER`, then log
+> out and back in.
 
 Opening the port resets the ESP32. After reset you should see:
 

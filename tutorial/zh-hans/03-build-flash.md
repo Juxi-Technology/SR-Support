@@ -66,7 +66,18 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 > 官方页面 <https://cmsoft.cn/resource/101.html>，官方下载入口
 > <https://cmsoft.cn/resource/download/101>。打开后选 COM 口、**115200、8N1、无流控**，
 > 勾选"发送新行"；接收区看启动日志与遥测，发送框输入命令。请从官方链接下载（第三方
-> 下载站常捆绑软件），不要把 exe 放进本仓库分发；macOS/Linux 用上面的 `pio` 命令。
+> 下载站常捆绑软件），不要把 exe 放进本仓库分发。
+
+**Linux / macOS 串口查看（任选一种）**：
+
+- 首选：上文的 `pio device monitor`（已随项目安装，跨平台）；
+- 轻量命令行：`python -m serial.tools.miniterm /dev/ttyACM0 115200`
+  （macOS 用 `/dev/tty.usbmodem*`；退出按 `Ctrl-]`）；也可用系统自带的
+  `screen /dev/ttyACM0 115200`（退出 `Ctrl-A` 再按 `K`）；
+- 图形界面：**CoolTerm**（免费，Windows/macOS/Linux，官网
+  <https://freeware.the-meiers.org>）；Linux 也可 `sudo apt install cutecom`。
+
+> Linux 需要把当前用户加入 `dialout` 组：`sudo usermod -aG dialout $USER`，重新登录生效。
 
 打开串口会触发 ESP32 复位；复位后应看到：
 
