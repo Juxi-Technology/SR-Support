@@ -19,7 +19,7 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 ## 4.2 Servo preparation (electrical center and horn index)
 
 1. **Electrical center (before assembly)**: wire both servos, the IMU, servo power and the
-   common ground first per the table in 3.4 (mechanical parts not mounted yet; the main
+   common ground first per the table in 4.4 (mechanical parts not mounted yet; the main
    firmware needs the IMU to boot), then flash the main firmware
    `firmware/releases/sr_support_b_ptk_factory.bin` (at `0x0`, method in
    [page 03, section 3.1](./03-build-flash)). Open the 115200 serial port and send `e` after
