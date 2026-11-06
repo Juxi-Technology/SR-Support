@@ -95,6 +95,13 @@ python3 -m venv .venv
 .venv/bin/pip install -r tools/requirements.txt
 ```
 
+> **要不要先激活 venv？** 教程默认**不激活**，命令里直接写解释器路径
+> （Windows `.venv\Scripts\python.exe`、Linux/macOS `.venv/bin/python`）：每条命令
+> 复制即可用，也避开 Windows PowerShell 默认禁止运行 `Activate.ps1` 的问题。
+> 想激活也可以：Windows 用 `.venv\Scripts\Activate.ps1`，Linux/macOS 用
+> `source .venv/bin/activate`，提示符出现 `(.venv)` 后，把命令里的路径前缀换成
+> `python` / `pip`（例如 `python tools/env_check.py`）。
+
 国内网络慢可在 pip 命令后加清华镜像
 `-i https://pypi.tuna.tsinghua.edu.cn/simple`；首次安装下载约几百 MB。
 
@@ -111,8 +118,9 @@ python3 -m venv .venv
 [ok] model hardware\v1\robot_v1.xml: nq=9 nv=8 dt=0.0002s, 200 steps stable ...
 ```
 
-Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`；没插开发板时
-`[--] no serial port found` 是正常提示，不影响 PASS。
+Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`（已激活 venv 时直接
+`python tools/env_check.py`）；没插开发板时 `[--] no serial port found` 是正常提示，
+不影响 PASS。
 
 > Linux 打开 MuJoCo 窗口若报 GLFW/OpenGL 错误，安装 `libgl1` 与 `libglew-dev`
 > （如 `sudo apt install libgl1 libglew-dev`）；Windows/macOS 的 MuJoCo wheel 自带运行库。

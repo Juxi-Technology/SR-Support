@@ -98,6 +98,13 @@ python3 -m venv .venv
 .venv/bin/pip install -r tools/requirements.txt
 ```
 
+> **Activate the venv or not?** This tutorial does **not** activate it: every command spells
+> out the interpreter (Windows `.venv\Scripts\python.exe`, Linux/macOS `.venv/bin/python`), so
+> each line can be copied as-is and Windows PowerShell's default block on `Activate.ps1` does
+> not matter. If you prefer activating: `.venv\Scripts\Activate.ps1` on Windows or
+> `source .venv/bin/activate` on Linux/macOS; once the prompt shows `(.venv)`, replace the
+> interpreter path in later commands with `python` / `pip` (e.g. `python tools/env_check.py`).
+
 On a slow network in China append the Tsinghua mirror
 `-i https://pypi.tuna.tsinghua.edu.cn/simple`; the first install downloads a few hundred MB.
 
@@ -114,8 +121,9 @@ The last line must be `env check: PASS`, with output like:
 [ok] model hardware\v1\robot_v1.xml: nq=9 nv=8 dt=0.0002s, 200 steps stable ...
 ```
 
-On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python`. With no board
-plugged in, `[--] no serial port found` is an informational line and does not affect PASS.
+On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python` (or just
+`python tools/env_check.py` when the venv is active). With no board plugged in,
+`[--] no serial port found` is an informational line and does not affect PASS.
 
 > On Linux, a GLFW/OpenGL error when the MuJoCo window opens means missing system libraries:
 > install `libgl1` and `libglew-dev` (e.g. `sudo apt install libgl1 libglew-dev`). The
