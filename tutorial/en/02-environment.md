@@ -1,9 +1,9 @@
 ---
-title: 02 Environment setup (flash tools and firmware)
-description: Before starting - get the prebuilt firmware and an official flash tool (Flash Download Tool / esptool), optionally PlatformIO and the computer-side tools, confirm the serial port.
+title: 02 Environment setup (flash tools, tools and MuJoCo)
+description: Before starting - the prebuilt firmware and an official flash tool (Flash Download Tool / esptool), the computer-side tools and MuJoCo environment, optional PlatformIO, and the serial port.
 ---
 
-# 02 Environment setup (flash tools and firmware)
+# 02 Environment setup (flash tools, tools and MuJoCo)
 
 > Do this page before starting. Flashing the prebuilt firmware needs **no PlatformIO and no
 > compilation**; the developer environment (2.4) is only for changing or rebuilding the code.
@@ -26,16 +26,12 @@ description: Before starting - get the prebuilt firmware and an official flash t
 
   (The repository is private - request access first.)
 
-- The **prebuilt images** live in `firmware/releases/` (also attached to GitHub Releases;
-  repository access required):
+- The **prebuilt image** lives in `firmware/releases/`:
 
   | File | Purpose |
   |---|---|
   | `sr_support_b_ptk_factory.bin` | main firmware (flash at 0x0; also used for assembly centering via serial `e`) |
   | `SHA256SUMS` | checksums |
-
-  GitHub Releases: <https://github.com/Juxi-Technology/SR-Support/releases> (repository
-  access required; the same files are mirrored on the company drive/Feishu).
 
 ## 2.3 Flash tools (all customers - pick one)
 
@@ -83,23 +79,49 @@ If connecting fails, enter download mode: hold **BOOT**, tap **RST**, release **
 - Linux/macOS: `pip install platformio`, and replace `.venv-pio/Scripts/pio.exe` below with `pio`;
 - Verify: `pio --version`.
 
-## 2.5 Computer-side tool environment (optional: zeroing / twin / logs)
+## 2.5 Computer-side tools and MuJoCo environment (twin / zeroing / logs)
 
-Not needed for flashing. Install it when you use the arrow-key zero tool, the MuJoCo twin or
-the log tools:
+Not needed for flashing. Install it when you use the arrow-key zero tool, the MuJoCo live twin
+(`tools/live_twin.py`), the simulation replay or the log tools. Everything goes into the
+project-local `.venv`: pyserial, numpy, MuJoCo (3.1+) and gymnasium.
+
+**Windows**
 
 ```bash
 powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1
 ```
 
-Creates `.venv` with pyserial/numpy/mujoco/gymnasium (a few hundred MB). On Linux/macOS:
+**Linux / macOS**
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r tools/requirements.txt
+python3 -m venv .venv
+.venv/bin/pip install -r tools/requirements.txt
 ```
 
-Replace `.venv/Scripts/python.exe` in later commands with `.venv/bin/python` on Linux/macOS,
-or with plain `python` if you skip the venv.
+On a slow network in China append the Tsinghua mirror
+`-i https://pypi.tuna.tsinghua.edu.cn/simple`; the first install downloads a few hundred MB.
+
+**Check 1: load the MuJoCo model**
+
+```bash
+.venv/Scripts/python.exe -c "import mujoco, numpy, serial, gymnasium; m=mujoco.MjModel.from_xml_path('hardware/v1/robot_v1.xml'); print('mujoco', mujoco.__version__, '| nq', m.nq)"
+```
+
+It must print something like `mujoco 3.16.0 | nq 9` (the version may differ; `nq 9` means the
+model loaded). On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python`.
+
+**Check 2: tool entry point**
+
+```bash
+.venv/Scripts/python.exe tools/live_twin.py --help
+```
+
+Printing the usage text means the install works.
+
+> On Linux, a GLFW/OpenGL error when the MuJoCo window opens means missing system libraries:
+> install `libgl1` and `libglew-dev` (e.g. `sudo apt install libgl1 libglew-dev`). The
+> Windows/macOS MuJoCo wheels bundle what they need. The `training/b_line` simulation and
+> replay use the same environment - nothing extra to install.
 
 ## 2.6 Connect the board and confirm the serial port
 
@@ -116,6 +138,7 @@ or with plain `python` if you skip the venv.
 - [ ] `python -m esptool version` works, or Flash Download Tool opens;
 - [ ] the board's serial port is visible;
 - [ ] (developers) `pio --version` works;
-- [ ] (optional) the `.venv` tool imports succeed.
+- [ ] the MuJoCo check prints `mujoco ... | nq 9`;
+- [ ] `tools/live_twin.py --help` prints the usage.
 
 Only continue once the items you need pass.

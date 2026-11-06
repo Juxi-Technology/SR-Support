@@ -1,6 +1,6 @@
 ---
 title: 02 环境准备（烧录工具与固件）
-description: 开工前准备：获取预编译固件与官方烧录工具（Flash Download Tool / esptool）、可选的 PlatformIO 与电脑端工具、确认串口。
+description: 开工前准备：预编译固件与官方烧录工具（Flash Download Tool / esptool）、电脑端工具与 MuJoCo 环境、可选的 PlatformIO，确认串口。
 ---
 
 # 02 环境准备（烧录工具与固件）
@@ -25,15 +25,12 @@ description: 开工前准备：获取预编译固件与官方烧录工具（Flas
 
   （私有仓库需先获得访问权限。）
 
-- **预编译固件**在 `firmware/releases/`（也可从 GitHub Releases 下载，需仓库权限）：
+- **预编译固件**在 `firmware/releases/`：
 
   | 文件 | 用途 |
   |---|---|
   | `sr_support_b_ptk_factory.bin` | 主固件（烧到 0x0；装配找中也用它，串口发 `e`） |
   | `SHA256SUMS` | 校验和 |
-
-  GitHub Releases：<https://github.com/Juxi-Technology/SR-Support/releases>（需仓库权限；
-  公司资料库/飞书同步提供同一份文件）。
 
 ## 2.3 烧录工具（所有客户，二选一）
 
@@ -79,22 +76,48 @@ python -m esptool --chip esp32s3 -p COM27 -b 460800 write_flash 0x0 firmware/rel
 - Linux/macOS：`pip install platformio`，后文的 `.venv-pio/Scripts/pio.exe` 换成 `pio`；
 - 验证：`pio --version`。
 
-## 2.5 电脑端工具环境（可选：零点/Twin/日志）
+## 2.5 电脑端工具与 MuJoCo 环境（Twin/零点/日志）
 
-只烧固件不需要；要用方向键零点工具、MuJoCo 镜像或日志工具时安装：
+只烧固件不需要本节；要用方向键零点工具、MuJoCo 实时镜像（`tools/live_twin.py`）、
+仿真回放或日志工具时安装。依赖都装在项目内 `.venv`：pyserial、numpy、MuJoCo（3.1+）、
+gymnasium。
+
+**Windows**
 
 ```bash
 powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1
 ```
 
-创建 `.venv` 并安装 pyserial/numpy/mujoco/gymnasium（约几百 MB）。Linux/macOS：
+**Linux / macOS**
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r tools/requirements.txt
+python3 -m venv .venv
+.venv/bin/pip install -r tools/requirements.txt
 ```
 
-后文命令中的 `.venv/Scripts/python.exe` 在 Linux/macOS 换成 `.venv/bin/python`；
-不想用虚拟环境也可以把它换成 `python`。
+国内网络慢可在 pip 命令后加清华镜像
+`-i https://pypi.tuna.tsinghua.edu.cn/simple`；首次安装下载约几百 MB。
+
+**验证 1：加载 MuJoCo 模型**
+
+```bash
+.venv/Scripts/python.exe -c "import mujoco, numpy, serial, gymnasium; m=mujoco.MjModel.from_xml_path('hardware/v1/robot_v1.xml'); print('mujoco', mujoco.__version__, '| nq', m.nq)"
+```
+
+应打印类似 `mujoco 3.16.0 | nq 9`（版本号可以不同，`nq 9` 说明模型加载成功）。
+Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`。
+
+**验证 2：工具入口**
+
+```bash
+.venv/Scripts/python.exe tools/live_twin.py --help
+```
+
+能打印用法说明即安装成功。
+
+> Linux 打开 MuJoCo 窗口若报 GLFW/OpenGL 错误，安装 `libgl1` 与 `libglew-dev`
+> （如 `sudo apt install libgl1 libglew-dev`）；Windows/macOS 的 MuJoCo wheel 自带运行库。
+> `training/b_line` 的仿真/回放使用同一套依赖，无需再装。
 
 ## 2.6 连接开发板，确认串口
 
@@ -110,6 +133,7 @@ python3 -m venv .venv && .venv/bin/pip install -r tools/requirements.txt
 - [ ] `python -m esptool version` 正常，或 Flash Download Tool 能打开；
 - [ ] 电脑能看到开发板串口；
 - [ ] （仅开发者）`pio --version` 正常；
-- [ ] （可选）`.venv` 工具依赖导入正常。
+- [ ] MuJoCo 自检打印 `mujoco ... | nq 9`；
+- [ ] `tools/live_twin.py --help` 能打印用法。
 
 全部通过后再进入下一页。
