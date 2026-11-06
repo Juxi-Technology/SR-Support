@@ -18,6 +18,7 @@ import argparse
 import math
 import os
 import re
+import shutil
 import sys
 import threading
 import time
@@ -126,15 +127,18 @@ def make_lines(st: State, port: str) -> list[str]:
     uz_c = max(-1.0, min(1.0, uz))
     tilt = math.degrees(math.acos(uz_c))
     wn = math.sqrt(wx * wx + wy * wy + wz * wz)
-    event = st.event[-70:] if st.event else "-"
-    return [
-        f"SR-Support live  {port}   type cmd + Enter, Ctrl-C quits",
-        f"up    x{ux:+.2f}  y{uy:+.2f}  z{uz:+.2f}    tilt {tilt:5.1f} deg",
-        f"w     {wx:+5.1f} {wy:+5.1f} {wz:+5.1f} rad/s   |w| {wn:.1f}",
-        f"q     shoulder {q1:+.2f}  elbow {q2:+.2f} rad   mode {st.mode}",
+    event = (st.event[:40] if st.event else "-")
+    cmd = st.cmd[-36:]
+    lines = [
+        f"SR-Support {port}  (Ctrl-C quit)",
+        f"up  x{ux:+.2f} y{uy:+.2f} z{uz:+.2f} tilt {tilt:4.1f}",
+        f"w   {wx:+.1f} {wy:+.1f} {wz:+.1f} rad/s |w| {wn:.1f}",
+        f"q   sh {q1:+.2f} el {q2:+.2f} mode {st.mode}",
         f"event {event}",
-        f"cmd>  {st.cmd}",
+        f"cmd> {cmd}",
     ]
+    width = max(20, shutil.get_terminal_size().columns - 1)
+    return [ln[:width] for ln in lines]
 
 
 def main() -> int:
@@ -157,7 +161,7 @@ def main() -> int:
     th.start()
     keys = Keys()
 
-    print("Live dashboard: commands are typed at cmd> (Ctrl-C quits).")
+    print("live: type at cmd>, Ctrl-C quits")
     move_up = 0
     try:
         while True:
