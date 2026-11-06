@@ -16,33 +16,39 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 3. Test-fit the 25T servo horns in their slots; fix with screws only when there is no bind;
 4. Weigh every printed part and record it against `hardware/v1/meshes/print_mass_model.json`.
 
-## 4.2 Servo preparation (electrical center and horn index)
+## 4.2 Servo preparation (firmware zero and horn installation)
 
-1. **Electrical center (before assembly)**: wire both servos, the IMU, servo power and the
-   common ground first per the table in 4.4 (mechanical parts not mounted yet; the main
-   firmware needs the IMU to boot), then flash the main firmware
-   `firmware/releases/sr_support_b_ptk_factory.bin` (at `0x0`, method in
-   [page 03, section 3.1](./03-build-flash)). Open the 115200 serial port and send `e` after
-   boot: both servos output the 1520 µs electrical center (the log prints
-   `electrical center: servos -> 1520 us ...`); install the horns facing up;
-2. **Re-index the shoulder horn** by about 2 teeth (~29°) on the 25T spline so that the firmware
-   center pulse (current baked value **1681 µs**, `SERVO_SHOULDER_CENTER_US`) corresponds to a
-   vertical arm at `q=0`; the elbow follows the same logic (**1456 µs**, `SERVO_CENTER_US`);
-3. Mount the horns, tighten, and check the full travel by hand for binding;
-4. Direction convention (matches the simulator): `shoulder +q` moves the big arm toward **−Y**,
+1. **Wire and flash first**: wire both servos, the IMU, servo power and the common ground per
+   the table in 4.4 (mechanical parts not mounted yet; the main firmware needs the IMU to
+   boot), then flash the main firmware per [page 03, section 3.1](./03-build-flash);
+2. **Power on to the firmware zero**: open the 115200 serial port and power up; after boot the
+   firmware drives both servos to q=0 (center pulses 1681 / 1456 µs). When the log shows
+   `servo start q: 0.00 0.00 rad` and `ready; send g to run` (or `autorun on: ...`), the
+   servos are at the zero;
+3. **Power off**: cut the servo power (USB may stay connected) and confirm both servos are
+   unloaded;
+4. **Install the horns**: mount the shoulder horn so the upper arm is vertical, and the elbow
+   horn so the forearm is in line with it; tighten and check the full travel by hand;
+5. Direction convention (matches the simulator): `shoulder +q` moves the big arm toward **−Y**,
    `elbow +q` moves the forearm toward **+X**; firmware defaults are
    `SERVO_SHOULDER_SIGN=-1`, `SERVO_ELBOW_SIGN=-1`.
 
-> The horn index is only a **coarse centering**. The precise zero must be set after full
-> assembly and main-firmware flashing ([page 03](./03-build-flash)) with the
-> [page 06 zero tool](./06-zero-tool): declare the visually vertical pose q=0 (`z` does not
-> use the IMU and works in any pose), then bake the printed pulses into `config.h` and reflash.
-> Even if you skipped the 1520 µs pre-centering and assembled directly, this zeroing still
-> works; only when one side lacks travel (the pulse clamps at 500/2500 µs) do you need to pull
-> the horn and re-index. The horn index sets how the travel splits between the two sides; the
-> firmware manual limits (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not widen them.
-> After zeroing, shift all sequence waypoints as described on page 06, otherwise the physical
-> get-up poses drift.
+> The firmware centers 1681 / 1456 µs already include the horn re-index from the factory
+> calibration - **do not count teeth**: mount the horns at the firmware zero with the arm
+> vertical. Alternatively (equivalent, optional) send `e` to put both servos at the 1520 µs
+> electrical center and mount there (see the command table on [page 03](./03-build-flash));
+> either way the [page 06](./06-zero-tool) `z` command does the final precise zero.
+
+> Mounting at the firmware zero is only a **coarse centering** (the horn spline is discrete).
+> The precise zero must be set after full assembly and main-firmware flashing
+> ([page 03](./03-build-flash)) with the [page 06 zero tool](./06-zero-tool): declare the
+> visually vertical pose q=0 (`z` does not use the IMU and works in any pose), then bake the
+> printed pulses into `config.h` and reflash. Even if the horn was not mounted perfectly, this
+> zeroing fixes it; only when one side lacks travel (the pulse clamps at 500/2500 µs) do you
+> need to pull the horn and re-index. The horn index sets how the travel splits between the two
+> sides; the firmware manual limits (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not
+> widen them. After zeroing, shift all sequence waypoints as described on page 06, otherwise
+> the physical get-up poses drift.
 
 ## 4.3 Base and arm assembly
 

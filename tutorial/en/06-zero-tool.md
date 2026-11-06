@@ -7,10 +7,10 @@ description: Jog the arm to the visual center with arrow keys and declare it q=0
 
 The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so a
 stock unit needs nothing here. A **DIY build must do this page**: a hand-assembled arm will
-almost never sit exactly at the center. Even if you never powered the servos to their 1520 µs
-center and just assembled the robot directly, you can still fix it here - jog the arm to
-visually vertical with the arrow keys and press `z` to declare the **current** pose q=0. The
-`z` command does not use the IMU and works at any pose or horn index.
+almost never sit exactly at the center. Even if the horn was not mounted exactly at the
+firmware zero, you can fix it here - jog the arm to visually vertical with the arrow keys and
+press `z` to declare the **current** pose q=0. The `z` command does not use the IMU and works
+at any pose or horn index.
 
 Come back when: a horn was re-indexed, the arm was disassembled/re-assembled, a servo was
 replaced, the IMU was replaced/re-mounted (recalibrate the accel), or the arm no longer rests at
@@ -18,8 +18,8 @@ the visual center after retracting.
 
 > `z` only shifts the software zero; it does **not** change how the horn index splits the travel
 > (PWM 500-2500 µs). If after zeroing one direction runs out of range (the pulse clamps at
-> 500/2500 µs and the arm cannot reach a required sequence angle), re-index the horn (~2 teeth
-> from the 1520 µs center on the shoulder) and zero again.
+> 500/2500 µs and the arm cannot reach a required sequence angle), re-index the horn (about
+> 2 teeth on the shoulder) and zero again.
 
 Timing: after the robot is fully assembled and the main firmware is flashed (the DIY path
 runs 03 → 04 → 05 → 06).

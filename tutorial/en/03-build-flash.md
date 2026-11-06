@@ -29,8 +29,10 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 > `COM27` on Windows, `/dev/ttyACM0` on Linux, `/dev/tty.usbmodem*` on macOS.
 > Flash Download Tool is Windows-only; use the esptool command line elsewhere.
 
-> Assembly centering needs no second image: after flashing this one, send `e` on the serial
-> port and both servos output 1520 µs (see [page 04, section 4.2](./04-assembly)).
+> Assembly centering needs no second image: after flashing this one, power up - both servos
+> drive to the firmware zero (1681 / 1456 µs) - then power off and install the horns
+> ([page 04, section 4.2](./04-assembly)). Optionally send `e` to put them at the 1520 µs
+> electrical center first (equivalent).
 
 ## 3.2 Build and flash from source (developers)
 
@@ -87,7 +89,7 @@ up ... | w ... | q ... | qd ... | run
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
 | `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 06](./06-zero-tool)) |
-| `e` | Electrical center: both servos to 1520 µs (horn installation; independent of the baked zero; see [page 04, 4.2](./04-assembly)) |
+| `e` | Electrical center (optional): both servos to 1520 µs for mounting the horns at the electrical center; the usual way is to power up to the firmware zero and mount there (see [page 04, 4.2](./04-assembly)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
 | `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 09](./09-wifi-twin)) |
 | `v` / `b` | Flip shoulder / elbow sign |
