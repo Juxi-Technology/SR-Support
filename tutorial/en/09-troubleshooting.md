@@ -5,8 +5,9 @@ description: Common SR-Support symptoms, causes and fixes covering IMU, serial p
 
 # 09 Troubleshooting
 
-Serial commands are sent through a serial assistant/monitor; serial tools / the Windows
-UartAssist download are on [page 03, section 3.3](./03-build-flash).
+Serial commands are sent through a serial assistant/monitor: type them in the send box and
+press Enter (enable "send newline" in UartAssist); serial tools / the Windows UartAssist
+download are on [page 03, section 3.3](./03-build-flash).
 
 ## 9.1 Common symptoms
 

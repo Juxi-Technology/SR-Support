@@ -36,9 +36,10 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 > The firmware centers 1681 / 1456 µs already include the horn re-index from the factory
 > calibration - **do not count teeth**: mount the horns at the firmware zero with the arm
-> vertical. Alternatively (equivalent, optional) send `e` to put both servos at the 1520 µs
-> electrical center and mount there (see the command table on [page 03](./03-build-flash));
-> either way the [page 05](./05-zero-tool) `z` command does the final precise zero.
+> vertical. Alternatively (equivalent, optional) type `e` in the serial send box and press
+> Enter to put both servos at the 1520 µs electrical center and mount there (see the command
+> table on [page 03](./03-build-flash)); either way the [page 05](./05-zero-tool) `z` command does
+> the final precise zero.
 
 > Mounting at the firmware zero is only a **coarse centering** (the horn spline is discrete).
 > The precise zero must be set after full assembly and main-firmware flashing

@@ -10,8 +10,9 @@ This step is optional and not required for self-righting itself.
 ## 8.1 Hotspot and status page
 
 Hotspot: SSID `SR-Support`, password `srsupport`, address `192.168.4.1` (`w` toggles it; on by
-default at boot). `w` is sent over serial - serial tools / the Windows UartAssist download
-are on [page 03, section 3.3](./03-build-flash).
+default at boot). `w` is sent over serial: type `w` in the send box of the serial
+monitor/assistant and press Enter; serial tools / the Windows UartAssist download are on
+[page 03, section 3.3](./03-build-flash).
 
 Join the hotspot and open `http://192.168.4.1` (phones usually pop the portal automatically).
 The page refreshes every 300 ms: state, up vector and uprightness bar, joint commands, get-up

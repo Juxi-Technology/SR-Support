@@ -95,6 +95,10 @@ up ... | w ... | q ... | qd ... | run
 
 ## 3.4 Serial commands (115200)
 
+Type every command into the **send box** of the serial monitor/assistant and press Enter
+(enable "send newline" in UartAssist); the `m` command needs a space and two values, e.g.
+`m 0.5 0`.
+
 | Command | Function |
 |---|---|
 | `g` | Start/continue running (this build autoruns; usually not needed) |

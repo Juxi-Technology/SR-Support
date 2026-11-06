@@ -5,8 +5,8 @@ description: SR-Support 自扶正装置常见现象、原因与处理方法（IM
 
 # 09 故障排查
 
-串口命令通过串口助手/监视器发送；串口工具/串口助手（含 Windows UartAssist 下载）见
-[03 页 3.3](./03-build-flash)。
+串口命令通过串口助手/监视器发送：在发送框输入后回车（UartAssist 勾选"发送新行"）；
+串口工具/串口助手（含 Windows UartAssist 下载）见 [03 页 3.3](./03-build-flash)。
 
 ## 9.1 常见现象
 

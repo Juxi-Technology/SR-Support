@@ -157,7 +157,7 @@ Joint limits:
 - Manual `m` commands clamp the elbow to `[-0.90, +0.70]` rad;
 - PWM output 500–2500 µs at 50 Hz.
 
-Send `t` and use `k` / `m` to check direction and centers:
+Type these one by one into the **send box** of the serial monitor/assistant (Enter after each):
 
 ```text
 t
