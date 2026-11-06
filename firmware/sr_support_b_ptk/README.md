@@ -2,8 +2,11 @@
 
 > **完整步骤请按教程 [`../../tutorial/zh-hans/04-build-flash.md`](../../tutorial/zh-hans/04-build-flash.md) 及后续页**。
 
+> **客户直接烧固件**：用 [`../releases/sr_support_b_ptk_factory.bin`](../releases/sr_support_b_ptk_factory.bin)
+> 烧到 `0x0` 即可，无需 PlatformIO；本 README 其余部分面向开发者。
+
 > 当前主固件。基于 Juxi-Technology/2dof-selfrighting-robot B 线固件（MIT/Apache-2.0），已改为 **PTK7452MG + 无源直连转接板**。
-> 来源/许可：[`../../third_party/juxi-2dof/`](../../third_party/juxi-2dof/) · [`../../docs/licensing.md`](../../docs/licensing.md)  
+> 来源/许可：[`../../third_party/juxi-2dof/`](../../third_party/juxi-2dof/) · 教程 [`../../tutorial/zh-hans/11-reference.md`](../../tutorial/zh-hans/11-reference.md)  
 > 状态：**已编译并烧录**（PlatformIO 6.2.0 + espressif32 8.0.0 + Arduino core 3.3.12；RAM 7.6%，Flash 13.0%；COM27 烧录 Hash verified）；**IMU 0x23 与两路舵机 bring-up 通过（`t` 自检）**；机械臂尚未组装，策略未跑。首次上电先手扶、空载、低电压。
 
 ## 1. 硬件假设

@@ -17,14 +17,11 @@ description: SR-Support 的打印件装配、舵机换齿与中位、接线表�
 
 ## 3.2 舵机准备（电气中位与舵盘齿位）
 
-1. **电气中位（装配前）**：只接两路舵机信号（GPIO4/5）+ 舵机电源 + 共地，烧录
-   `firmware/servo_center_ptk` 装配辅助固件（该 sketch 不依赖 IMU，仅用于装配找中）：
-
-   ```bash
-   .venv-pio/Scripts/pio.exe run -d firmware/servo_center_ptk -t upload --upload-port COM27
-   ```
-
-   烧录后两只舵机输出 1520 µs 中位脉宽，先把舵盘朝上装好；
+1. **电气中位（装配前）**：只接两路舵机信号（GPIO4/5）+ 舵机电源 + 共地，烧录找中辅助固件
+   `firmware/releases/servo_center_ptk.bin`（烧到 `0x0`，方法见 [04 页 4.1](./04-build-flash)；
+   该固件不依赖 IMU，仅用于装配找中）。从源码构建则用
+   `pio run -d firmware/servo_center_ptk -t upload`。烧录后两只舵机输出 1520 µs 中位脉宽，
+   先把舵盘朝上装好；
 2. **肩舵机换齿**：把舵盘相对花键错开约 2 齿（≈29°），使固件中位脉宽（当前整机固化
    **1681 µs**，`SERVO_SHOULDER_CENTER_US`）对应手臂竖直的 `q=0`；肘舵机同理
    （**1456 µs**，`SERVO_CENTER_US`）；

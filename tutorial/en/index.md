@@ -15,9 +15,9 @@ verified build.
 | # | Page | Content | Note |
 |---|---|---|---|
 | 01 | [Basics](./01-basics) | Working principle, specs, BOM, tools, power safety | read first |
-| 02 | [Environment setup](./02-environment) | Get the code, install PlatformIO and the computer-side tools, confirm the serial port | **do this first** |
+| 02 | [Environment setup](./02-environment) | Prebuilt firmware + flash tools (Flash Download Tool / esptool), optional PlatformIO and tool env, serial port | **do this first** |
 | 03 | [Assembly: print, build, wire](./03-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
-| 04 | [Step 1: build and flash](./04-build-flash) | PlatformIO build, flashing, serial commands, boot behavior | skippable for stock units |
+| 04 | [Step 1: flash the main firmware](./04-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
 | 05 | [Debug and checks](./05-debug-and-checks) | Telemetry, IMU/servo checks, four lying poses, fall gate | debug page |
 | 06 | [Zero-calibration](./06-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; skippable for stock units |
 | 07 | [Step 2: calibration](./07-calibrate) | Gyro+accel calibration, direction self-test, zero check, fall-gate check | |

@@ -1,16 +1,37 @@
 ---
-title: 04 Step 1: build and flash
-description: Build and flash the SR-Support B-line firmware with PlatformIO, serial commands and boot log.
+title: 04 Step 1: flash the main firmware
+description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash Download Tool / esptool) or build it with PlatformIO; serial commands and boot log.
 ---
 
-# 04 Step 1: build and flash
+# 04 Step 1: flash the main firmware
 
 > **Finished-unit users can skip this page**: the factory has flashed and verified the
-> firmware. Only redo this for firmware upgrades or after modifying the code.
+> firmware. Only redo this for firmware upgrades or after modifying the code. Customers use
+> the prebuilt image (4.1, no PlatformIO); developers build from source (4.2).
 
-The environment (PlatformIO and the computer-side tools) is installed on [page 02](./02-environment); this page builds and flashes.
+## 4.1 Flash the prebuilt image (recommended for customers)
 
-## 4.1 Build and flash
+1. Make sure you have `firmware/releases/sr_support_b_ptk_factory.bin` (checksums in
+   `SHA256SUMS` next to it; GitHub Releases requires repository access);
+2. Enter download mode: hold **BOOT**, tap **RST**, release **BOOT**;
+3. Flash it (tool setup on [page 02, section 2.3](./02-environment)):
+   - Windows GUI: Flash Download Tool → ESP32-S3 → load the bin at `0x0` → START;
+   - Windows / Linux / macOS command line:
+
+     ```bash
+     python -m esptool --chip esp32s3 -p COM27 -b 460800 write_flash 0x0 firmware/releases/sr_support_b_ptk_factory.bin
+     ```
+
+4. Press RST when done and read the log as in 4.3.
+
+> The assembly centering helper works the same way:
+> `firmware/releases/servo_center_ptk.bin`, also at `0x0`
+> (see [page 03, section 3.2](./03-assembly)).
+
+## 4.2 Build and flash from source (developers)
+
+Environment: [page 02, section 2.4](./02-environment). Project:
+`firmware/sr_support_b_ptk/` (environment `ptk7452`).
 
 ```bash
 # Build
@@ -20,13 +41,15 @@ The environment (PlatformIO and the computer-side tools) is installed on [page 0
 .venv-pio/Scripts/pio.exe run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
+On Linux/macOS replace `.venv-pio/Scripts/pio.exe` with `pio`.
+
 > Close anything holding the serial port (serial monitor, `tools/hw_monitor.py`) before
 > flashing, otherwise you get `could not open port` / `Access is denied`.
 
 A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
 builds without WiFi were about 7% / 12%).
 
-## 4.2 Serial monitor
+## 4.3 Serial monitor
 
 ```bash
 .venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
@@ -40,7 +63,7 @@ autorun on: get-up waits for a fall
 up ... | w ... | q ... | qd ... | run
 ```
 
-## 4.3 Serial commands (115200)
+## 4.4 Serial commands (115200)
 
 | Command | Function |
 |---|---|
@@ -65,7 +88,7 @@ up ... | w ... | q ... | qd ... | run
 | `h` | Stand-homing toggle (legacy policy path) |
 | `a` | Legacy scripted get-up test mode |
 
-## 4.4 Power-on behavior
+## 4.5 Power-on behavior
 
 The firmware defines `AUTORUN_ON_BOOT`: after power-up the executor waits for the robot to be
 **fully down and still** for 0.5 s, then starts automatically - no `g` needed. Power up with
