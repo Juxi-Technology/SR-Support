@@ -32,7 +32,7 @@ download are on [page 03, section 3.3](./03-build-flash.md).
 | Situation | Command |
 |---|---|
 | Stop motion immediately | `s` (hold last target) or `x` (detach PWM, release torque) |
-| Recover after `x` | `r` to re-initialize, then power-cycle if needed |
+| Recover after `x` | `r` re-initializes PWM and centers |
 | A joint moves the wrong way | `v` (shoulder) / `b` (elbow) sign flip |
 
 ## 9.3 Capturing a failure
