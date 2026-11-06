@@ -25,6 +25,9 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 
 4. Press RST when done and read the log as in 3.3.
 
+> For flashing / serial debugging you can power the ESP32 from USB and leave the 5 V supply
+> to the servos only (the two power options are in [page 04, section 4.4](./04-assembly)).
+
 > The command is **identical on Windows / Linux / macOS**; only the port changes:
 > `COM27` on Windows, `/dev/ttyACM0` on Linux, `/dev/tty.usbmodem*` on macOS.
 > Flash Download Tool is Windows-only; use the esptool command line elsewhere.

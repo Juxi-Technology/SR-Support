@@ -12,6 +12,12 @@ description: Telemetry format, IMU and servo checks, gyro+accel calibration, cen
 This is the **whole-robot functional check and calibration** after assembly, flashing and
 zeroing; work through it in order before using the robot.
 
+> **Power while debugging**: USB carries serial data only. `c` needs just the IMU (the
+> servos may stay unpowered); `t` / `z` / `e` need the 5 V servo rail on. If you do not want
+> the ESP32 fed from two sources, unplug the 5 V branch to the ESP32, power it from USB alone
+> and let the 5 V supply feed only the servos - a normal setup, see
+> [page 04, section 4.4](./04-assembly).
+
 ## 6.1 Telemetry format
 
 The firmware prints one telemetry line every 250 ms (the monitor summarizes it every 5 s):

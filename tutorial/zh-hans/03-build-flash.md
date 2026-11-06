@@ -24,6 +24,9 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 
 4. 烧录完成后按 RST 启动，按下节 3.3 查看日志。
 
+> 烧录 / 串口调试时可以用 USB 给 ESP32 供电、5 V 电源只供舵机（见 [04 页 4.4](./04-assembly)
+> 的两种供电方式）。
+
 > 命令本身 **Windows / Linux / macOS 通用**：`python -m esptool ...` 写法相同，只需把
 > `COM27` 换成实际串口（Windows 如 `COM27`，Linux 如 `/dev/ttyACM0`，macOS 如
 > `/dev/tty.usbmodem*`）。Flash Download Tool 仅 Windows，其他系统用 esptool 命令行。

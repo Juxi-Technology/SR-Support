@@ -87,6 +87,12 @@ Notes:
 - With USB and the 5 V supply connected at the same time: the ESP32-S3-DevKitC-1 has a
   reverse-feed diode between USB and the 5V pin, so both may be connected; if your board
   lacks that diode, unplug the 5 V branch while flashing;
+- **Power while debugging / flashing (both are normal; pick one)**:
+  1. the 5 V supply feeds the ESP32 and the servos via the splitter, USB carries data only;
+  2. easier to reason about: unplug the 5 V branch to the ESP32, power the ESP32 from USB
+     alone and let the 5 V supply feed only the servos.
+  Use option 2 for flashing, serial monitoring and `c` calibration; option 1 for standalone
+  operation;
 - On first power-up leave the servos disconnected, verify V+ polarity and voltage with a
   multimeter, then test one servo, then both;
 - Wiring order: ground and signals → 5 V supply (ESP32 and servos together) → USB for the
