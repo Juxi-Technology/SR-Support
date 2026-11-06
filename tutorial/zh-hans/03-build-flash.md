@@ -24,6 +24,10 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 
 4. 烧录完成后按 RST 启动，按下节 3.3 查看日志。
 
+> 命令本身 **Windows / Linux / macOS 通用**：`python -m esptool ...` 写法相同，只需把
+> `COM27` 换成实际串口（Windows 如 `COM27`，Linux 如 `/dev/ttyACM0`，macOS 如
+> `/dev/tty.usbmodem*`）。Flash Download Tool 仅 Windows，其他系统用 esptool 命令行。
+
 > 装配找中不需要第二个固件：烧好本固件后串口发 `e`，两舵机输出 1520 µs
 > （见 [04 页 4.2](./04-assembly)）。
 
@@ -39,9 +43,9 @@ pio run -d firmware/sr_support_b_ptk
 pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-> 命令在 `SR-Support` 目录下、已激活 `.venv` 的终端里执行（02 页 2.3）。烧录前必须
-> 关闭占用串口的程序（串口监视器、`tools/hw_monitor.py` 等），否则会报
-> `could not open port` / `Access is denied`。
+> 命令在 `SR-Support` 目录下、已激活 `.venv` 的终端里执行（02 页 2.3），三平台通用；
+> `--upload-port COM27` 同样换成实际串口。烧录前必须关闭占用串口的程序（串口监视器、
+> `tools/hw_monitor.py` 等），否则会报 `could not open port` / `Access is denied`。
 
 构建成功时资源占用约 RAM 56%、Flash 30%（含 WiFi 与网页服务；不含 WiFi 的早期版本
 约 7%/12%）。
@@ -51,6 +55,8 @@ pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```bash
 pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
+
+（同样三平台通用，`-p COM27` 换成实际串口。）
 
 打开串口会触发 ESP32 复位；复位后应看到：
 

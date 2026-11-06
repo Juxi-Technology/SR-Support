@@ -25,6 +25,10 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 
 4. Press RST when done and read the log as in 3.3.
 
+> The command is **identical on Windows / Linux / macOS**; only the port changes:
+> `COM27` on Windows, `/dev/ttyACM0` on Linux, `/dev/tty.usbmodem*` on macOS.
+> Flash Download Tool is Windows-only; use the esptool command line elsewhere.
+
 > Assembly centering needs no second image: after flashing this one, send `e` on the serial
 > port and both servos output 1520 µs (see [page 04, section 4.2](./04-assembly)).
 
@@ -41,7 +45,8 @@ pio run -d firmware/sr_support_b_ptk
 pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-> Run these in the `SR-Support` folder with `.venv` activated (page 02, section 2.3). Close
+> Run these in the `SR-Support` folder with `.venv` activated (page 02, section 2.3); they are
+> identical on all three platforms - replace `COM27` in `--upload-port` with your port. Close
 > anything holding the serial port (serial monitor, `tools/hw_monitor.py`) before flashing,
 > otherwise you get `could not open port` / `Access is denied`.
 
@@ -53,6 +58,8 @@ builds without WiFi were about 7% / 12%).
 ```bash
 pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
+
+(Same on all three platforms; replace `COM27` with your port.)
 
 Opening the port resets the ESP32. After reset you should see:
 
