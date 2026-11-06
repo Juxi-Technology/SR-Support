@@ -12,7 +12,8 @@ description: 使用 PlatformIO 构建并烧录 SR-Support B 线固件，串口�
 - **PlatformIO（Arduino framework）**，不是 ESP-IDF；
 - 平台：`espressif32 8.0.0`，Arduino core 3.3.12；
 - 工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）；
-- 本仓库自带项目内 PlatformIO：`.venv-pio/Scripts/pio.exe`（Windows）。
+- 本仓库自带项目内 PlatformIO：`.venv-pio/Scripts/pio.exe`（Windows）；首次使用先安装：
+  `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`。
 
 ## 5.2 构建与烧录
 

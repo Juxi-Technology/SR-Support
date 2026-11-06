@@ -30,7 +30,7 @@
 - [`install_platformio.ps1`](install_platformio.ps1)：项目内 `.venv-pio` 安装 PlatformIO；
 - [`install_xtensa_toolchain.ps1`](install_xtensa_toolchain.ps1)：工具链下载卡住时的修复脚本。
 
-完整说明见 [`../docs/platformio-install.md`](../docs/platformio-install.md)。
+
 
 ```bash
 pip install -r tools/requirements.txt

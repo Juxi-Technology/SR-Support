@@ -27,6 +27,6 @@ pip install -r training/b_line/requirements.txt
 .venv/Scripts/python.exe tools/verify_v1_lying_poses.py
 ```
 
-模型/质量更新流程见 [`../../docs/build-guide.md`](../../docs/build-guide.md) §11.2
-（改 `hardware/v1/meshes/print_mass_model.json` 与 `robot_v1.xml`）。
-来源与许可：[`../../docs/licensing.md`](../../docs/licensing.md)。
+模型/质量更新：逐件称重后修改 `hardware/v1/meshes/print_mass_model.json` 与
+`hardware/v1/robot_v1.xml` 的质量参数并重新验证。
+来源与许可：根目录 `LICENSE`、[`../../third_party/juxi-2dof/`](../../third_party/juxi-2dof/)。

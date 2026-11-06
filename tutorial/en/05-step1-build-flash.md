@@ -13,7 +13,8 @@ description: Build and flash the SR-Support B-line firmware with PlatformIO, ser
 - **PlatformIO (Arduino framework)**, not ESP-IDF;
 - Platform `espressif32 8.0.0`, Arduino core 3.3.12;
 - Project: `firmware/sr_support_b_ptk/` (environment `ptk7452`);
-- The repo ships a project-local PlatformIO: `.venv-pio/Scripts/pio.exe` (Windows).
+- The repo ships a project-local PlatformIO: `.venv-pio/Scripts/pio.exe` (Windows);
+  install it first with `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`.
 
 ## 5.2 Build and flash
 

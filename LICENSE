@@ -6,7 +6,8 @@ of this software or its associated hardware design files, except by explicit
 written permission from the copyright holder.
 
 Third-party dependencies remain under their own licenses; see
-docs/licensing.md and docs/provenance.md for details.
+the tutorial (tutorial/zh-hans/10-reference.md, licensing section),
+third_party/juxi-2dof/ and the git history for details.
 
 In particular:
 - Files derived from Juxi-Technology/2dof-selfrighting-robot software

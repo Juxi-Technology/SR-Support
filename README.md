@@ -11,22 +11,18 @@
 
 | 你想做什么 | 看这里 |
 |---|---|
-| **新手上手（按阅读顺序）** | [`tutorial/zh-hans/`](tutorial/zh-hans/index.md)（英文版 [`en/`](tutorial/en/index.md)） |
-| 完整复现手册 | [`docs/build-guide.md`](docs/build-guide.md) |
-| 一页式检查清单 | [`docs/checklist.md`](docs/checklist.md) |
+| **教程（唯一文档入口，按阅读顺序）** | [`tutorial/zh-hans/`](tutorial/zh-hans/index.md)（英文版 [`en/`](tutorial/en/index.md)） |
 | **3D 模型 / MuJoCo XML** | [`hardware/v1/`](hardware/v1/)（`robot_v1.xml` + `meshes/`） |
 | 固件（命令表、镜像、零点、WiFi） | [`firmware/sr_support_b_ptk/README.md`](firmware/sr_support_b_ptk/README.md) |
 | 电脑端工具 | [`tools/README.md`](tools/README.md) |
 | 仿真与训练 | [`training/README.md`](training/README.md) |
-| 实机验证记录 | [`docs/hardware-validation.md`](docs/hardware-validation.md) |
-| 许可与来源（商用必读） | [`docs/licensing.md`](docs/licensing.md) |
+| 许可与来源（商用必读） | [`tutorial/zh-hans/10-reference.md`](tutorial/zh-hans/10-reference.md)（10.5 节） |
 
 ## 目录结构
 
 ```
 SR-Support/
 ├─ tutorial/                # 教程（zh-hans / en，按阅读顺序 11 页）
-├─ docs/                    # 手册、检查清单、验证记录、许可
 ├─ firmware/
 │  ├─ sr_support_b_ptk/     # ★ 当前主固件
 │  ├─ i2c_scanner/          # IMU 地址诊断
@@ -57,11 +53,11 @@ SR-Support/
 - **零点**：换齿/重装舵盘后用 `tools/hw_shoulder_range.py` 定零并固化（教程第 02 页）；
 - **许可**：代码 MIT/Apache-2.0；自研 CAD/模型 CERN-OHL-S-2.0；SelfRisingRobot 无许可、
   仓库不包含其任何文件；专利 CN109693729A/B 商用前需 FTO。详见
-  [`docs/licensing.md`](docs/licensing.md)。
+  教程 [`10-reference`](tutorial/zh-hans/10-reference.md) 的许可一节。
 
 ## 资料与许可
 
 - 上游 B 线：[Juxi-Technology/2dof-selfrighting-robot](https://github.com/Juxi-Technology/2dof-selfrighting-robot)
   — 代码 MIT/Apache，硬件 CERN-OHL-S；许可见 [`third_party/juxi-2dof/`](third_party/juxi-2dof/)；
 - 仅参考、不可直接商用：[SelfRisingRobot](https://github.com/homemadegarbage/SelfRisingRobot)（无许可证）；
-- 本项目许可：根目录 [`LICENSE`](LICENSE)；来源记录见 [`docs/provenance.md`](docs/provenance.md)。
+- 本项目许可：根目录 [`LICENSE`](LICENSE)；来源记录见 [`third_party/juxi-2dof/ORIGIN.md`](third_party/juxi-2dof/ORIGIN.md) 与 git 历史。

@@ -475,8 +475,7 @@ static void auto_next(float next[2], float up_z) {
 // shoulder to -1.07 with the elbow folded the mirrored way and hold; the
 // arm levers the lying body straight up onto its base, no roll-over.
 // (The previous over-the-top roll recipe needed the +X-side travel that
-// the PWM clamp removes; it stalls at a 150 deg equilibrium, see
-// docs/hardware-validation.md 0.4.)
+// the PWM clamp removes; it stalls at a 150 deg equilibrium.)
 //
 // With the servo rail at 5 V the shoulder-only press stalls at about
 // up_z 0.60 (torque-marginal near the base-rim lever); the same press

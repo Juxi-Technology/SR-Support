@@ -1,6 +1,6 @@
 # sr_support_b_ptk — B 线固件（PTK7452MG，180° PWM）
 
-> **完整步骤请按 [`../../docs/build-guide.md`](../../docs/build-guide.md)**；一页检查清单 [`../../docs/checklist.md`](../../docs/checklist.md)。
+> **完整步骤请按教程 [`../../tutorial/zh-hans/05-step1-build-flash.md`](../../tutorial/zh-hans/05-step1-build-flash.md) 及后续页**。
 
 > 当前主固件。基于 Juxi-Technology/2dof-selfrighting-robot B 线固件（MIT/Apache-2.0），已改为 **PTK7452MG + 无源直连转接板**。
 > 来源/许可：[`../../third_party/juxi-2dof/`](../../third_party/juxi-2dof/) · [`../../docs/licensing.md`](../../docs/licensing.md)  
@@ -35,7 +35,7 @@
 ## 3. 编译/烧录
 
 > **工具结论：PlatformIO（Arduino framework），不是 ESP-IDF。** 底层是 `esptool`，PlatformIO 会自动调用；不需要 `idf.py`。  
-> 本机已装 Core 6.2.0 到项目内 `.venv-pio`；命令可用 `.venv-pio/Scripts/pio.exe`，或先激活 venv。详见 [`../../docs/platformio-install.md`](../../docs/platformio-install.md)。
+> 本机已装 Core 6.2.0 到项目内 `.venv-pio`；命令可用 `.venv-pio/Scripts/pio.exe`；首次使用运行 `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1` 安装。
 
 PlatformIO（推荐）：
 

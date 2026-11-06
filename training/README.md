@@ -14,9 +14,7 @@ pip install -r training/b_line/requirements.txt
 # 回放/验证四姿态扶正（MuJoCo 窗口）
 .venv/Scripts/python.exe tools/play_getup_executor.py --xml hardware/v1/robot_v1.xml
 
-# 训练（导出覆盖 firmware/sr_support_b_ptk/include/policy_b.h 后重新烧录）
-.venv/Scripts/python.exe training/b_line/train.py
 ```
 
-训练/评估/导出的细节与参数见 [`b_line/README.md`](b_line/README.md)。
-来源与许可：[`../docs/licensing.md`](../docs/licensing.md)、[`../docs/provenance.md`](../docs/provenance.md)。
+执行器/参考序列与仿真细节见 [`b_line/README.md`](b_line/README.md)（PPO 训练管线已随 2026-11 瘦身移除）。
+来源与许可：根目录 `LICENSE`、[`../third_party/juxi-2dof/`](../third_party/juxi-2dof/)、教程 10-reference。
