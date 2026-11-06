@@ -18,11 +18,20 @@ zeroing; work through it in order before using the robot.
 > and let the 5 V supply feed only the servos - a normal setup, see
 > [page 04, section 4.4](./04-assembly).
 
-## 6.1 Telemetry format
+## 6.1 Open the serial port and read telemetry
 
-The firmware prints one telemetry line every 250 ms (the monitor summarizes it every 5 s):
+In the `SR-Support` folder with `.venv` activated, open the serial port (`COM27` is your port):
+
+```bash
+pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
+```
+
+Opening the port resets the ESP32; you should see the boot log and then one telemetry line
+every 250 ms:
 
 ```text
+IMU version 1.1.2
+autorun on: get-up waits for a fall
 up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 ```
 
@@ -34,21 +43,44 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 | `qd` | Joint command rates |
 | Mode | `run` / `hold` / `manual` / `auto` |
 
-Quick hardware self-check (in the `SR-Support` folder with `.venv` activated):
-`python tools/hw_check.py --port COM27` reads 0.6 s of telemetry; add `--tilt 8` and tilt the
-robot by hand to print the up/gyro ranges and the tilt range, which reveals a stuck or
-mis-oriented IMU.
+**How to send serial commands**: keep the monitor open and type the command followed by
+Enter (single-character commands need no quotes). Commands used on this page:
+
+```text
+c        # gyro + accel calibration (robot level and still)
+t        # servo self-test
+k        # read both servo center pulses
+m 0.5 0  # manual shoulder direction test
+i / j    # flip IMU X / Y signs (only if a direction is reversed)
+```
+
+The full command table is on [page 03, section 3.4](./03-build-flash).
+
+**Quick self-check script** (close the serial monitor first so the port is free):
+
+```bash
+python tools/hw_check.py --port COM27
+python tools/hw_check.py --port COM27 --tilt 8
+```
+
+The first command reads 0.6 s of telemetry; during `--tilt 8` tilt the robot by hand and it
+prints the up/gyro ranges and the tilt range, which reveals a stuck or mis-oriented IMU.
 
 ## 6.2 IMU checks and calibration
 
 1. First do the mechanical orientation check on [page 04, section 4.5](./04-assembly)
    (shoulder shaft toward IMU −Y, elbow shaft toward IMU +X), then keep the robot still and
    upright; confirm `up≈(0, 0, 1)` and `w≈0`;
-2. Stand the robot LEVEL on a flat surface and keep it still; send `c` to calibrate gyro AND
-   accel zero offsets together (`calibrating gyro+accel...`; the accel bias is stored in NVS
-   and reloaded on boot). Success prints `accel bias ... (saved)`; `accel cal rejected` means
-   the robot was not level or not still - retry. The factory has already done this per unit;
-   redo it only after replacing/re-mounting the IMU or when the lying pose is off (step 5);
+2. Stand the robot LEVEL on a flat surface and keep it still; send `c`:
+
+   ```text
+   c
+   ```
+
+   `calibrating gyro+accel...` is printed; the accel bias is stored in NVS and reloaded on
+   boot. Success prints `accel bias ... (saved)`; `accel cal rejected` means the robot was
+   not level or not still - retry. The factory has already done this per unit; redo it only
+   after replacing/re-mounting the IMU or when the lying pose is off (step 5);
 3. Tilt slowly left/right and forward/back; the x/y components of `up` must follow the real
    tilt with no jumps;
 4. If the x or y direction is reversed, send `i` / `j` to flip the IMU axis signs, then `c`
@@ -75,8 +107,18 @@ Joint limits:
 - Manual `m` commands clamp the elbow to `[-0.90, +0.70]` rad;
 - PWM output 500–2500 µs at 50 Hz.
 
-Send `t` and confirm: shoulder `q>0` → big arm toward **−Y**; elbow `q>0` → forearm toward
-**+X**. Wrong direction: flip with `v` / `b`, or re-mount the horn.
+Send `t` and use `k` / `m` to check direction and centers:
+
+```text
+t
+k
+m 0.5 0
+m 0 0.5
+m 0 0
+```
+
+Confirm: shoulder `q>0` → big arm toward **−Y**; elbow `q>0` → forearm toward **+X**.
+Wrong direction: flip with `v` / `b`, or re-mount the horn.
 
 ## 6.4 Center check
 
