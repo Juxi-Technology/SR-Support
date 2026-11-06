@@ -78,3 +78,7 @@ executor pose=roll_neg ph=3 tick=9 tgt=(2.00,-0.80) up=(0.58,-0.24,-0.77) q=(2.0
 
 For every test record the pose, whether it ended with `done`, the duration, the number of
 switches and any violations. `logs/hw_monitor.log` is the authoritative record.
+
+---
+
+[← Back to the tutorial contents](./index.md)

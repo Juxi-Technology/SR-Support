@@ -58,3 +58,7 @@ Saves the hotspot telemetry stream to `logs/wifi_<time>.txt` for offline replay 
 
 The repo ships the MuJoCo model and training code (`training/b_line/`) for replay and
 retraining; the model files are described on [page 10](./10-reference.md).
+
+---
+
+[← Back to the tutorial contents](./index.md)

@@ -128,3 +128,7 @@ Type every command into the **send box** of the serial monitor/assistant and pre
 The firmware defines `AUTORUN_ON_BOOT`: after power-up the executor waits for the robot to be
 **fully down and still** for 0.5 s, then starts automatically - no `g` needed. Power up with
 the robot upright.
+
+---
+
+[← Back to the tutorial contents](./index.md)

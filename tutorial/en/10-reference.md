@@ -76,3 +76,7 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 - B-line CAD/STL: CERN-OHL-S-2.0 (strong reciprocity — check obligations before commercial use);
 - SelfRisingRobot: no license; this tutorial contains none of its code, waypoints or models;
 - Patent CN109693729A/B: perform an FTO review before commercial use.
+
+---
+
+[← Back to the tutorial contents](./index.md)

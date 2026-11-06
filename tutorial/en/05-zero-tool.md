@@ -82,3 +82,7 @@ corresponding center pulse widths.
 | `z` | Current pose becomes q=0 for both joints; prints the new center pulses (RAM only) |
 | `k` | Read the current center pulses (shoulder/elbow, µs) |
 | `o` / `p` | Shoulder center ±10 µs live trim (reset on reboot) |
+
+---
+
+[← Back to the tutorial contents](./index.md)

@@ -45,3 +45,7 @@ Keep the corresponding part of `logs/hw_monitor.log`. The key lines are:
 <time> executor re-plan A -> B up=(x,y,z)
 <time> standing -> executor done | executor timeout
 ```
+
+---
+
+[← Back to the tutorial contents](./index.md)

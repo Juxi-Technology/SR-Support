@@ -74,3 +74,7 @@ description: 参考模型文件（MuJoCo XML / STL）、固件参数表、四姿
 - B 线 CAD/STL：CERN-OHL-S-2.0（强互惠，商用前确认义务）；
 - SelfRisingRobot：无许可证，本教程不包含其代码、waypoint 或模型文件；
 - 专利 CN109693729A/B：商用前需完成 FTO 评估。
+
+---
+
+[← 返回教程目录](./index.md)

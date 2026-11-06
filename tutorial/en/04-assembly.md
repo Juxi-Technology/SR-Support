@@ -126,3 +126,7 @@ hardware, the IMU or a servo mount is installed the wrong way - fix it before po
 
 After power-up, re-check on [page 06](./06-debug-and-calibrate.md): upright gives `up≈(0, 0, 1)`;
 the four lying poses are listed in the table in 6.5.
+
+---
+
+[← Back to the tutorial contents](./index.md)

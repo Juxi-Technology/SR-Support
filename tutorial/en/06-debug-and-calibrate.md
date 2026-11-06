@@ -206,3 +206,7 @@ serial log must show `getup start pose=<matching pose>`.
 - [ ] `t` shows correct directions on both joints;
 - [ ] `k` matches the baked centers (or you re-zeroed per page 05 and baked it);
 - [ ] all four lying poses trigger `getup start`.
+
+---
+
+[← Back to the tutorial contents](./index.md)

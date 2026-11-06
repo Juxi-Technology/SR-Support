@@ -1,5 +1,7 @@
 # SR-Support 教程（wiki 目录格式）
 
+> **中文教程入口：[zh-hans/index.md](zh-hans/index.md)** · English: [en/index.md](en/index.md)
+
 本目录按 Juxi Technology Wiki（wiki.juxitech.com）教程的目录规范组织：
 `tutorial/<语言>/<章节>`，语言目录在前，章节文件直接放在对应语言目录下。
 教程先保存在本项目路径下，发布时再复制到 `wiki-documents` 仓库。

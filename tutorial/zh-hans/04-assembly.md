@@ -103,3 +103,7 @@ up_body = (up_imu.y, -up_imu.x, up_imu.z)
 
 上电后再按 [06 调试页](./06-debug-and-calibrate.md) 复核：直立时 `up≈(0, 0, 1)`；
 四种躺姿的 up 向量见 6.5 节表格。
+
+---
+
+[← 返回教程目录](./index.md)

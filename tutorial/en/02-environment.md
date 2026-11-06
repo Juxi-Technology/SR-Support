@@ -235,3 +235,7 @@ With no board plugged in, `[--] no serial port found` is informational and does 
 - [ ] `python tools/env_check.py` prints `env check: PASS`.
 
 Only continue once the items you need pass.
+
+---
+
+[← Back to the tutorial contents](./index.md)

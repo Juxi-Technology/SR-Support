@@ -220,3 +220,7 @@ python tools/env_check.py
 - [ ] `python tools/env_check.py` 输出 `env check: PASS`。
 
 全部通过后再进入下一页。
+
+---
+
+[← 返回教程目录](./index.md)

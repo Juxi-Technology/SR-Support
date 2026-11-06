@@ -74,3 +74,7 @@ executor pose=roll_neg ph=3 tick=9 tgt=(2.00,-0.80) up=(0.58,-0.24,-0.77) q=(2.0
 
 建议每次测试记录：姿态、是否 `done`、用时、切换次数、是否有越界。日志文件即为记录，
 可直接用 `logs/hw_monitor.log` 的时间戳检索。
+
+---
+
+[← 返回教程目录](./index.md)
