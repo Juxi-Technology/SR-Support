@@ -84,9 +84,11 @@ Notes:
 - With a **5 V** supply you may feed the ESP32 5V/GND and branch the same supply to the
   adapter V+/GND for the servos; higher voltages (6 V / 7.4 V) must feed the adapter
   V+/GND only and the ESP32 must be powered from USB;
-- With USB and the 5 V supply connected at the same time: the ESP32-S3-DevKitC-1 has a
-  reverse-feed diode between USB and the 5V pin, so both may be connected; if your board
-  lacks that diode, unplug the 5 V branch while flashing;
+- **With a 5 V battery feeding the ESP32 you may keep the Type-C plugged in**: in the
+  official DevKitC-1 schematic each USB VBUS reaches the 5V net through a Schottky diode, so
+  there is no back-feed and USB works as data (plus auxiliary power). On a clone board that
+  omits the diode, or if you cannot confirm it, unplug the 5 V branch to the ESP32 while
+  flashing and power it from USB (option 2);
 - **Power while debugging / flashing (both are normal; pick one)**:
   1. the 5 V supply feeds the ESP32 and the servos via the splitter, USB carries data only;
   2. easier to reason about: unplug the 5 V branch to the ESP32, power the ESP32 from USB
