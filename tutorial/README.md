@@ -11,7 +11,7 @@ tutorial/
 ├─ zh-hans/                     # 简体中文（11 页，阅读顺序）
 │  ├─ index.md                  # 目录
 │  ├─ 01-basics.md              # 基础知识
-│  ├─ 02-zero-tool.md           # 中位零点校准工具（可跳过）
+│  ├─ 02-zero-tool.md           # 中位零点校准（DIY 必做）
 │  ├─ 03-debug-and-checks.md    # 调试与检查
 │  ├─ 04-assembly.md            # 散件组装：打印、装配与接线
 │  ├─ 05-step1-build-flash.md   # 第一步：环境、构建与烧录

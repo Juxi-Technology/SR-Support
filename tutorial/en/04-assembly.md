@@ -35,9 +35,12 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 > assembly and main-firmware flashing ([page 05](./05-step1-build-flash)) with the
 > [page 02 zero tool](./02-zero-tool): declare the visually vertical pose q=0 (`z` does not
 > use the IMU and works in any pose), then bake the printed pulses into `config.h` and reflash.
-> The horn index sets how the travel splits between the two sides; the firmware manual limits
-> (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not widen them. After zeroing, shift
-> all sequence waypoints as described on page 02, otherwise the physical get-up poses drift.
+> Even if you skipped the 1520 µs pre-centering and assembled directly, this zeroing still
+> works; only when one side lacks travel (the pulse clamps at 500/2500 µs) do you need to pull
+> the horn and re-index. The horn index sets how the travel splits between the two sides; the
+> firmware manual limits (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not widen them.
+> After zeroing, shift all sequence waypoints as described on page 02, otherwise the physical
+> get-up poses drift.
 
 ## 4.3 Base and arm assembly
 

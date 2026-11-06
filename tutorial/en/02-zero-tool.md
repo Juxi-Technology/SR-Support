@@ -1,19 +1,28 @@
 ---
-title: 02 Zero-calibration tool (arrow keys, skippable)
-description: Jog the arm to the visual center with arrow keys and declare it q=0 with one command; required after re-indexing a horn or re-assembly.
+title: 02 Zero-calibration (arrow keys; required for DIY builds)
+description: Jog the arm to the visual center with arrow keys and declare it q=0; required for every DIY build, and after re-indexing a horn or re-assembly.
 ---
 
-# 02 Zero-calibration tool (arrow keys, skippable)
+# 02 Zero-calibration (arrow keys; required for DIY builds)
 
-The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so
-**you can skip this page** for a stock unit. Come back when: a horn was re-indexed, the arm was
-disassembled/re-assembled, a servo was replaced, the IMU was replaced/re-mounted (recalibrate
-the accel), or the arm no longer rests at the visual center after retracting.
+The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so a
+stock unit needs nothing here. A **DIY build must do this page**: a hand-assembled arm will
+almost never sit exactly at the center. Even if you never powered the servos to their 1520 µs
+center and just assembled the robot directly, you can still fix it here - jog the arm to
+visually vertical with the arrow keys and press `z` to declare the **current** pose q=0. The
+`z` command does not use the IMU and works at any pose or horn index.
+
+Come back when: a horn was re-indexed, the arm was disassembled/re-assembled, a servo was
+replaced, the IMU was replaced/re-mounted (recalibrate the accel), or the arm no longer rests at
+the visual center after retracting.
+
+> `z` only shifts the software zero; it does **not** change how the horn index splits the travel
+> (PWM 500-2500 µs). If after zeroing one direction runs out of range (the pulse clamps at
+> 500/2500 µs and the arm cannot reach a required sequence angle), re-index the horn (~2 teeth
+> from the 1520 µs center on the shoulder) and zero again.
 
 This page sits at position 02 only because it is a standalone tool page; **in practice it is
 used after [page 04 assembly](./04-assembly) and [page 05 flashing](./05-step1-build-flash)**.
-The `z` command only reads the current servo command positions and does not use the IMU, so it
-works in any pose - but it only makes sense once the robot is fully assembled.
 
 ## 2.1 Principle
 

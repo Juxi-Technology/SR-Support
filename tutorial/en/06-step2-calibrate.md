@@ -31,7 +31,7 @@ Send `t` and confirm:
 ## 6.3 Center / zero
 
 Baked at the factory (shoulder 1681 µs / elbow 1456 µs) - **skippable for a stock unit**. In a
-DIY build this was already done with the [page 02 tool](./02-zero-tool) after
+DIY build this was already done with the [page 02 zero-calibration](./02-zero-tool) after
 [flashing](./05-step1-build-flash), with the values baked into `config.h` (reflash if they
 changed); here just run `k` to confirm the centers match the baked values. Return to page 02
 only after re-indexing a horn, re-assembly, or if the arm no longer rests at the visual center.

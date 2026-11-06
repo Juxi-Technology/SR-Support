@@ -15,7 +15,7 @@ verified build.
 | # | Page | Content | Note |
 |---|---|---|---|
 | 01 | [Basics](./01-basics) | Working principle, specs, BOM, tools, power safety | read first |
-| 02 | [Zero-calibration tool](./02-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | tool page; used after assembly+flash, skippable for stock units |
+| 02 | [Zero-calibration](./02-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; done after assembly+flash, skippable for stock units |
 | 03 | [Debug and checks](./03-debug-and-checks) | Telemetry, IMU/servo checks, four lying poses, fall gate | debug page |
 | 04 | [Assembly: print, build, wire](./04-assembly) | Printed parts, horn re-index, wiring table, IMU mounting | assembly tutorial |
 | 05 | [Step 1: build and flash](./05-step1-build-flash) | PlatformIO build, flashing, serial commands, boot behavior | |
@@ -32,7 +32,7 @@ This tutorial serves two audiences - pick the path that matches yours:
 | Reader | Factory state | Recommended path |
 |---|---|---|
 | **Finished-unit user** | Assembled and wired, firmware flashed, **calibrated** (servo zeros and IMU accel zeros baked), **tested** (all four get-up directions verified per unit) | Go straight to [07 usage](./07-step3-self-righting) and [08 WiFi/twin](./08-step4-wifi-twin) (optional); keep [09](./09-troubleshooting)/[10](./10-reference) for reference. **Pages 02/04/05/06 are only needed for firmware upgrades, servo/IMU replacement or horn re-mounting** |
-| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [04](./04-assembly) → [05](./05-step1-build-flash) → [02 zeroing](./02-zero-tool) → [06](./06-step2-calibrate) → [07](./07-step3-self-righting) end to end. Both servo zeroing (02) and IMU calibration (06) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
+| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [04](./04-assembly) → [05](./05-step1-build-flash) → [02 zeroing (required)](./02-zero-tool) → [06](./06-step2-calibrate) → [07](./07-step3-self-righting) end to end. Both servo zeroing (02) and IMU calibration (06) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
 
 > Recommended first-use check for a finished unit: power up upright → confirm `up≈(0,0,1)` →
 > tip it once in each of the four directions per [page 07](./07-step3-self-righting) and
