@@ -66,6 +66,14 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 
 (Same on all three platforms; replace `COM27` with your port.)
 
+> **Windows GUI serial assistant (optional)**: UartAssist from 野人家园 (free, single exe,
+> Windows only). Official page <https://cmsoft.cn/resource/101.html>, official download
+> entry <https://cmsoft.cn/resource/download/101>. Select the COM port, **115200, 8N1, no
+> flow control**, enable "send newline"; watch the boot log/telemetry in the receive pane and
+> type commands in the send box. Download it from the official link only (third-party sites
+> often bundle adware); do not commit the exe to this repository. On macOS/Linux use the
+> `pio` command above.
+
 Opening the port resets the ESP32. After reset you should see:
 
 ```text

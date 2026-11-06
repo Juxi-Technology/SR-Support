@@ -62,6 +62,12 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 
 （同样三平台通用，`-p COM27` 换成实际串口。）
 
+> **Windows 图形串口助手（可选）**：野人家园 **UartAssist**（免费、单文件、仅 Windows）。
+> 官方页面 <https://cmsoft.cn/resource/101.html>，官方下载入口
+> <https://cmsoft.cn/resource/download/101>。打开后选 COM 口、**115200、8N1、无流控**，
+> 勾选"发送新行"；接收区看启动日志与遥测，发送框输入命令。请从官方链接下载（第三方
+> 下载站常捆绑软件），不要把 exe 放进本仓库分发；macOS/Linux 用上面的 `pio` 命令。
+
 打开串口会触发 ESP32 复位；复位后应看到：
 
 ```text

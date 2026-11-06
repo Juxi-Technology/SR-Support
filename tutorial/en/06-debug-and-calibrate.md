@@ -66,13 +66,9 @@ It redraws up/tilt, angular velocity, joint angles, mode and the last event in p
 `pio device monitor` or `tools/hw_monitor.py` (the latter writes a summary to the log every
 5 s).
 
-**Windows GUI serial assistant (optional)**: UartAssist from 野人家园 (free, single exe,
-Windows only; current 5.15). Official page <https://cmsoft.cn/resource/101.html>, official
-download entry <https://cmsoft.cn/resource/download/101> (redirects to
-`uartassist5.15.zip`). Select the COM port, **115200, 8N1, no flow control**, enable
-"send newline", then type `c` / `t` / `k` in the send box. Download it from the official
-link only (third-party sites often bundle adware); do not commit the exe to this repository.
-On macOS/Linux use `pio device monitor` or `tools/hw_watch.py` above.
+**Windows GUI serial assistant (optional)**: the UartAssist official download link and COM
+settings are on [page 03, section 3.3](./03-build-flash); on macOS/Linux use
+`pio device monitor` or `tools/hw_watch.py` above.
 
 **How to send serial commands**: keep the monitor open and type the command followed by
 Enter (single-character commands need no quotes). Commands used on this page:
