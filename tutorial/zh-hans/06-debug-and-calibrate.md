@@ -60,6 +60,13 @@ python tools/hw_watch.py --port COM27
 事件同时写入 `logs/hw_watch.log`。跑完整扶正、需要保留每一行时，仍用 `pio device monitor`
 或 `tools/hw_monitor.py`（后者每 5 秒把摘要写入日志）。
 
+**Windows 图形串口助手（可选）**：野人家园 **UartAssist**（免费、单文件、仅 Windows；
+当前 5.15）。官方页面 <https://cmsoft.cn/resource/101.html>，官方下载入口
+<https://cmsoft.cn/resource/download/101>（跳转到 `uartassist5.15.zip`）。打开后选择
+COM 口、**115200、8N1、无流控**，勾选"发送新行"，在发送框输入 `c` / `t` / `k` 等命令。
+请从官方链接下载（第三方下载站常捆绑软件），不要把 exe 放进本仓库分发；macOS/Linux
+用上面的 `pio device monitor` 或 `tools/hw_watch.py`。
+
 **串口命令怎么发**：保持监视器打开，直接输入命令并回车（单字符命令不用加引号）。
 本页会用到的命令：
 
