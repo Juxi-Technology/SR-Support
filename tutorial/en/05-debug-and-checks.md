@@ -28,7 +28,9 @@ mis-oriented IMU.
 
 ## 5.2 IMU checks and calibration
 
-1. Keep the robot still and upright; confirm `up≈(0, 0, 1)` and `w≈0`;
+1. First do the mechanical orientation check on [page 04, section 4.5](./04-assembly)
+   (shoulder shaft toward IMU −Y, elbow shaft toward IMU +X), then keep the robot still and
+   upright; confirm `up≈(0, 0, 1)` and `w≈0`;
 2. Stand the robot LEVEL on a flat surface and keep it still; send `c` to calibrate gyro AND
    accel zero offsets together (`calibrating gyro+accel...`; the accel bias is stored in NVS
    and only counts when `accel bias ... (saved)` is printed; a `rejected` message means the

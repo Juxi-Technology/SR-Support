@@ -94,12 +94,22 @@ Notes:
 
 ## 4.5 IMU mounting orientation
 
-The IMU is mounted rotated +90° about the body vertical. The firmware enables `IMU_YAW90` and
-converts the IMU-frame up vector into body coordinates:
+The IMU is fixed to the base with screws (its orientation is not adjustable), so the
+firmware enables `IMU_YAW90` and converts the IMU-frame up vector into body coordinates:
 
 ```c
 up_body = (up_imu.y, -up_imu.x, up_imu.z)
 ```
 
-After mounting, verify with [page 05](./05-debug-and-checks): upright gives `up≈(0, 0, 1)`;
+**Mechanical orientation check** (possible once the servos are mounted, before power-up):
+using the axes printed on / documented for the IMU module,
+
+- the shoulder servo **output shaft** (the shaft the horn mounts on; also called the horn
+  shaft or gear shaft) points toward the IMU **−Y**;
+- the elbow servo output shaft points toward the IMU **+X**.
+
+These two directions are the body's shoulder and elbow axes; if they do not match the
+hardware, the IMU or a servo mount is installed the wrong way - fix it before powering up.
+
+After power-up, re-check on [page 05](./05-debug-and-checks): upright gives `up≈(0, 0, 1)`;
 the four lying poses are listed in the table in 5.4.
