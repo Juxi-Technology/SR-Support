@@ -64,24 +64,30 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 | Device | ESP32-S3 pin | Adapter | Notes |
 |---|---|---|---|
-| Shoulder signal | GPIO4 | CH1 | 50 Hz PWM |
-| Elbow signal | GPIO5 | CH2 | 50 Hz PWM |
-| IMU SDA | GPIO6 | CH3 signal pin | I²C 0x23, 100 kHz |
-| IMU SCL | GPIO7 | CH4 signal pin | I²C 0x23, 100 kHz |
-| IMU VCC | 3V3 | — | **Never to servo V+ (6 V)** |
-| IMU GND | GND | CH3/CH4 GND | Common ground |
-| LED (optional) | GPIO2 | — | Status LED |
-| Servo V+ | — | V+/GND terminal | 6 V / ≥5 A |
-| Servo GND | — | V+/GND terminal | Common with ESP32 |
+| Adapter 3V3 | 3V3 | S1 signal pin | other end to IMU VCC (3.3 V) |
+| Shoulder signal | GPIO4 | S4 | 50 Hz PWM |
+| Elbow signal | GPIO5 | S5 | 50 Hz PWM |
+| IMU SDA | GPIO6 | S6 signal pin | other end to IMU SDA; I²C 0x23, 100 kHz |
+| IMU SCL | GPIO7 | S7 signal pin | other end to IMU SCL; I²C 0x23, 100 kHz |
+| IMU GND | GND | — (direct) | common ground |
+| LED (optional) | GPIO2 | — | status LED |
+| 5 V power input | 5V / GND | — | 1-to-2 cable: one branch to the ESP32, one to the adapter V+/GND for the servos |
+| Servo power | — | V+/GND terminal | 5 V / ≥5 A; **with 6 V use this terminal only, never the ESP32 5V** |
+| S2 / S3 | — | — | not connected |
 
 Notes:
 
-- The adapter is passive: confirm every cascaded header has the same V+/GND/signal order -
+- The adapter is a passive pass-through: S1/S6/S7 carry 3V3 / SDA / SCL on their signal
+  pins, S4/S5 carry the servo signals; confirm the V+/GND/signal order of every header -
   reversed polarity destroys servos or the board;
 - Keep I²C wires short and away from servo wires; module pull-ups are 3.3 V;
+- With a **5 V** supply you may feed the ESP32 5V/GND and branch the same supply to the
+  adapter V+/GND for the servos; with **6 V / 7.4 V** power the adapter V+/GND only and
+  power the ESP32 from USB;
 - On first power-up leave the servos disconnected, verify V+ polarity and voltage with a
   multimeter, then test one servo, then both;
-- Power-up order: ground and signals → servo power → ESP32 USB. Reverse when powering down.
+- Wiring order: ground and signals → 5 V supply (ESP32 and servos together) → USB for the
+  serial port when needed. Reverse when powering down.
 
 ## 4.5 IMU mounting orientation
 

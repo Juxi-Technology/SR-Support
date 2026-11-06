@@ -60,5 +60,6 @@ page with home-network provisioning, and a wireless MuJoCo live twin
 > - Hold the robot on first power-up, keep a 30 cm clear area, and send `x` or cut servo power
 >   on any anomaly;
 > - Never stall a servo longer than 1 s; stop when the case exceeds 60 °C;
-> - 6 V goes to the servo rail only - **never** to the ESP32 5V/3V3;
+> - 6 V goes to the servo rail only - **never** to the ESP32 5V/3V3 (a 5 V supply may feed the
+>   ESP32 5V pin);
 > - Everything shares one ground; power-up order is in [page 04](./04-assembly).
