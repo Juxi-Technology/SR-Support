@@ -85,7 +85,8 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 > On Linux add your user to the `dialout` group: `sudo usermod -aG dialout $USER`, then log
 > out and back in.
 
-Opening the port resets the ESP32. After reset you should see:
+After opening the port, if the board was just powered or you pressed RST you will see the
+boot log first; if not, press RST once. After reset you should see:
 
 ```text
 IMU version 1.1.2

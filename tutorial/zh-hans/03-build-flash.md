@@ -79,7 +79,8 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 
 > Linux 需要把当前用户加入 `dialout` 组：`sudo usermod -aG dialout $USER`，重新登录生效。
 
-打开串口会触发 ESP32 复位；复位后应看到：
+打开串口后，如果板子刚上电或按过 RST，会先看到启动日志；没有启动日志时按一下 RST
+再看。复位后应看到：
 
 ```text
 IMU version 1.1.2

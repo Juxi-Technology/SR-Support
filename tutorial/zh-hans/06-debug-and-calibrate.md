@@ -25,7 +25,8 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 
 （串口工具/串口助手（含 Windows UartAssist 下载）见 [03 页 3.3](./03-build-flash.md)。）
 
-打开串口会复位 ESP32；复位后应看到启动日志，随后每 250 ms 一行遥测：
+打开串口后，如果板子刚上电或按过 RST，会先看到启动日志；没有启动日志时按一下 RST
+再看。之后每 250 ms 一行遥测：
 
 ```text
 IMU version 1.1.2
@@ -96,14 +97,16 @@ python tools/hw_check.py --port COM27 --tilt 8
 
 操作（舵机可以不上电）：
 
-1. 机器人**直立、放在水平桌面**，手离开，线不要拉；
-2. 在串口监视器或 `hw_watch` 的 `cmd>` 里输入 `c` 并回车：
+1. 先按 [04 页 4.5](./04-assembly.md) 做机械方向自检（肩输出轴朝 IMU −Y、肘输出轴朝
+   IMU +X）；
+2. 机器人**直立、放在水平桌面**，手离开，线不要拉；
+3. 在串口监视器或 `hw_watch` 的 `cmd>` 里输入 `c` 并回车：
 
    ```text
    c
    ```
 
-3. 保持静止约 2 秒，看到下面三行即成功：
+4. 保持静止约 2 秒，看到下面三行即成功：
 
    ```text
    gyro bias (rad/s): ...
@@ -111,7 +114,7 @@ python tools/hw_check.py --port COM27 --tilt 8
    calibration done; hold
    ```
 
-4. 若出现 `accel cal rejected: |a|=...`：说明没放平或还在动（重力模长偏离 9.8 超过
+5. 若出现 `accel cal rejected: |a|=...`：说明没放平或还在动（重力模长偏离 9.8 超过
    1.5 m/s²），零点保持不变，重新放稳再发 `c`。
 
 验证：

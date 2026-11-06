@@ -29,8 +29,9 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 (Serial tools / the Windows UartAssist download are on
 [page 03, section 3.3](./03-build-flash.md).)
 
-Opening the port resets the ESP32; you should see the boot log and then one telemetry line
-every 250 ms:
+After opening the port, if the board was just powered or you pressed RST you will see the
+boot log first; if there is no boot log, press RST once. Then one telemetry line every
+250 ms:
 
 ```text
 IMU version 1.1.2
@@ -104,14 +105,16 @@ prints the up/gyro ranges and the tilt range, which reveals a stuck or mis-orien
 
 Procedure (servo power is not required):
 
-1. Stand the robot upright on a LEVEL table, hands off, cables not pulling;
-2. Type `c` and press Enter in the serial monitor or the `hw_watch` `cmd>`:
+1. First do the mechanical orientation check on [page 04, section 4.5](./04-assembly.md)
+   (shoulder shaft toward IMU −Y, elbow shaft toward IMU +X);
+2. Stand the robot upright on a LEVEL table, hands off, cables not pulling;
+3. Type `c` and press Enter in the serial monitor or the `hw_watch` `cmd>`:
 
    ```text
    c
    ```
 
-3. Keep still for about 2 s; success prints:
+4. Keep still for about 2 s; success prints:
 
    ```text
    gyro bias (rad/s): ...
@@ -119,7 +122,7 @@ Procedure (servo power is not required):
    calibration done; hold
    ```
 
-4. `accel cal rejected: |a|=...` means the robot was not level or not still (the gravity norm
+5. `accel cal rejected: |a|=...` means the robot was not level or not still (the gravity norm
    is more than 1.5 m/s² away from 9.8); the bias is left unchanged - place it again and
    resend `c`.
 
