@@ -61,6 +61,18 @@ py -3.12 -m venv .venv
   - **Git Bash**：`source .venv/Scripts/activate`
   - 退出虚拟环境：`deactivate`
 
+**Windows（cmd.exe）**
+
+```bat
+cd /d D:\Project\SR-Support    # cmd 跨盘符必须加 /d，只写 cd D:\... 不会离开 C 盘
+py -3.12 -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+> 怎么分辨终端：cmd 的提示符是 `C:\...>`，PowerShell 是 `PS C:\...>`。本教程默认用
+> PowerShell；用 cmd 时把激活命令换成 `activate.bat` 即可，其余命令相同。
+> 不需要管理员权限，普通终端即可。
+
 **Linux / macOS**
 
 ```bash
@@ -77,7 +89,8 @@ source .venv/bin/activate
 
 > **目录要求（重要）**：`.venv` 必须位于**`SR-Support` 文件夹（仓库根目录）**，不能建在
 > 子目录。上面的创建/激活命令都是**相对路径**，所以必须在这个目录里执行——新开终端
-> 也要先 `cd D:\Project\SR-Support`（换成你的实际路径）再激活；或者用绝对路径激活，如
+> 也要先进入该目录再激活（PowerShell：`cd D:\Project\SR-Support`；cmd：
+> `cd /d D:\Project\SR-Support`，换成你的实际路径）；或者用绝对路径激活，如
 > `C:\path\SR-Support\.venv\Scripts\Activate.ps1` /
 > `source /path/SR-Support/.venv/bin/activate`。
 >

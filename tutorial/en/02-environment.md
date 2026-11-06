@@ -64,6 +64,18 @@ py -3.12 -m venv .venv
   - **Git Bash**: `source .venv/Scripts/activate`
   - Leave the venv with `deactivate`
 
+**Windows (cmd.exe)**
+
+```bat
+cd /d D:\Project\SR-Support    # cmd needs /d to change drive; plain cd D:\... stays on C:
+py -3.12 -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+> Telling the shells apart: cmd prompts look like `C:\...>`, PowerShell like `PS C:\...>`.
+> The tutorial uses PowerShell by default; in cmd just swap the activation command for
+> `activate.bat`, everything else is identical. Administrator rights are not needed.
+
 **Linux / macOS**
 
 ```bash
@@ -81,8 +93,9 @@ will fail.
 
 > **Directory requirement (important)**: `.venv` must live in the **`SR-Support` folder (the
 > repository root)**, never in a subfolder. The create/activate commands above use **relative
-> paths**, so they must be run from that folder - after opening a new terminal, `cd
-> D:\Project\SR-Support` (your path) before activating, or use an absolute path such as
+> paths**, so they must be run from that folder - after opening a new terminal, enter it first
+> (PowerShell: `cd D:\Project\SR-Support`; cmd: `cd /d D:\Project\SR-Support`, with your path)
+> before activating, or use an absolute path such as
 > `C:\path\SR-Support\.venv\Scripts\Activate.ps1` /
 > `source /path/SR-Support/.venv/bin/activate`.
 >
