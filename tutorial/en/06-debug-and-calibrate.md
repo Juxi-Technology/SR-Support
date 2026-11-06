@@ -16,7 +16,7 @@ zeroing; work through it in order before using the robot.
 > servos may stay unpowered); `t` / `z` / `e` need the 5 V servo rail on. If you do not want
 > the ESP32 fed from two sources, unplug the 5 V branch to the ESP32, power it from USB alone
 > and let the 5 V supply feed only the servos - a normal setup, see
-> [page 04, section 4.4](./04-assembly).
+> [page 04, section 4.4](./04-assembly.md).
 
 ## 6.1 Open the serial port and read telemetry
 
@@ -27,7 +27,7 @@ pio device monitor --rts 0 --dtr 0 -b 115200 -p COM27
 ```
 
 (Serial tools / the Windows UartAssist download are on
-[page 03, section 3.3](./03-build-flash).)
+[page 03, section 3.3](./03-build-flash.md).)
 
 Opening the port resets the ESP32; you should see the boot log and then one telemetry line
 every 250 ms:
@@ -80,7 +80,7 @@ m 0.5 0  # manual shoulder direction test
 i / j    # flip IMU X / Y signs (only if a direction is reversed)
 ```
 
-The full command table is on [page 03, section 3.4](./03-build-flash).
+The full command table is on [page 03, section 3.4](./03-build-flash.md).
 
 **Quick self-check script** (close the serial monitor first so the port is free):
 
@@ -133,7 +133,7 @@ Verification:
 
 > Finished units are calibrated at the factory (stored in NVS); redo this only after
 > replacing/re-mounting the IMU or when the lying pose is visibly tilted. `c` only calibrates
-> the IMU - it does not change the servo zero (that is [page 05](./05-zero-tool)).
+> the IMU - it does not change the servo zero (that is [page 05](./05-zero-tool.md)).
 >
 > If you used manual commands before calibrating (the telemetry ends in `manual`), `c` leaves
 > the robot in `hold`/`manual` and the fall gate will not start a get-up; keep it upright and
@@ -143,7 +143,7 @@ Verification:
 
 | Check | Method | Expected |
 |---|---|---|
-| Centers | `k` | `centers: shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 05](./05-zero-tool)) |
+| Centers | `k` | `centers: shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 05](./05-zero-tool.md)) |
 | Shoulder trim | `o` / `p` (±10 µs) | Arm vertical at `q=0` |
 | Direction | `m 0.5 0` / `m 0 0.5` | Shoulder + → big arm toward −Y; elbow + → forearm toward +X |
 | Sign flip | `v` (shoulder) / `b` (elbow) | Only if a direction is reversed |
@@ -173,7 +173,7 @@ Wrong direction: flip with `v` / `b`, or re-mount the horn.
 ## 6.4 Center check
 
 Baked at the factory (shoulder 1681 µs / elbow 1456 µs) - **skippable for a stock unit**. In a
-DIY build this was already done with the [page 05 zero-calibration](./05-zero-tool) and the
+DIY build this was already done with the [page 05 zero-calibration](./05-zero-tool.md) and the
 values baked into `config.h` (reflash if they changed); here just run `k` to confirm the
 centers match the baked values. Return to page 05 only after re-indexing a horn, re-assembly,
 or if the arm no longer rests at the visual center.

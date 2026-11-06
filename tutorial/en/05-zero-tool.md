@@ -41,7 +41,7 @@ corresponding center pulse widths.
 
    Close any serial assistant/monitor first (they hold the port); the keys in the window
    below are read by this tool, no serial assistant is needed. Serial tools / the Windows
-   UartAssist download are on [page 03, section 3.3](./03-build-flash).
+   UartAssist download are on [page 03, section 3.3](./03-build-flash.md).
 
    A persistent four-line display updates in place:
 
@@ -71,7 +71,7 @@ corresponding center pulse widths.
    (`SERVO_SHOULDER_CENTER_US` / `SERVO_CENTER_US`);
 2. Shift every waypoint of `EXEC_REF*` and `training/b_line/getup_reference_b39.py` by the same
    offsets (shoulder/elbow each −Δ rad);
-3. Reflash and re-test all four directions ([page 07](./07-self-righting)).
+3. Reflash and re-test all four directions ([page 07](./07-self-righting.md)).
 
 > A mis-press is harmless: zero again to overwrite.
 

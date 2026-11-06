@@ -13,7 +13,7 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 1. 确认有 `firmware/releases/sr_support_b_ptk_factory.bin`（校验和见同目录
    `SHA256SUMS`）；
 2. 进入下载模式：按住 **BOOT**，点按一下 **RST**，松开 **BOOT**；
-3. 烧录（工具安装见 [02 页 2.4](./02-environment)；以下命令在 `SR-Support` 目录、
+3. 烧录（工具安装见 [02 页 2.4](./02-environment.md)；以下命令在 `SR-Support` 目录、
    已激活 `.venv` 的终端里执行）：
    - Windows 图形界面：Flash Download Tool → ESP32-S3 → `0x0` 加载 bin → START；
    - Windows / Linux / macOS 命令行：
@@ -24,7 +24,7 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 
 4. 烧录完成后按 RST 启动，按下节 3.3 查看日志。
 
-> 烧录 / 串口调试时可以用 USB 给 ESP32 供电、5 V 电源只供舵机（见 [04 页 4.4](./04-assembly)
+> 烧录 / 串口调试时可以用 USB 给 ESP32 供电、5 V 电源只供舵机（见 [04 页 4.4](./04-assembly.md)
 > 的两种供电方式）。
 
 > 命令本身 **Windows / Linux / macOS 通用**：`python -m esptool ...` 写法相同，只需把
@@ -32,12 +32,12 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 > `/dev/tty.usbmodem*`）。Flash Download Tool 仅 Windows，其他系统用 esptool 命令行。
 
 > 装配找中不需要第二个固件：烧好本固件后上电，两舵机自动走到固件零点（1681 / 1456 µs），
-> 断电即可装舵盘（见 [04 页 4.2](./04-assembly)）；也可以发 `e` 让舵机到 1520 µs 电气中位
+> 断电即可装舵盘（见 [04 页 4.2](./04-assembly.md)）；也可以发 `e` 让舵机到 1520 µs 电气中位
 > 再装（可选，等价做法）。
 
 ## 3.2 从源码构建与烧录（开发者）
 
-环境见 [02 页 2.5](./02-environment)。工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）。
+环境见 [02 页 2.5](./02-environment.md)。工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）。
 
 ```bash
 # 构建
@@ -107,10 +107,10 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 秒 50 Hz 快速日志 |
 | `k` | 打印两舵机中位脉宽 |
 | `o` / `p` | 肩中位脉宽 ±10 µs 微调 |
-| `z` | 编码器式清零：当前姿态设为两关节 q=0 并打印新脉宽（仅内存；见 [05 页](./05-zero-tool)） |
-| `e` | 电气中位（可选）：两舵机输出 1520 µs，供按电气中位装舵盘；常规做法是上电到固件零点后装盘（见 [04 页 4.2](./04-assembly)） |
+| `z` | 编码器式清零：当前姿态设为两关节 q=0 并打印新脉宽（仅内存；见 [05 页](./05-zero-tool.md)） |
+| `e` | 电气中位（可选）：两舵机输出 1520 µs，供按电气中位装舵盘；常规做法是上电到固件零点后装盘（见 [04 页 4.2](./04-assembly.md)） |
 | `d` | 开关 50 Hz Twin 流（供 MuJoCo 镜像；状态页有同等开关） |
-| `w` | 开/关 WiFi（热点 + 状态页/配网，见 [08 页](./08-wifi-twin)） |
+| `w` | 开/关 WiFi（热点 + 状态页/配网，见 [08 页](./08-wifi-twin.md)） |
 | `v` / `b` | 翻转肩 / 肘方向符号 |
 | `i` / `j` | 翻转 IMU X / Y 符号 |
 | `h` | 站立收臂回中开关（旧策略用） |

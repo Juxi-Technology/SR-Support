@@ -37,7 +37,7 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 | `EXEC_MIN_SWITCH_AGE` | 25 | Earliest tick for a switch |
 | `EXEC_MAX_SWITCHES` | 5 | Max switches per run |
 | `EXEC_NEUTRAL_MAX` | 120 | Max neutral-retract ticks |
-| `SERVO_SHOULDER_CENTER_US` | 1681 | Shoulder zero pulse (visual-center value baked 2026-11; re-zero per [page 05](./05-zero-tool)) |
+| `SERVO_SHOULDER_CENTER_US` | 1681 | Shoulder zero pulse (visual-center value baked 2026-11; re-zero per [page 05](./05-zero-tool.md)) |
 | `SERVO_CENTER_US` | 1456 | Elbow zero pulse (same) |
 | `SERVO_US_PER_RAD` | 636.62 | 2000 µs / π |
 | `Q_SHOULDER_MIN/MAX` | −1.85 / +1.82 rad | Shoulder manual-command limits |
@@ -59,14 +59,14 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 ## 10.4 Verified status and factory inspection (2026-11-06)
 
 - **Factory inspection**: each finished unit gets - servo zeros defined and baked per unit
-  ([page 05](./05-zero-tool)), gyro + accel zero calibration (NVS), and a four-direction
+  ([page 05](./05-zero-tool.md)), gyro + accel zero calibration (NVS), and a four-direction
   get-up test before shipping;
 - All four directions verified on the real robot, each as a **direct get-up** (no roll-over),
   about 1–6 s; no servo envelope violations;
 - `roll_neg` final recipe: full-travel direct press + elbow-wedge pumps ×2, whip-slam retry as
   fallback (the earlier roll-over + re-plan scheme is retired);
 - The attitude pipeline was corrected with accel-bias calibration (see
-  [page 06, 6.2](./06-debug-and-calibrate)); lying poses now match the real robot;
+  [page 06, 6.2](./06-debug-and-calibrate.md)); lying poses now match the real robot;
 - `roll_neg` still does not reproduce in the 1× mass simulation model (arm mass/friction
   differ); that is a known model gap - the hardware firmware is validated on hardware.
 

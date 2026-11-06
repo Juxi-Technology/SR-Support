@@ -7,7 +7,7 @@ description: Common SR-Support symptoms, causes and fixes covering IMU, serial p
 
 Serial commands are sent through a serial assistant/monitor: type them in the send box and
 press Enter (enable "send newline" in UartAssist); serial tools / the Windows UartAssist
-download are on [page 03, section 3.3](./03-build-flash).
+download are on [page 03, section 3.3](./03-build-flash.md).
 
 ## 9.1 Common symptoms
 
@@ -22,8 +22,8 @@ download are on [page 03, section 3.3](./03-build-flash).
 | Occasional `executor re-plan` events | Normal fallback after a failed `roll_neg` press | Check whether it ends with `done` |
 | Servo buzzes / heats up | Stall or binding target | Send `x` or cut power; check limits and mechanical clearance |
 | Arm hits the body during self-righting | Large shoulder motion | Check `Q_SHOULDER_MAX` and clearance; keep the ~68 mm base height |
-| `up` does not match the real pose (persistent 5°+ tilt while lying) | Accel zero offsets uncalibrated | Stand the robot level and send `c` (see [page 06, 6.2](./06-debug-and-calibrate)) |
-| Arm does not rest at the visual center after retracting | Zero drifted (re-indexed/re-assembled without re-zeroing) | Re-zero with the [page 05 tool](./05-zero-tool) and bake it |
+| `up` does not match the real pose (persistent 5°+ tilt while lying) | Accel zero offsets uncalibrated | Stand the robot level and send `c` (see [page 06, 6.2](./06-debug-and-calibrate.md)) |
+| Arm does not rest at the visual center after retracting | Zero drifted (re-indexed/re-assembled without re-zeroing) | Re-zero with the [page 05 tool](./05-zero-tool.md) and bake it |
 | Servo buzzes/chatters after a get-up | Analog servo transient self-excitation after large motion/stalls (output is constant) | Self-decays; add rubber damping washers or use a digital servo; pinching the arm silences it instantly |
 | Status page / provisioning unreachable | Browser proxy not bypassed, or hotspot off | Add `192.168.4.1` to the proxy exceptions; send `w` to enable WiFi |
 

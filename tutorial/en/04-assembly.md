@@ -6,7 +6,7 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 # 04 Assembly: print, build, wire
 
 > **Finished-unit users can skip this page**: the factory has already printed, assembled, wired
-> and inspected the unit (see the factory-state section in [index](./index)). Follow this page
+> and inspected the unit (see the factory-state section in [index](./index.md)). Follow this page
 > only when building from parts or replacing components.
 
 ## 4.1 Printing and inspection
@@ -20,9 +20,9 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 1. **Wire and flash first**: wire both servos, the IMU, servo power and the common ground per
    the table in 4.4 (mechanical parts not mounted yet; the main firmware needs the IMU to
-   boot), then flash the main firmware per [page 03, section 3.1](./03-build-flash);
+   boot), then flash the main firmware per [page 03, section 3.1](./03-build-flash.md);
 2. **Power on to the firmware zero**: open the 115200 serial port (serial tools / the
-   UartAssist download are on [page 03, section 3.3](./03-build-flash)) and power up; after boot the
+   UartAssist download are on [page 03, section 3.3](./03-build-flash.md)) and power up; after boot the
    firmware drives both servos to q=0 (center pulses 1681 / 1456 µs). When the log shows
    `servo start q: 0.00 0.00 rad` and `ready; send g to run` (or `autorun on: ...`), the
    servos are at the zero;
@@ -38,12 +38,12 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 > calibration - **do not count teeth**: mount the horns at the firmware zero with the arm
 > vertical. Alternatively (equivalent, optional) type `e` in the serial send box and press
 > Enter to put both servos at the 1520 µs electrical center and mount there (see the command
-> table on [page 03](./03-build-flash)); either way the [page 05](./05-zero-tool) `z` command does
+> table on [page 03](./03-build-flash.md)); either way the [page 05](./05-zero-tool.md) `z` command does
 > the final precise zero.
 
 > Mounting at the firmware zero is only a **coarse centering** (the horn spline is discrete).
 > The precise zero must be set after full assembly and main-firmware flashing
-> ([page 03](./03-build-flash)) with the [page 05 zero tool](./05-zero-tool): declare the
+> ([page 03](./03-build-flash.md)) with the [page 05 zero tool](./05-zero-tool.md): declare the
 > visually vertical pose q=0 (`z` does not use the IMU and works in any pose), then bake the
 > printed pulses into `config.h` and reflash. Even if the horn was not mounted perfectly, this
 > zeroing fixes it; only when one side lacks travel (the pulse clamps at 500/2500 µs) do you
@@ -124,5 +124,5 @@ when mounting the horns or wiring.
 These two directions are the body's shoulder and elbow axes; if they do not match the
 hardware, the IMU or a servo mount is installed the wrong way - fix it before powering up.
 
-After power-up, re-check on [page 06](./06-debug-and-calibrate): upright gives `up≈(0, 0, 1)`;
+After power-up, re-check on [page 06](./06-debug-and-calibrate.md): upright gives `up≈(0, 0, 1)`;
 the four lying poses are listed in the table in 6.5.

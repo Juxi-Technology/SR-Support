@@ -12,7 +12,7 @@ This step is optional and not required for self-righting itself.
 Hotspot: SSID `SR-Support`, password `srsupport`, address `192.168.4.1` (`w` toggles it; on by
 default at boot). `w` is sent over serial: type `w` in the send box of the serial
 monitor/assistant and press Enter; serial tools / the Windows UartAssist download are on
-[page 03, section 3.3](./03-build-flash).
+[page 03, section 3.3](./03-build-flash.md).
 
 Join the hotspot and open `http://192.168.4.1` (phones usually pop the portal automatically).
 The page refreshes every 300 ms: state, up vector and uprightness bar, joint commands, get-up
@@ -39,7 +39,7 @@ python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
 (In the `SR-Support` folder; create and activate `.venv` first as on
-[page 02](./02-environment) - the tool environment is set up there too.)
+[page 02](./02-environment.md) - the tool environment is set up there too.)
 
 - The window mirrors the real attitude live and keeps the body on the floor;
 - The arm is held at its floor-contact angle like the stalled servo (no floor penetration);
@@ -57,4 +57,4 @@ Saves the hotspot telemetry stream to `logs/wifi_<time>.txt` for offline replay 
 ## 8.5 Simulation and training reference
 
 The repo ships the MuJoCo model and training code (`training/b_line/`) for replay and
-retraining; the model files are described on [page 10](./10-reference).
+retraining; the model files are described on [page 10](./10-reference.md).

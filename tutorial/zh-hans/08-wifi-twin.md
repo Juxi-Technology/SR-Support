@@ -11,7 +11,7 @@ description: 状态页、家庭网络配网、MuJoCo 无线实时镜像与 WiFi 
 
 热点：SSID `SR-Support`，密码 `srsupport`，地址 `192.168.4.1`（`w` 开关，上电默认开）。
 `w` 通过串口发送：在串口监视器/串口助手的发送框输入 `w` 并回车即可切换；串口工具/
-串口助手（含 Windows UartAssist 下载）见 [03 页 3.3](./03-build-flash)。
+串口助手（含 Windows UartAssist 下载）见 [03 页 3.3](./03-build-flash.md)。
 
 设备连上热点后打开 `http://192.168.4.1`（多数手机会自动弹出配网门户）。页面每 300 ms
 刷新：运行状态、up 向量与直立度条、两关节指令角、扶正姿态/阶段、Home WiFi 状态、
@@ -35,7 +35,7 @@ Twin 流开关。浏览器有系统代理时，把该地址加入代理例外。
 python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
-（在 `SR-Support` 目录下、先按 [02 页](./02-environment) 创建并激活 `.venv`；工具环境
+（在 `SR-Support` 目录下、先按 [02 页](./02-environment.md) 创建并激活 `.venv`；工具环境
 也在那里安装。）
 
 - 窗口中的模型按实机姿态实时显示，身体自动贴地；
@@ -54,4 +54,4 @@ python tools/tcp_log.py
 ## 8.5 仿真与训练参考
 
 项目自带 MuJoCo 仿真模型与训练代码（`training/b_line/`），用于复盘与重训；
-模型文件说明见 [10 参考页](./10-reference)。
+模型文件说明见 [10 参考页](./10-reference.md)。

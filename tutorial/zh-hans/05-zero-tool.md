@@ -35,7 +35,7 @@ q=0——`z` 不依赖 IMU，任意姿态、任意齿位都能定零。
 
    运行前先关闭串口助手/其他监视器（会占用串口）；下面界面的按键由这个工具读取，
    不需要另开串口助手。串口工具/串口助手（含 Windows UartAssist 下载）见
-   [03 页 3.3](./03-build-flash)。
+   [03 页 3.3](./03-build-flash.md)。
 
    界面常驻四行、原地刷新：
 
@@ -64,7 +64,7 @@ q=0——`z` 不依赖 IMU，任意姿态、任意齿位都能定零。
    （`SERVO_SHOULDER_CENTER_US` / `SERVO_CENTER_US`）；
 2. 把固件 `EXEC_REF*` 与 `training/b_line/getup_reference_b39.py` 的全部路点按相同差值平移
    （肩/肘各 −Δ rad）；
-3. 重新烧录，复测四个方向（[07 页](./07-self-righting)）。
+3. 重新烧录，复测四个方向（[07 页](./07-self-righting.md)）。
 
 > 误按 `z` 没有破坏性：重新摆好再按一遍即可覆盖。
 

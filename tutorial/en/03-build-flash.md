@@ -14,7 +14,7 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 1. Make sure you have `firmware/releases/sr_support_b_ptk_factory.bin` (checksums in
    `SHA256SUMS` next to it);
 2. Enter download mode: hold **BOOT**, tap **RST**, release **BOOT**;
-3. Flash it (tool setup on [page 02, section 2.4](./02-environment); run these commands in
+3. Flash it (tool setup on [page 02, section 2.4](./02-environment.md); run these commands in
    the `SR-Support` folder with `.venv` activated):
    - Windows GUI: Flash Download Tool → ESP32-S3 → load the bin at `0x0` → START;
    - Windows / Linux / macOS command line:
@@ -26,7 +26,7 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 4. Press RST when done and read the log as in 3.3.
 
 > For flashing / serial debugging you can power the ESP32 from USB and leave the 5 V supply
-> to the servos only (the two power options are in [page 04, section 4.4](./04-assembly)).
+> to the servos only (the two power options are in [page 04, section 4.4](./04-assembly.md)).
 
 > The command is **identical on Windows / Linux / macOS**; only the port changes:
 > `COM27` on Windows, `/dev/ttyACM0` on Linux, `/dev/tty.usbmodem*` on macOS.
@@ -34,12 +34,12 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 
 > Assembly centering needs no second image: after flashing this one, power up - both servos
 > drive to the firmware zero (1681 / 1456 µs) - then power off and install the horns
-> ([page 04, section 4.2](./04-assembly)). Optionally send `e` to put them at the 1520 µs
+> ([page 04, section 4.2](./04-assembly.md)). Optionally send `e` to put them at the 1520 µs
 > electrical center first (equivalent).
 
 ## 3.2 Build and flash from source (developers)
 
-Environment: [page 02, section 2.5](./02-environment). Project:
+Environment: [page 02, section 2.5](./02-environment.md). Project:
 `firmware/sr_support_b_ptk/` (environment `ptk7452`).
 
 ```bash
@@ -114,10 +114,10 @@ Type every command into the **send box** of the serial monitor/assistant and pre
 | `l` | 3 s 50 Hz fast log |
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
-| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 05](./05-zero-tool)) |
-| `e` | Electrical center (optional): both servos to 1520 µs for mounting the horns at the electrical center; the usual way is to power up to the firmware zero and mount there (see [page 04, 4.2](./04-assembly)) |
+| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 05](./05-zero-tool.md)) |
+| `e` | Electrical center (optional): both servos to 1520 µs for mounting the horns at the electrical center; the usual way is to power up to the firmware zero and mount there (see [page 04, 4.2](./04-assembly.md)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
-| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 08](./08-wifi-twin)) |
+| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 08](./08-wifi-twin.md)) |
 | `v` / `b` | Flip shoulder / elbow sign |
 | `i` / `j` | Flip IMU X / Y sign |
 | `h` | Stand-homing toggle (legacy policy path) |
