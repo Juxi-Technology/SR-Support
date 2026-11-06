@@ -21,6 +21,10 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 | `qd` | Joint command rates |
 | Mode | `run` / `hold` / `manual` / `auto` |
 
+Quick hardware self-check: `.venv/Scripts/python.exe tools/hw_check.py --port COM27` reads
+0.6 s of telemetry; add `--tilt 8` and tilt the robot by hand to print the up/gyro ranges and
+the tilt range, which reveals a stuck or mis-oriented IMU.
+
 ## 5.2 IMU checks and calibration
 
 1. Keep the robot still and upright; confirm `up≈(0, 0, 1)` and `w≈0`;

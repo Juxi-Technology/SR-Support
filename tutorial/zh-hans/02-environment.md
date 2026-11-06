@@ -98,22 +98,21 @@ python3 -m venv .venv
 国内网络慢可在 pip 命令后加清华镜像
 `-i https://pypi.tuna.tsinghua.edu.cn/simple`；首次安装下载约几百 MB。
 
-**验证 1：加载 MuJoCo 模型**
+**验证：运行环境自检（实际加载并步进 MuJoCo，而不是只做 import）**
 
 ```bash
-.venv/Scripts/python.exe -c "import mujoco, numpy, serial, gymnasium; m=mujoco.MjModel.from_xml_path('hardware/v1/robot_v1.xml'); print('mujoco', mujoco.__version__, '| nq', m.nq)"
+.venv/Scripts/python.exe tools/env_check.py
 ```
 
-应打印类似 `mujoco 3.16.0 | nq 9`（版本号可以不同，`nq 9` 说明模型加载成功）。
-Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`。
+预期最后一行是 `env check: PASS`，并打印类似：
 
-**验证 2：工具入口**
-
-```bash
-.venv/Scripts/python.exe tools/live_twin.py --help
+```text
+[ok] mujoco 3.16.0
+[ok] model hardware\v1\robot_v1.xml: nq=9 nv=8 dt=0.0002s, 200 steps stable ...
 ```
 
-能打印用法说明即安装成功。
+Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`；没插开发板时
+`[--] no serial port found` 是正常提示，不影响 PASS。
 
 > Linux 打开 MuJoCo 窗口若报 GLFW/OpenGL 错误，安装 `libgl1` 与 `libglew-dev`
 > （如 `sudo apt install libgl1 libglew-dev`）；Windows/macOS 的 MuJoCo wheel 自带运行库。
@@ -133,7 +132,6 @@ Linux/macOS 把 `.venv/Scripts/python.exe` 换成 `.venv/bin/python`。
 - [ ] `python -m esptool version` 正常，或 Flash Download Tool 能打开；
 - [ ] 电脑能看到开发板串口；
 - [ ] （仅开发者）`pio --version` 正常；
-- [ ] MuJoCo 自检打印 `mujoco ... | nq 9`；
-- [ ] `tools/live_twin.py --help` 能打印用法。
+- [ ] `tools/env_check.py` 输出 `env check: PASS`。
 
 全部通过后再进入下一页。

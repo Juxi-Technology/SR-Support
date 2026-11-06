@@ -101,22 +101,21 @@ python3 -m venv .venv
 On a slow network in China append the Tsinghua mirror
 `-i https://pypi.tuna.tsinghua.edu.cn/simple`; the first install downloads a few hundred MB.
 
-**Check 1: load the MuJoCo model**
+**Check: run the environment self-test (it loads and steps MuJoCo, not just imports)**
 
 ```bash
-.venv/Scripts/python.exe -c "import mujoco, numpy, serial, gymnasium; m=mujoco.MjModel.from_xml_path('hardware/v1/robot_v1.xml'); print('mujoco', mujoco.__version__, '| nq', m.nq)"
+.venv/Scripts/python.exe tools/env_check.py
 ```
 
-It must print something like `mujoco 3.16.0 | nq 9` (the version may differ; `nq 9` means the
-model loaded). On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python`.
+The last line must be `env check: PASS`, with output like:
 
-**Check 2: tool entry point**
-
-```bash
-.venv/Scripts/python.exe tools/live_twin.py --help
+```text
+[ok] mujoco 3.16.0
+[ok] model hardware\v1\robot_v1.xml: nq=9 nv=8 dt=0.0002s, 200 steps stable ...
 ```
 
-Printing the usage text means the install works.
+On Linux/macOS replace `.venv/Scripts/python.exe` with `.venv/bin/python`. With no board
+plugged in, `[--] no serial port found` is an informational line and does not affect PASS.
 
 > On Linux, a GLFW/OpenGL error when the MuJoCo window opens means missing system libraries:
 > install `libgl1` and `libglew-dev` (e.g. `sudo apt install libgl1 libglew-dev`). The
@@ -138,7 +137,6 @@ Printing the usage text means the install works.
 - [ ] `python -m esptool version` works, or Flash Download Tool opens;
 - [ ] the board's serial port is visible;
 - [ ] (developers) `pio --version` works;
-- [ ] the MuJoCo check prints `mujoco ... | nq 9`;
-- [ ] `tools/live_twin.py --help` prints the usage.
+- [ ] `tools/env_check.py` prints `env check: PASS`.
 
 Only continue once the items you need pass.
