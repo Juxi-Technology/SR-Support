@@ -13,7 +13,7 @@
 | [`hw_log.py`](hw_log.py) | `l` 快速日志采集（3 s 50 Hz，含原始 IMU） |
 | [`hw_check.py`](hw_check.py) | 快速连通性自检（IMU 状态、串口命令往返） |
 | [`hw_right.py`](hw_right.py) | 手动扶正脚本（按实测序列分段发 `m` 命令） |
-| [`servo_center.py`](servo_center.py) | 舵机回中辅助（单发 1520/自定义脉宽） |
+| [`servo_center.py`](servo_center.py) | 舵机回固件 q=0 中位（发 `r`，当前固化 1681/1456 µs；装配找中用 `firmware/servo_center_ptk`） |
 
 ## 2. 仿真与验证
 

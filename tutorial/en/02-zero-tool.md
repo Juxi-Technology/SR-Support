@@ -10,6 +10,11 @@ The servo zeros and the IMU accel zeros are calibrated and baked per unit at the
 disassembled/re-assembled, a servo was replaced, the IMU was replaced/re-mounted (recalibrate
 the accel), or the arm no longer rests at the visual center after retracting.
 
+This page sits at position 02 only because it is a standalone tool page; **in practice it is
+used after [page 04 assembly](./04-assembly) and [page 05 flashing](./05-step1-build-flash)**.
+The `z` command only reads the current servo command positions and does not use the IMU, so it
+works in any pose - but it only makes sense once the robot is fully assembled.
+
 ## 2.1 Principle
 
 The firmware defines q=0 as the visual center: arm vertical, both links in one line. The `z`

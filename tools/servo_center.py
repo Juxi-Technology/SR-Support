@@ -1,8 +1,11 @@
-"""Put both servos back to the mechanical neutral (1520 us).
+"""Drive both servos to the firmware zero (arm vertical).
 
 Sends the B-line firmware command ``r`` over serial: it re-arms the PWM
-outputs and writes q = 0 on both joints (SERVO_CENTER_US = 1520 us), then
-holds.  DTR/RTS are set before opening so the ESP32-S3 is not reset.
+outputs and writes q = 0 on both joints at the baked centers (currently
+shoulder 1681 us / elbow 1456 us), then holds.  For the 1520 us electrical
+center used while installing the horns, flash the bench sketch
+``firmware/servo_center_ptk`` instead.  DTR/RTS are set before opening so the
+ESP32-S3 is not reset.
 
 Run with the PlatformIO Python (pyserial is installed there):
   .venv-pio/Scripts/python.exe tools/servo_center.py --port COM27
@@ -17,7 +20,7 @@ import serial
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description="Center both servos at 1520 us")
+    p = argparse.ArgumentParser(description="Drive both servos to the firmware q=0 center")
     p.add_argument("--port", default="COM27")
     p.add_argument("--baud", type=int, default=115200)
     p.add_argument("--wait", type=float, default=2.0)
@@ -44,7 +47,7 @@ def main() -> None:
     print(text.encode("ascii", "replace").decode("ascii").strip()
           or "(no reply; check port/baud and that the firmware is running)")
     if "re-armed at neutral" in text:
-        print("OK: servos commanded to 1520 us neutral")
+        print("OK: servos commanded to the firmware q=0 center")
     elif "re-init failed" in text:
         print("FAIL: servo re-init failed; power/wiring, or power-cycle the board")
 
