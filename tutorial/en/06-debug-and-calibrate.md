@@ -113,6 +113,7 @@ Procedure (servo power is not required):
    ```text
    gyro bias (rad/s): ...
    accel bias (m/s^2): ... (saved)
+   calibration done; hold
    ```
 
 4. `accel cal rejected: |a|=...` means the robot was not level or not still (the gravity norm
@@ -130,6 +131,10 @@ Verification:
 > Finished units are calibrated at the factory (stored in NVS); redo this only after
 > replacing/re-mounting the IMU or when the lying pose is visibly tilted. `c` only calibrates
 > the IMU - it does not change the servo zero (that is [page 05](./05-zero-tool)).
+>
+> If you used manual commands before calibrating (the telemetry ends in `manual`), `c` leaves
+> the robot in `hold`/`manual` and the fall gate will not start a get-up; keep it upright and
+> send `g` to resume, or reset the board.
 
 ## 6.3 Servo checks and direction self-test
 

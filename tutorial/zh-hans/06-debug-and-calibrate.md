@@ -101,11 +101,12 @@ python tools/hw_check.py --port COM27 --tilt 8
    c
    ```
 
-3. 保持静止约 2 秒，看到下面两行即成功：
+3. 保持静止约 2 秒，看到下面三行即成功：
 
    ```text
    gyro bias (rad/s): ...
    accel bias (m/s^2): ... (saved)
+   calibration done; hold
    ```
 
 4. 若出现 `accel cal rejected: |a|=...`：说明没放平或还在动（重力模长偏离 9.8 超过
@@ -120,6 +121,9 @@ python tools/hw_check.py --port COM27 --tilt 8
 
 > 成品出厂已标定并写入 NVS，无需重做；仅在更换/重新安装 IMU、或躺姿明显倾斜时执行。
 > `c` 只标 IMU，不改变舵机零点——舵机零点见 [05 页](./05-zero-tool)。
+>
+> 如果校准前用过手动命令（遥测末尾是 `manual`），`c` 完成后会停在 `hold`/`manual`，
+> 跌倒门不会自动扶正；保持机器人直立后发送 `g` 恢复运行，或直接复位。
 
 ## 6.3 舵机检查与方向自检
 
