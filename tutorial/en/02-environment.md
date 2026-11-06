@@ -96,6 +96,17 @@ tutorial pages runs in this **activated terminal**; re-activate after opening a 
 Without activation `pip` / `python` point at the system installation and installs or runs
 will fail.
 
+Confirm the activation worked:
+
+- Windows: `where python` - the first line must be `...\SR-Support\.venv\Scripts\python.exe`;
+- Linux / macOS: `which python` - must be `.../SR-Support/.venv/bin/python`.
+
+> **Screen cleared after activating in cmd?** The stock `activate.bat` temporarily switches
+> the console code page (`chcp 65001`) and some terminals redraw the screen - it is **not a
+> new terminal**. If the new prompt starts with `(.venv)` and `where python` points into
+> `.venv`, the activation succeeded. To avoid the redraw, use PowerShell's `Activate.ps1`
+> (it does not touch the code page) or call `.venv\Scripts\python.exe` without activating.
+
 > **Directory requirement (important)**: `.venv` must live in the **`SR-Support` folder (the
 > repository root)**, never in a subfolder. The create/activate commands above use **relative
 > paths**, so they must be run from that folder - after opening a new terminal, enter it first

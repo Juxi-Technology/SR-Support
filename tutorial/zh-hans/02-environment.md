@@ -92,6 +92,16 @@ source .venv/bin/activate
 **已激活的终端**里执行；关掉终端再打开时需要重新激活。忘记激活时 `pip` / `python`
 会指向系统环境，安装或运行都会出问题。
 
+验证是否激活成功：
+
+- Windows：`where python` 第一条应指向 `...\SR-Support\.venv\Scripts\python.exe`；
+- Linux / macOS：`which python` 应指向 `.../SR-Support/.venv/bin/python`。
+
+> **cmd 里激活后屏幕被清空？** 这是 venv 自带的 `activate.bat` 在临时切换控制台代码页
+> （`chcp 65001`）时触发的终端重绘，**不是新开终端**。只要新提示符以 `(.venv)` 开头、
+> `where python` 指向 `.venv`，就说明激活成功。介意清屏的话用 PowerShell 的
+> `Activate.ps1`（不会切换代码页），或直接调用 `.venv\Scripts\python.exe`（不激活）。
+
 > **目录要求（重要）**：`.venv` 必须位于**`SR-Support` 文件夹（仓库根目录）**，不能建在
 > 子目录。上面的创建/激活命令都是**相对路径**，所以必须在这个目录里执行——新开终端
 > 也要先进入该目录再激活（PowerShell：`cd D:\Project\SR-Support`；cmd：
