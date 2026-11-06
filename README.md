@@ -11,7 +11,7 @@
 
 | 你想做什么 | 看这里 |
 |---|---|
-| **教程（唯一文档入口，按阅读顺序）** | [`tutorial/zh-hans/`](tutorial/zh-hans/index.md)（繁體中文 [`zh-hant/`](tutorial/zh-hant/index.md)、English [`en/`](tutorial/en/index.md)） |
+| **教程（唯一文档入口，按阅读顺序）** | [`tutorial/zh-hans/`](tutorial/zh-hans/index.md)（繁體中文 [`zh-hant/`](tutorial/zh-hant/index.md)、English [`en/`](tutorial/en/index.md)；日本語/한국어/Deutsch/Français/Español/Italiano/Português 见 [`tutorial/README.md`](tutorial/README.md)） |
 | **3D 模型 / MuJoCo XML** | [`hardware/v1/`](hardware/v1/)（`robot_v1.xml` + `meshes/`） |
 | 固件（命令表、镜像、零点、WiFi） | [`firmware/sr_support_b_ptk/README.md`](firmware/sr_support_b_ptk/README.md) |
 | 电脑端工具 | [`tools/README.md`](tools/README.md) |
@@ -22,7 +22,7 @@
 
 ```
 SR-Support/
-├─ tutorial/                # 教程（zh-hans / zh-hant / en，按阅读顺序 11 页，含目录）
+├─ tutorial/                # 教程（11 种语言，各 11 页含目录，见 tutorial/README）
 ├─ firmware/
 │  ├─ releases/             # ★ 预编译固件（客户直接烧录，无需 PlatformIO）
 │  ├─ sr_support_b_ptk/     # ★ 当前主固件

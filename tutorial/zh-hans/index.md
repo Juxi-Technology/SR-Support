@@ -5,6 +5,9 @@ description: SR-Support（2-DOF 自扶正装置）从基础知识、环境准备
 
 # SR-Support 自扶正装置教程
 
+[简体中文](../zh-hans/index.md) · [繁體中文](../zh-hant/index.md) · [English](../en/index.md) · [日本語](../ja/index.md) · [한국어](../ko/index.md) · [Deutsch](../de/index.md) · [Français](../fr/index.md) · [Español](../es/index.md) · [Italiano](../it/index.md) · [Português (BR)](../pt-br/index.md) · [Português (PT)](../pt-pt/index.md)
+
+
 SR-Support 是一个基于 2 自由度手臂的低成本主动自扶正装置：向任意方向倾倒后，能依靠一只
 两关节手臂撑地、翻转并撬起，自主回到直立姿态。本系列教程按阅读顺序组织，覆盖从零复现到
 实机验证的全过程。

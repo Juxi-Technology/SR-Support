@@ -1,6 +1,6 @@
 # SR-Support 教程（wiki 目录格式）
 
-> **中文教程入口：[zh-hans/index.md](zh-hans/index.md)** · 繁體中文：[zh-hant/index.md](zh-hant/index.md) · English: [en/index.md](en/index.md)
+> **中文教程入口：[zh-hans/index.md](zh-hans/index.md)** · 繁體中文：[zh-hant/index.md](zh-hant/index.md) · English: [en/index.md](en/index.md) · 日本語: [ja/index.md](ja/index.md) · 한국어: [ko/index.md](ko/index.md) · Deutsch: [de/index.md](de/index.md) · Français: [fr/index.md](fr/index.md) · Español: [es/index.md](es/index.md) · Italiano: [it/index.md](it/index.md) · Português (BR): [pt-br/index.md](pt-br/index.md) · Português (PT): [pt-pt/index.md](pt-pt/index.md)
 
 本目录按 Juxi Technology Wiki（wiki.juxitech.com）教程的目录规范组织：
 `tutorial/<语言>/<章节>`，语言目录在前，章节文件直接放在对应语言目录下。
@@ -22,10 +22,16 @@ tutorial/
 │  ├─ 08-wifi-twin.md           # WiFi 与仿真镜像
 │  ├─ 09-troubleshooting.md     # 故障排查
 │  └─ 10-reference.md           # 参考：模型、参数与许可
-├─ zh-hant/                     # 繁體中文（与简体逐文件对应，10 页正文 + 目录）
-├─ en/                          # 英文（与中文逐文件对应，10 页正文 + 目录）
-├─ de/                          # 其余语言目录已建好，待翻译（当前为占位）
-├─ ja/  ko/  fr/  es/  it/  pt-br/  pt-pt/
+├─ zh-hant/                     # 繁體中文（10 页正文 + 目录）
+├─ en/                          # English（10 页正文 + 目录）
+├─ ja/                          # 日本語（10 页正文 + 目录）
+├─ ko/                          # 한국어（10 页正文 + 目录）
+├─ de/                          # Deutsch（10 页正文 + 目录）
+├─ fr/                          # Français（10 页正文 + 目录）
+├─ es/                          # Español（10 页正文 + 目录）
+├─ it/                          # Italiano（10 页正文 + 目录）
+├─ pt-br/                       # Português (Brasil)（10 页正文 + 目录）
+├─ pt-pt/                       # Português (Portugal)（10 页正文 + 目录）
 └─ images/sr-support/self-righting/   # 教程图片（各语言共用）
 ```
 
@@ -46,8 +52,9 @@ npm run docs:build    # 提交前验证构建
 
 - 每个 `.md` 必须带 `title`、`description` frontmatter；文件名使用英文 kebab-case，
   章节带两位序号；
-- 每个语种目录下需要有一一对应的章节文件；当前提供简体中文、繁體中文与英文，其余语言待翻译，
-  翻译完成前不放入空章节文件，避免发布空页面；
+- 每个语种目录下需要有一一对应的章节文件；当前提供简体中文、繁體中文、英文、日本語、
+  한국어、Deutsch、Français、Español、Italiano、Português (BR/PT)，其余语言可继续补充，
+  但不要放入空章节文件，避免发布空页面；
 - 代码块必须标注语言（`bash`、`c`、`text` 等）。
 
 ## 教程配图

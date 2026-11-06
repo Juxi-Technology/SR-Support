@@ -5,6 +5,9 @@ description: Complete tutorial for the SR-Support 2-DOF self-righting device, fr
 
 # SR-Support Self-Righting Robot Tutorial
 
+[简体中文](../zh-hans/index.md) · [繁體中文](../zh-hant/index.md) · [English](../en/index.md) · [日本語](../ja/index.md) · [한국어](../ko/index.md) · [Deutsch](../de/index.md) · [Français](../fr/index.md) · [Español](../es/index.md) · [Italiano](../it/index.md) · [Português (BR)](../pt-br/index.md) · [Português (PT)](../pt-pt/index.md)
+
+
 SR-Support is a low-cost active self-righting device based on a 2-DOF arm. After tipping in
 any direction it plants its two-joint arm on the ground, rolls and levers itself back upright.
 This tutorial is organized as a reading order covering the full path from scratch to a
