@@ -26,7 +26,7 @@ SR-Support is a 2-DOF (shoulder + elbow) active self-righting device:
 
 | Item | Specification |
 |---|---|
-| Base | ~88 × 82 mm shell, 68 mm tall (bottom plate + shell + shoulder mount, 3D printed) |
+| Base | ~88 × 82 mm, 68 mm tall (bottom plate + shoulder servo mount, 3D printed) |
 | Arm | Shoulder axis 56 mm above the base, elbow 40.1 mm above the shoulder; forearm strut ~17 cm (12 mm tube) |
 | Mass | ~133 g (model mass table: foot 92.1 / arm1 20.7 / arm2 20.1 g, including both servos) |
 | Shoulder | PTK7452MG; manual limits `[-1.85, +1.82]` rad (sim joint range `[-1.07, +2.07]`) |

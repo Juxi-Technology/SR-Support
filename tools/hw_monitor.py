@@ -25,7 +25,7 @@ import serial
 ROOT = Path(__file__).resolve().parent.parent
 LOG = ROOT / "logs" / "hw_monitor.log"
 
-SHOULDER_MIN, SHOULDER_MAX = -1.07, 2.07
+SHOULDER_MIN, SHOULDER_MAX = -1.85, 1.82
 ELBOW_MAX = 1.55
 SUMMARY_EVERY_S = 5.0
 
