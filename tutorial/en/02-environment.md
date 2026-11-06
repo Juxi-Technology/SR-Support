@@ -75,6 +75,11 @@ py -3.12 -m venv .venv
 > Telling the shells apart: cmd prompts look like `C:\...>`, PowerShell like `PS C:\...>`.
 > The tutorial uses PowerShell by default; in cmd just swap the activation command for
 > `activate.bat`, everything else is identical. Administrator rights are not needed.
+>
+> **The activation file must match the shell**: cmd uses `activate.bat`, PowerShell uses
+> `Activate.ps1`. Running the `.ps1` from cmd does not activate the current window (usually
+> nothing happens, or a separate window opens). Also make sure `.venv` exists first (`dir`
+> must list the `.venv` folder); if not, run `py -3.12 -m venv .venv` first.
 
 **Linux / macOS**
 

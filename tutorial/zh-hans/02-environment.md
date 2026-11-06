@@ -72,6 +72,11 @@ py -3.12 -m venv .venv
 > 怎么分辨终端：cmd 的提示符是 `C:\...>`，PowerShell 是 `PS C:\...>`。本教程默认用
 > PowerShell；用 cmd 时把激活命令换成 `activate.bat` 即可，其余命令相同。
 > 不需要管理员权限，普通终端即可。
+>
+> **激活文件必须和终端匹配**：cmd 用 `activate.bat`，PowerShell 用 `Activate.ps1`。
+> 在 cmd 里运行 `.ps1` 不会激活当前窗口（通常没有反应或另开一个窗口）。
+> 另外先确认 `.venv` 已创建（`dir` 能看到 `.venv` 文件夹）；没有就先执行
+> `py -3.12 -m venv .venv`。
 
 **Linux / macOS**
 
