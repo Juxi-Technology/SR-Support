@@ -108,6 +108,9 @@ using the axes printed on / documented for the IMU module,
   shaft or gear shaft) points toward the IMU **−Y**;
 - the elbow servo output shaft points toward the IMU **+X**.
 
+From bottom to top the two servos are **shoulder (lower) → elbow (upper)**; do not swap them
+when mounting the horns or wiring.
+
 These two directions are the body's shoulder and elbow axes; if they do not match the
 hardware, the IMU or a servo mount is installed the wrong way - fix it before powering up.
 
