@@ -14,7 +14,22 @@ description: Build and flash the SR-Support B-line firmware with PlatformIO, ser
 - Platform `espressif32 8.0.0`, Arduino core 3.3.12;
 - Project: `firmware/sr_support_b_ptk/` (environment `ptk7452`);
 - The repo ships a project-local PlatformIO: `.venv-pio/Scripts/pio.exe` (Windows);
-  install it first with `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`.
+  install it first with `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`
+  (needs Python 3.12 and the `py` launcher).
+
+**Computer-side Python tools** (monitor, zeroing, twin) need pyserial/numpy/mujoco/gymnasium -
+pick one of two options:
+
+- Recommended: the project-local `.venv` (independent of PlatformIO's `.venv-pio`):
+  `powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1`;
+- No virtual environment needed at all: in any Python 3.10+ install
+  `pip install -r tools/requirements.txt` and replace `.venv\Scripts\python.exe` in the
+  commands below with `python`.
+
+> A virtual environment is not mandatory - it only isolates the dependencies from your system
+> Python (MuJoCo is sensitive to versions, so it is recommended). The same holds for
+> PlatformIO: the VS Code extension or a global `pio` works too; just replace
+> `.venv-pio\Scripts\pio.exe` with the matching command.
 
 ## 5.2 Build and flash
 

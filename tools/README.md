@@ -27,8 +27,13 @@
 
 ## 3. 安装脚本
 
-- [`install_platformio.ps1`](install_platformio.ps1)：项目内 `.venv-pio` 安装 PlatformIO；
+- [`install_platformio.ps1`](install_platformio.ps1)：项目内 `.venv-pio` 安装 PlatformIO（烧录用）；
+- [`install_tools_env.ps1`](install_tools_env.ps1)：项目内 `.venv` 安装电脑端工具依赖
+  （pyserial/numpy/mujoco/gymnasium）；
 - [`install_xtensa_toolchain.ps1`](install_xtensa_toolchain.ps1)：工具链下载卡住时的修复脚本。
+
+虚拟环境不是硬性要求：也可以自行 `pip install -r tools/requirements.txt`，把命令里的
+`.venv\Scripts\python.exe` 换成 `python`。
 
 
 

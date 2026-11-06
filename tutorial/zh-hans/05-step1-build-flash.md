@@ -13,7 +13,19 @@ description: 使用 PlatformIO 构建并烧录 SR-Support B 线固件，串口�
 - 平台：`espressif32 8.0.0`，Arduino core 3.3.12；
 - 工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）；
 - 本仓库自带项目内 PlatformIO：`.venv-pio/Scripts/pio.exe`（Windows）；首次使用先安装：
-  `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`。
+  `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`
+  （需要 Python 3.12 + `py` 启动器）。
+
+**电脑端 Python 工具**（监控、零点、Twin 镜像）依赖 pyserial/numpy/mujoco/gymnasium，二选一：
+
+- 推荐：项目内虚拟环境 `.venv`（与 PlatformIO 的 `.venv-pio` 相互独立）：
+  `powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1`；
+- 不用虚拟环境也可以：在任意 Python 3.10+ 环境执行 `pip install -r tools/requirements.txt`，
+  并把后文命令中的 `.venv\Scripts\python.exe` 换成 `python`。
+
+> 虚拟环境不是硬性要求，只是隔离依赖、避免与系统 Python 冲突（MuJoCo 对版本较敏感，
+> 建议使用）。PlatformIO 同理：也可以用 VS Code 插件或全局 `pio`，把
+> `.venv-pio\Scripts\pio.exe` 换成对应命令即可。
 
 ## 5.2 构建与烧录
 

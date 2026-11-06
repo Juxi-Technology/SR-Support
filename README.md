@@ -41,7 +41,8 @@ SR-Support/
 2. 把机器人放倒（任意方向），**松手静止约 0.5 秒**，自动扶正开始；
 3. 可选 WiFi：连热点 `SR-Support`（密码 `srsupport`）→ 打开 `http://192.168.4.1`
    （状态页 + 配网 + Twin 流开关）；
-4. MuJoCo 实时镜像：`.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333`。
+4. MuJoCo 实时镜像：`.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333`
+   （工具环境安装见教程 05 页；不想用虚拟环境就把 `.venv/Scripts/python.exe` 换成 `python`）。
 
 自组装流程（打印→装配→烧录→标定）见 [`tutorial/zh-hans/index.md`](tutorial/zh-hans/index.md)。
 
