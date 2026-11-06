@@ -84,6 +84,9 @@ Notes:
 - With a **5 V** supply you may feed the ESP32 5V/GND and branch the same supply to the
   adapter V+/GND for the servos; with **6 V / 7.4 V** power the adapter V+/GND only and
   power the ESP32 from USB;
+- With USB and the 5 V supply connected at the same time: the ESP32-S3-DevKitC-1 has a
+  reverse-feed diode between USB and the 5V pin, so both may be connected; if your board
+  lacks that diode, unplug the 5 V branch while flashing;
 - On first power-up leave the servos disconnected, verify V+ polarity and voltage with a
   multimeter, then test one servo, then both;
 - Wiring order: ground and signals → 5 V supply (ESP32 and servos together) → USB for the
