@@ -1,11 +1,11 @@
 ---
-title: 02 Assembly and Wiring
+title: 04 Assembly: print, build, wire
 description: Printing, servo horn re-index and centering, wiring table, IMU mounting orientation and power-up order for SR-Support.
 ---
 
-# 02 Assembly and Wiring
+# 04 Assembly: print, build, wire
 
-## 2.1 Printing and inspection
+## 4.1 Printing and inspection
 
 1. Print `footP`, `arm1P`, `arm2P` and `armhornP` ×2;
 2. Check the base outline (~60 × 73 mm) and the 37 mm riser with calipers; the foot plate is
@@ -13,14 +13,14 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 3. Test-fit the 25T servo horns in their slots; fix with screws only when there is no bind;
 4. Weigh every printed part and record it for later simulation mass calibration.
 
-## 2.2 Servo preparation (horn re-index)
+## 4.2 Servo preparation (horn re-index)
 
 1. Before mounting, command both servos to 1520 µs (electrical center);
 2. **Re-index the shoulder horn** by about 2 teeth (~29°) on the 25T spline so the vertical arm
    corresponds to the firmware zero `q=0`. After re-indexing, define the visual center as q=0
-   with the arrow-key tool in 4.5 and write the printed pulse back to
+   with the [page 02 zero tool](./02-zero-tool) and write the printed pulse back to
    `SERVO_SHOULDER_CENTER_US` (current unit's baked value: **1681 µs**);
-3. The elbow zero follows the same 4.5 procedure (current baked value: **1456 µs**,
+3. The elbow zero follows the same page-02 procedure (current baked value: **1456 µs**,
    `SERVO_CENTER_US`);
 4. Mount the horns, tighten, and check the full travel by hand for binding;
 5. Direction convention (matches the simulator): `shoulder +q` moves the big arm toward **−Y**,
@@ -29,9 +29,9 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 > The horn index sets how the travel splits between the two sides; the firmware manual limits
 > (`Q_SHOULDER_MIN/MAX`) must match the real travel - do not widen them. After zeroing, shift
-> all sequence waypoints as described in 4.5, otherwise the physical get-up poses drift.
+> all sequence waypoints as described on page 02, otherwise the physical get-up poses drift.
 
-## 2.3 Base and arm assembly
+## 4.3 Base and arm assembly
 
 1. Fix the 3 mm foot plate to the 37 mm riser with M3 screws to form the 40 mm base;
 2. Install the shoulder servo in the top slot, horn facing up;
@@ -39,7 +39,7 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 4. Install the elbow servo at the top of `arm1P`; connect `arm2P` (forearm) through `armhornP`;
 5. Move the arm to vertical by hand (`q≈0`) and confirm it matches the servo center.
 
-## 2.4 Wiring
+## 4.4 Wiring
 
 | Device | ESP32-S3 pin | Adapter | Notes |
 |---|---|---|---|
@@ -55,14 +55,14 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 Notes:
 
-- The adapter is passive: confirm every cascaded header has the same V+/GND/signal order —
+- The adapter is passive: confirm every cascaded header has the same V+/GND/signal order -
   reversed polarity destroys servos or the board;
 - Keep I²C wires short and away from servo wires; module pull-ups are 3.3 V;
 - On first power-up leave the servos disconnected, verify V+ polarity and voltage with a
   multimeter, then test one servo, then both;
 - Power-up order: ground and signals → servo power → ESP32 USB. Reverse when powering down.
 
-## 2.5 IMU mounting orientation
+## 4.5 IMU mounting orientation
 
 The IMU is mounted rotated +90° about the body vertical. The firmware enables `IMU_YAW90` and
 converts the IMU-frame up vector into body coordinates:
@@ -71,5 +71,5 @@ converts the IMU-frame up vector into body coordinates:
 up_body = (up_imu.y, -up_imu.x, up_imu.z)
 ```
 
-After mounting, verify with Chapter 04: upright gives `up≈(0, 0, 1)`; the four lying poses are
-listed in the table in 4.4.
+After mounting, verify with [page 03](./03-debug-and-checks): upright gives `up≈(0, 0, 1)`;
+the four lying poses are listed in the table in 3.4.

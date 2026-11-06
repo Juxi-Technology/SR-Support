@@ -1,18 +1,18 @@
 ---
-title: 03 固件构建与烧录
+title: 05 第一步：环境、构建与烧录
 description: 使用 PlatformIO 构建并烧录 SR-Support B 线固件，串口命令与启动日志说明。
 ---
 
-# 03 固件构建与烧录
+# 05 第一步：环境、构建与烧录
 
-## 3.1 环境
+## 5.1 环境
 
 - **PlatformIO（Arduino framework）**，不是 ESP-IDF；
 - 平台：`espressif32 8.0.0`，Arduino core 3.3.12；
 - 工程：`firmware/sr_support_b_ptk/`（环境名 `ptk7452`）；
 - 本仓库自带项目内 PlatformIO：`.venv-pio/Scripts/pio.exe`（Windows）。
 
-## 3.2 构建与烧录
+## 5.2 构建与烧录
 
 ```bash
 # 构建
@@ -27,7 +27,7 @@ description: 使用 PlatformIO 构建并烧录 SR-Support B 线固件，串口�
 
 构建成功时资源占用约 RAM 56%、Flash 30%（含 WiFi 与网页服务；不含 WiFi 的早期版本约 7%/12%）。
 
-## 3.3 串口监视
+## 5.3 串口监视
 
 ```bash
 .venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
@@ -41,7 +41,7 @@ autorun on: get-up waits for a fall
 up ... | w ... | q ... | qd ... | run
 ```
 
-## 3.4 串口命令（115200）
+## 5.4 串口命令（115200）
 
 | 命令 | 作用 |
 |---|---|
@@ -58,15 +58,15 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 秒 50 Hz 快速日志 |
 | `k` | 打印两舵机中位脉宽 |
 | `o` / `p` | 肩中位脉宽 ±10 µs 微调 |
-| `z` | 编码器式清零：当前姿态设为两关节 q=0 并打印新脉宽（仅内存；固化流程见 4.5） |
+| `z` | 编码器式清零：当前姿态设为两关节 q=0 并打印新脉宽（仅内存；见 [02 页](./02-zero-tool)） |
 | `d` | 开关 50 Hz Twin 流（供 MuJoCo 镜像；状态页有同等开关） |
-| `w` | 开/关 WiFi（热点 + 状态页/配网，见 5.6） |
+| `w` | 开/关 WiFi（热点 + 状态页/配网，见 [08 页](./08-step4-wifi-twin)） |
 | `v` / `b` | 翻转肩 / 肘方向符号 |
 | `i` / `j` | 翻转 IMU X / Y 符号 |
 | `h` | 站立收臂回中开关（旧策略用） |
 | `a` | 旧的脚本扶正模式（legacy，仅测试用） |
 
-## 3.5 上电行为
+## 5.5 上电行为
 
 固件启用 `AUTORUN_ON_BOOT`：上电后执行器处于待命状态，等机器人**完全倒下且静止**
 0.5 秒后自动开始扶正，无需发送 `g`。上电时请让机器人保持直立。

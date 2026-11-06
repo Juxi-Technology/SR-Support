@@ -1,11 +1,11 @@
 ---
-title: 06 Troubleshooting
-description: Common SR-Support symptoms, causes and fixes covering IMU, serial port, fall gate and executor timeouts.
+title: 09 Troubleshooting
+description: Common SR-Support symptoms, causes and fixes covering IMU, serial port, fall gate, executor timeouts and WiFi.
 ---
 
-# 06 Troubleshooting
+# 09 Troubleshooting
 
-## 6.1 Common symptoms
+## 9.1 Common symptoms
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
@@ -15,15 +15,15 @@ description: Common SR-Support symptoms, causes and fixes covering IMU, serial p
 | Robot does not start after being placed | Body not still, or a hand is touching it | Release and keep still for ≥0.5 s; watch for `getup start` |
 | Immediate flailing / wrong direction | Fall gate triggered mid-roll, misclassification | Place and release cleanly; retry |
 | Run stops and prints `executor timeout` after 14 s | Reference did not finish | Normal fallback; automatic retry after 1.5 s; keep the log |
-| Frequent `executor re-plan` events | Normal roll-over procedure for `roll_neg` | No action; check whether it ends with `done` |
+| Occasional `executor re-plan` events | Normal fallback after a failed `roll_neg` press | Check whether it ends with `done` |
 | Servo buzzes / heats up | Stall or binding target | Send `x` or cut power; check limits and mechanical clearance |
 | Arm hits the body during self-righting | Large shoulder motion | Check `Q_SHOULDER_MAX` and clearance; keep the 40 mm base height |
-| `up` does not match the real pose (persistent 5°+ tilt while lying) | Accel zero offsets uncalibrated | Stand the robot level and send `c` (gyro + accel together, see 4.2) |
-| Arm does not rest at the visual center after retracting | Zero drifted (re-indexed/re-assembled without re-zeroing) | Re-zero with the arrow-key tool and bake it (4.5) |
+| `up` does not match the real pose (persistent 5°+ tilt while lying) | Accel zero offsets uncalibrated | Stand the robot level and send `c` (see [page 03, 3.2](./03-debug-and-checks)) |
+| Arm does not rest at the visual center after retracting | Zero drifted (re-indexed/re-assembled without re-zeroing) | Re-zero with the [page 02 tool](./02-zero-tool) and bake it |
 | Servo buzzes/chatters after a get-up | Analog servo transient self-excitation after large motion/stalls (output is constant) | Self-decays; add rubber damping washers or use a digital servo; pinching the arm silences it instantly |
 | Status page / provisioning unreachable | Browser proxy not bypassed, or hotspot off | Add `192.168.4.1` to the proxy exceptions; send `w` to enable WiFi |
 
-## 6.2 Safety commands
+## 9.2 Safety commands
 
 | Situation | Command |
 |---|---|
@@ -31,7 +31,7 @@ description: Common SR-Support symptoms, causes and fixes covering IMU, serial p
 | Recover after `x` | `r` to re-initialize, then power-cycle if needed |
 | A joint moves the wrong way | `v` (shoulder) / `b` (elbow) sign flip |
 
-## 6.3 Capturing a failure
+## 9.3 Capturing a failure
 
 Keep the corresponding part of `logs/hw_monitor.log`. The key lines are:
 

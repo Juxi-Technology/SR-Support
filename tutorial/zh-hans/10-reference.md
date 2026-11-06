@@ -1,11 +1,25 @@
 ---
-title: 07 参数与参考
-description: SR-Support 固件参数表、四姿态参考序列、验证状态与许可说明。
+title: 10 参考：模型、参数与许可
+description: 参考模型文件（MuJoCo XML / STL）、固件参数表、四姿态参考序列、验证状态与许可。
 ---
 
-# 07 参数与参考
+# 10 参考：模型、参数与许可
 
-## 7.1 固件关键参数（`firmware/sr_support_b_ptk/include/config.h`）
+## 10.1 参考模型文件
+
+仿真采用 MuJoCo MJCF（`.xml` + `.stl` 网格），与实机同源（自研 v1 设计）：
+
+| 文件 | 说明 |
+|---|---|
+| `training/b_line/assets/robot_v1.xml` | 主模型（与实机几何/质量对应） |
+| `training/b_line/assets/robot_v1_sym.xml` / `robot_v1_270.xml` | 行程变体（对称 ±90° / 270° 验证用） |
+| `training/b_line/assets/v1_meshes/*.stl` | 6 个网格（底座底板/外壳、肩座、上臂支架、肘舵机、小臂杆） |
+| `training/b_line/assets/v1_meshes/print_mass_model.json` | 逐件打印质量表（15% 填充） |
+| `hardware/juxi_b_line/STEP|STL/` | Juxi B 线参考 CAD（CERN-OHL-S） |
+
+本仓库未附带 URDF；如需 ROS 使用，可由上述 CAD/网格导出。
+
+## 10.2 固件关键参数（`firmware/sr_support_b_ptk/include/config.h`）
 
 | 参数 | 值 | 说明 |
 |---|---|---|
@@ -25,7 +39,7 @@ description: SR-Support 固件参数表、四姿态参考序列、验证状态�
 | `EXEC_MIN_SWITCH_AGE` | 25 | 参考启动后允许切换的最早拍数 |
 | `EXEC_MAX_SWITCHES` | 5 | 单次运行最多切换次数 |
 | `EXEC_NEUTRAL_MAX` | 120 | 中立回撤最长拍数 |
-| `SERVO_SHOULDER_CENTER_US` | 1681 | 肩零点脉宽（2026-11 视觉中位固化；以 4.5 节定零为准） |
+| `SERVO_SHOULDER_CENTER_US` | 1681 | 肩零点脉宽（2026-11 视觉中位固化；以 [02 页](./02-zero-tool) 定零为准） |
 | `SERVO_CENTER_US` | 1456 | 肘零点脉宽（同上） |
 | `SERVO_US_PER_RAD` | 636.62 | 2000 µs / π |
 | `Q_SHOULDER_MIN/MAX` | −1.85 / +1.82 rad | 肩手动命令限位 |
@@ -35,7 +49,7 @@ description: SR-Support 固件参数表、四姿态参考序列、验证状态�
 | `MAHONY_KP` / `ACCEL_TRUST_BAND` | 6.0 / 2.5 m/s² | 姿态滤波：加速度修正增益 / 信任带 |
 | `WIFI_AP_SSID` / `WIFI_AP_PASS` | SR-Support / srsupport | 热点（`w` 开关，上电默认开） |
 
-## 7.2 参考序列（肩, 肘，rad；与 `training/b_line/getup_reference_b39.py` 逐值同步）
+## 10.3 参考序列（肩, 肘，rad；与 `training/b_line/getup_reference_b39.py` 逐值同步）
 
 | 姿态 | 序列 |
 |---|---|
@@ -44,16 +58,17 @@ description: SR-Support 固件参数表、四姿态参考序列、验证状态�
 | `pitch_pos` | `[-1.32,1.45] → [-0.25,1.45] → 收臂` |
 | `pitch_neg` | `[-1.32,-1.65] → [-0.25,-1.65] → 收臂` |
 
-## 7.3 验证状态（2026-11-06）
+## 10.4 验证状态（2026-11-06）
 
 - 四个方向实机扶正全部通过，均为**直接起身**（无需翻滚），约 1–6 秒，全程无舵机越界；
 - `roll_neg` 最终方案：全行程直接按压 + 肘部楔形泵 ×2，失败时鞭甩下砸重试（早期依赖
   "滚过顶部 + 姿态重规划"的方案已废弃）；
-- 状态机另经 IMU 加速度计零点标定修正（见 4.2），躺姿姿态与实际一致；
+- 状态机另经 IMU 加速度计零点标定修正（见 [03 调试页 3.2](./03-debug-and-checks)），
+  躺姿姿态与实际一致；
 - 仿真 1× 质量模型下 `roll_neg` 不复现（模型手臂质量/摩擦与实机不同），属已知模型差异，
   实机固件以实机验证为准。
 
-## 7.4 许可与来源
+## 10.5 许可与来源
 
 - B 线固件/训练代码：MIT / Apache-2.0；
 - B 线 CAD/STL：CERN-OHL-S-2.0（强互惠，商用前确认义务）；

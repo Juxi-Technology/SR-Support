@@ -1,18 +1,18 @@
 ---
-title: 03 Firmware Build and Flash
+title: 05 Step 1: environment, build and flash
 description: Build and flash the SR-Support B-line firmware with PlatformIO, serial commands and boot log.
 ---
 
-# 03 Firmware Build and Flash
+# 05 Step 1: environment, build and flash
 
-## 3.1 Environment
+## 5.1 Environment
 
 - **PlatformIO (Arduino framework)**, not ESP-IDF;
 - Platform `espressif32 8.0.0`, Arduino core 3.3.12;
 - Project: `firmware/sr_support_b_ptk/` (environment `ptk7452`);
 - The repo ships a project-local PlatformIO: `.venv-pio/Scripts/pio.exe` (Windows).
 
-## 3.2 Build and flash
+## 5.2 Build and flash
 
 ```bash
 # Build
@@ -28,7 +28,7 @@ description: Build and flash the SR-Support B-line firmware with PlatformIO, ser
 A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
 builds without WiFi were about 7% / 12%).
 
-## 3.3 Serial monitor
+## 5.3 Serial monitor
 
 ```bash
 .venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
@@ -42,7 +42,7 @@ autorun on: get-up waits for a fall
 up ... | w ... | q ... | qd ... | run
 ```
 
-## 3.4 Serial commands (115200)
+## 5.4 Serial commands (115200)
 
 | Command | Function |
 |---|---|
@@ -59,16 +59,16 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 s 50 Hz fast log |
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
-| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; baking procedure in 4.5) |
+| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 02](./02-zero-tool)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
-| `w` | Toggle WiFi (hotspot + status page/provisioning, see 5.6) |
+| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 08](./08-step4-wifi-twin)) |
 | `v` / `b` | Flip shoulder / elbow sign |
 | `i` / `j` | Flip IMU X / Y sign |
 | `h` | Stand-homing toggle (legacy policy path) |
 | `a` | Legacy scripted get-up test mode |
 
-## 3.5 Power-on behavior
+## 5.5 Power-on behavior
 
 The firmware defines `AUTORUN_ON_BOOT`: after power-up the executor waits for the robot to be
-**fully down and still** for 0.5 s, then starts automatically — no `g` needed. Power up with
+**fully down and still** for 0.5 s, then starts automatically - no `g` needed. Power up with
 the robot upright.
