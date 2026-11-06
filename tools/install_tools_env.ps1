@@ -16,6 +16,13 @@ $Python = Join-Path $Venv "Scripts\python.exe"
 if (-not (Test-Path $Python)) {
     Write-Host "Creating venv at $Venv ..."
     py -3.12 -m venv $Venv
+    if (-not (Test-Path $Python)) {
+        Write-Host "Python 3.12 not found; falling back to py -3 ..."
+        py -3 -m venv $Venv
+    }
+}
+if (-not (Test-Path $Python)) {
+    Write-Error "Could not create the venv. Install Python 3.10+ from python.org (keep the 'py' launcher) and retry."
 }
 
 Write-Host "Upgrading pip ..."

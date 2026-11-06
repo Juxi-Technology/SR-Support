@@ -1,11 +1,11 @@
 ---
-title: 03 Debug and checks
+title: 05 Debug and checks
 description: Telemetry format, IMU attitude checks and calibration, servo direction/center checks, four lying poses and the fall gate.
 ---
 
-# 03 Debug and checks
+# 05 Debug and checks
 
-## 3.1 Telemetry format
+## 5.1 Telemetry format
 
 The firmware prints one telemetry line every 250 ms (the monitor summarizes it every 5 s):
 
@@ -21,7 +21,7 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 | `qd` | Joint command rates |
 | Mode | `run` / `hold` / `manual` / `auto` |
 
-## 3.2 IMU checks and calibration
+## 5.2 IMU checks and calibration
 
 1. Keep the robot still and upright; confirm `up≈(0, 0, 1)` and `w≈0`;
 2. Stand the robot LEVEL on a flat surface and keep it still; send `c` to calibrate gyro AND
@@ -36,11 +36,11 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
    pose (e.g. lying on the −Y side gives `up≈(0,−1,0)` with the base face flat). A persistent
    5°+ tilt while lying usually means the accel bias is uncalibrated - redo step 2.
 
-## 3.3 Servo checks
+## 5.3 Servo checks
 
 | Check | Method | Expected |
 |---|---|---|
-| Centers | `k` | `shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 02](./02-zero-tool)) |
+| Centers | `k` | `shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 06](./06-zero-tool)) |
 | Shoulder trim | `o` / `p` (±10 µs) | Arm vertical at `q=0` |
 | Direction | `m 0.5 0` / `m 0 0.8` | Shoulder + → big arm toward −Y; elbow + → forearm toward +X |
 | Sign flip | `v` (shoulder) / `b` (elbow) | Only if a direction is reversed |
@@ -54,7 +54,7 @@ Joint limits:
 - Manual `m` commands clamp the elbow to `[-0.90, +0.70]` rad;
 - PWM output 500–2500 µs at 50 Hz.
 
-## 3.4 Four lying poses and the fall gate
+## 5.4 Four lying poses and the fall gate
 
 | Pose | Monitor `up` | Physical meaning |
 |---|---|---|

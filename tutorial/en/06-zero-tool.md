@@ -1,9 +1,9 @@
 ---
-title: 02 Zero-calibration (arrow keys; required for DIY builds)
+title: 06 Zero-calibration (arrow keys; required for DIY builds)
 description: Jog the arm to the visual center with arrow keys and declare it q=0; required for every DIY build, and after re-indexing a horn or re-assembly.
 ---
 
-# 02 Zero-calibration (arrow keys; required for DIY builds)
+# 06 Zero-calibration (arrow keys; required for DIY builds)
 
 The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so a
 stock unit needs nothing here. A **DIY build must do this page**: a hand-assembled arm will
@@ -21,16 +21,16 @@ the visual center after retracting.
 > 500/2500 µs and the arm cannot reach a required sequence angle), re-index the horn (~2 teeth
 > from the 1520 µs center on the shoulder) and zero again.
 
-This page sits at position 02 only because it is a standalone tool page; **in practice it is
-used after [page 04 assembly](./04-assembly) and [page 05 flashing](./05-step1-build-flash)**.
+Timing: after the robot is fully assembled and the main firmware is flashed (the DIY path
+runs 03 → 04 → 05 → 06).
 
-## 2.1 Principle
+## 6.1 Principle
 
 The firmware defines q=0 as the visual center: arm vertical, both links in one line. The `z`
 command is an encoder-style zero: it makes the **current** joint positions q=0 and prints the
 corresponding center pulse widths.
 
-## 2.2 Procedure
+## 6.2 Procedure
 
 1. Connect both the battery and USB (servos powered) and run:
 
@@ -58,7 +58,7 @@ corresponding center pulse widths.
 4. Sanity check: press `n` (home), jog a little, home again - the arm must return to the visual
    center you just defined.
 
-## 2.3 Baking (mandatory once satisfied)
+## 6.3 Baking (mandatory once satisfied)
 
 `z` only touches RAM; a reboot restores the old zero. When happy:
 
@@ -66,11 +66,11 @@ corresponding center pulse widths.
    (`SERVO_SHOULDER_CENTER_US` / `SERVO_CENTER_US`);
 2. Shift every waypoint of `EXEC_REF*` and `training/b_line/getup_reference_b39.py` by the same
    offsets (shoulder/elbow each −Δ rad);
-3. Reflash and re-test all four directions ([page 07](./07-step3-self-righting)).
+3. Reflash and re-test all four directions ([page 08](./08-self-righting)).
 
 > A mis-press is harmless: zero again to overwrite.
 
-## 2.4 Related commands
+## 6.4 Related commands
 
 | Command | Function |
 |---|---|

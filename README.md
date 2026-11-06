@@ -16,13 +16,13 @@
 | 固件（命令表、镜像、零点、WiFi） | [`firmware/sr_support_b_ptk/README.md`](firmware/sr_support_b_ptk/README.md) |
 | 电脑端工具 | [`tools/README.md`](tools/README.md) |
 | 仿真与训练 | [`training/README.md`](training/README.md) |
-| 许可与来源（商用必读） | [`tutorial/zh-hans/10-reference.md`](tutorial/zh-hans/10-reference.md)（10.5 节） |
+| 许可与来源（商用必读） | [`tutorial/zh-hans/11-reference.md`](tutorial/zh-hans/11-reference.md)（11.5 节） |
 
 ## 目录结构
 
 ```
 SR-Support/
-├─ tutorial/                # 教程（zh-hans / en，按阅读顺序 11 页）
+├─ tutorial/                # 教程（zh-hans / en，按阅读顺序 12 页，含目录）
 ├─ firmware/
 │  ├─ sr_support_b_ptk/     # ★ 当前主固件
 │  ├─ i2c_scanner/          # IMU 地址诊断
@@ -42,19 +42,19 @@ SR-Support/
 3. 可选 WiFi：连热点 `SR-Support`（密码 `srsupport`）→ 打开 `http://192.168.4.1`
    （状态页 + 配网 + Twin 流开关）；
 4. MuJoCo 实时镜像：`.venv/Scripts/python.exe tools/live_twin.py --tcp <Robot IP>:3333`
-   （工具环境安装见教程 05 页；不想用虚拟环境就把 `.venv/Scripts/python.exe` 换成 `python`）。
+   （工具环境安装见教程 02 页；不想用虚拟环境就把 `.venv/Scripts/python.exe` 换成 `python`）。
 
-自组装流程（打印→装配→烧录→标定）见 [`tutorial/zh-hans/index.md`](tutorial/zh-hans/index.md)。
+自组装流程（环境→打印→装配→烧录→标定）见 [`tutorial/zh-hans/index.md`](tutorial/zh-hans/index.md)。
 
 ## 重要提醒
 
 - **电源**：舵机规格 6 V / ≥5 A（独立供电）；5 V 可用但堵转扭矩约降 15%，
   `roll_neg` 更依赖楔形泵。ESP32 用 USB-C 单独供电，与舵机电源共地，**不要把 6 V 接到 ESP32**；
 - **IMU 标定**：更换/重装 IMU 后，站立水平发 `c`（陀螺+加速度计零点，写入 NVS）；
-- **零点**：换齿/重装舵盘后用 `tools/hw_shoulder_range.py` 定零并固化（教程第 02 页）；
+- **零点**：换齿/重装舵盘后用 `tools/hw_shoulder_range.py` 定零并固化（教程第 06 页）；
 - **许可**：代码 MIT/Apache-2.0；自研 CAD/模型 CERN-OHL-S-2.0；SelfRisingRobot 无许可、
   仓库不包含其任何文件；专利 CN109693729A/B 商用前需 FTO。详见
-  教程 [`10-reference`](tutorial/zh-hans/10-reference.md) 的许可一节。
+  教程 [`11-reference`](tutorial/zh-hans/11-reference.md) 的许可一节。
 
 ## 资料与许可
 

@@ -1,37 +1,16 @@
 ---
-title: 05 Step 1: environment, build and flash
+title: 04 Step 1: build and flash
 description: Build and flash the SR-Support B-line firmware with PlatformIO, serial commands and boot log.
 ---
 
-# 05 Step 1: environment, build and flash
+# 04 Step 1: build and flash
 
 > **Finished-unit users can skip this page**: the factory has flashed and verified the
 > firmware. Only redo this for firmware upgrades or after modifying the code.
 
-## 5.1 Environment
+The environment (PlatformIO and the computer-side tools) is installed on [page 02](./02-environment); this page builds and flashes.
 
-- **PlatformIO (Arduino framework)**, not ESP-IDF;
-- Platform `espressif32 8.0.0`, Arduino core 3.3.12;
-- Project: `firmware/sr_support_b_ptk/` (environment `ptk7452`);
-- The repo ships a project-local PlatformIO: `.venv-pio/Scripts/pio.exe` (Windows);
-  install it first with `powershell -ExecutionPolicy Bypass -File tools/install_platformio.ps1`
-  (needs Python 3.12 and the `py` launcher).
-
-**Computer-side Python tools** (monitor, zeroing, twin) need pyserial/numpy/mujoco/gymnasium -
-pick one of two options:
-
-- Recommended: the project-local `.venv` (independent of PlatformIO's `.venv-pio`):
-  `powershell -ExecutionPolicy Bypass -File tools/install_tools_env.ps1`;
-- No virtual environment needed at all: in any Python 3.10+ install
-  `pip install -r tools/requirements.txt` and replace `.venv\Scripts\python.exe` in the
-  commands below with `python`.
-
-> A virtual environment is not mandatory - it only isolates the dependencies from your system
-> Python (MuJoCo is sensitive to versions, so it is recommended). The same holds for
-> PlatformIO: the VS Code extension or a global `pio` works too; just replace
-> `.venv-pio\Scripts\pio.exe` with the matching command.
-
-## 5.2 Build and flash
+## 4.1 Build and flash
 
 ```bash
 # Build
@@ -47,7 +26,7 @@ pick one of two options:
 A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
 builds without WiFi were about 7% / 12%).
 
-## 5.3 Serial monitor
+## 4.2 Serial monitor
 
 ```bash
 .venv-pio/Scripts/pio.exe device monitor --rts 0 --dtr 0 -b 115200 -p COM27
@@ -61,7 +40,7 @@ autorun on: get-up waits for a fall
 up ... | w ... | q ... | qd ... | run
 ```
 
-## 5.4 Serial commands (115200)
+## 4.3 Serial commands (115200)
 
 | Command | Function |
 |---|---|
@@ -78,15 +57,15 @@ up ... | w ... | q ... | qd ... | run
 | `l` | 3 s 50 Hz fast log |
 | `k` | Print both servo center pulse widths |
 | `o` / `p` | Shoulder center ±10 µs trim |
-| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 02](./02-zero-tool)) |
+| `z` | Encoder-style zero: current pose becomes q=0 for both joints; prints the new pulses (RAM only; see [page 06](./06-zero-tool)) |
 | `d` | Toggle the 50 Hz twin stream (MuJoCo twin; same switch on the status page) |
-| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 08](./08-step4-wifi-twin)) |
+| `w` | Toggle WiFi (hotspot + status page/provisioning, see [page 09](./09-wifi-twin)) |
 | `v` / `b` | Flip shoulder / elbow sign |
 | `i` / `j` | Flip IMU X / Y sign |
 | `h` | Stand-homing toggle (legacy policy path) |
 | `a` | Legacy scripted get-up test mode |
 
-## 5.5 Power-on behavior
+## 4.4 Power-on behavior
 
 The firmware defines `AUTORUN_ON_BOOT`: after power-up the executor waits for the robot to be
 **fully down and still** for 0.5 s, then starts automatically - no `g` needed. Power up with

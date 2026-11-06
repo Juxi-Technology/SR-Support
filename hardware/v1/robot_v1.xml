@@ -1,7 +1,7 @@
 <mujoco model="sr_support_v1">
   <!-- SR-Support v1 CAD (2026-10-30), own design - built from the 二自由度扶正
        装置 v1 STEP parts in FreeCAD (no third-party geometry). Hardware
-       license: CERN-OHL-S-2.0, see LICENSE and the tutorial 10-reference page.
+       license: CERN-OHL-S-2.0, see LICENSE and the tutorial 11-reference page.
        CAD frame -> MuJoCo: CAD +Y (up) -> sim +Z, CAD X -> sim Y, CAD Z ->
        sim X. Meshes exported in mm, body-local (scale 0.001).
        Shoulder axis: sim X through (0,0,0.056); elbow axis: sim Y through

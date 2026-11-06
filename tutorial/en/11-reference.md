@@ -1,11 +1,11 @@
 ---
-title: 10 Reference: model, parameters and licensing
+title: 11 Reference: model, parameters and licensing
 description: Reference model files (MuJoCo XML / STL), firmware parameters, the four reference sequences, verified status and licensing.
 ---
 
-# 10 Reference: model, parameters and licensing
+# 11 Reference: model, parameters and licensing
 
-## 10.1 Reference model files
+## 11.1 Reference model files
 
 The simulation uses MuJoCo MJCF (`.xml` + `.stl` meshes), sharing the hardware's own design:
 
@@ -19,7 +19,7 @@ The simulation uses MuJoCo MJCF (`.xml` + `.stl` meshes), sharing the hardware's
 
 No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 
-## 10.2 Firmware parameters (`firmware/sr_support_b_ptk/include/config.h`)
+## 11.2 Firmware parameters (`firmware/sr_support_b_ptk/include/config.h`)
 
 | Parameter | Value | Meaning |
 |---|---|---|
@@ -39,7 +39,7 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 | `EXEC_MIN_SWITCH_AGE` | 25 | Earliest tick for a switch |
 | `EXEC_MAX_SWITCHES` | 5 | Max switches per run |
 | `EXEC_NEUTRAL_MAX` | 120 | Max neutral-retract ticks |
-| `SERVO_SHOULDER_CENTER_US` | 1681 | Shoulder zero pulse (visual-center value baked 2026-11; re-zero per [page 02](./02-zero-tool)) |
+| `SERVO_SHOULDER_CENTER_US` | 1681 | Shoulder zero pulse (visual-center value baked 2026-11; re-zero per [page 06](./06-zero-tool)) |
 | `SERVO_CENTER_US` | 1456 | Elbow zero pulse (same) |
 | `SERVO_US_PER_RAD` | 636.62 | 2000 µs / π |
 | `Q_SHOULDER_MIN/MAX` | −1.85 / +1.82 rad | Shoulder manual-command limits |
@@ -49,7 +49,7 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 | `MAHONY_KP` / `ACCEL_TRUST_BAND` | 6.0 / 2.5 m/s² | Attitude filter: accel-correction gain / trust band |
 | `WIFI_AP_SSID` / `WIFI_AP_PASS` | SR-Support / srsupport | Hotspot (`w` toggles it; on at boot) |
 
-## 10.3 Reference sequences (shoulder, elbow; rad; value-for-value with `training/b_line/getup_reference_b39.py`)
+## 11.3 Reference sequences (shoulder, elbow; rad; value-for-value with `training/b_line/getup_reference_b39.py`)
 
 | Pose | Sequence |
 |---|---|
@@ -58,21 +58,21 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 | `pitch_pos` | `[-1.32,1.45] → [-0.25,1.45] → retract` |
 | `pitch_neg` | `[-1.32,-1.65] → [-0.25,-1.65] → retract` |
 
-## 10.4 Verified status and factory inspection (2026-11-06)
+## 11.4 Verified status and factory inspection (2026-11-06)
 
 - **Factory inspection**: each finished unit gets - servo zeros defined and baked per unit
-  ([page 02](./02-zero-tool)), gyro + accel zero calibration (NVS), and a four-direction
+  ([page 06](./06-zero-tool)), gyro + accel zero calibration (NVS), and a four-direction
   get-up test before shipping;
 - All four directions verified on the real robot, each as a **direct get-up** (no roll-over),
   about 1–6 s; no servo envelope violations;
 - `roll_neg` final recipe: full-travel direct press + elbow-wedge pumps ×2, whip-slam retry as
   fallback (the earlier roll-over + re-plan scheme is retired);
 - The attitude pipeline was corrected with accel-bias calibration (see
-  [page 03, 3.2](./03-debug-and-checks)); lying poses now match the real robot;
+  [page 05, 5.2](./05-debug-and-checks)); lying poses now match the real robot;
 - `roll_neg` still does not reproduce in the 1× mass simulation model (arm mass/friction
   differ); that is a known model gap - the hardware firmware is validated on hardware.
 
-## 10.5 Licensing
+## 11.5 Licensing
 
 - B-line firmware/training code: MIT / Apache-2.0;
 - B-line CAD/STL: CERN-OHL-S-2.0 (strong reciprocity — check obligations before commercial use);

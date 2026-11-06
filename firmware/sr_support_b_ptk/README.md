@@ -1,6 +1,6 @@
 # sr_support_b_ptk — B 线固件（PTK7452MG，180° PWM）
 
-> **完整步骤请按教程 [`../../tutorial/zh-hans/05-step1-build-flash.md`](../../tutorial/zh-hans/05-step1-build-flash.md) 及后续页**。
+> **完整步骤请按教程 [`../../tutorial/zh-hans/04-build-flash.md`](../../tutorial/zh-hans/04-build-flash.md) 及后续页**。
 
 > 当前主固件。基于 Juxi-Technology/2dof-selfrighting-robot B 线固件（MIT/Apache-2.0），已改为 **PTK7452MG + 无源直连转接板**。
 > 来源/许可：[`../../third_party/juxi-2dof/`](../../third_party/juxi-2dof/) · [`../../docs/licensing.md`](../../docs/licensing.md)  

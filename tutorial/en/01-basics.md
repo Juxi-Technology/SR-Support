@@ -13,14 +13,14 @@ SR-Support is a 2-DOF (shoulder + elbow) active self-righting device:
   long axis and the elbow folds the forearm;
 - **Sensing**: a 6-axis IMU provides the attitude quaternion; the firmware classifies each fall
   into one of four poses (`pitch_pos/neg`, `roll_pos/neg`, see
-  [page 03](./03-debug-and-checks) 3.4) from the body-frame up vector;
+  [page 05](./05-debug-and-checks) 5.4) from the body-frame up vector;
 - **Actuation**: a reference-sequence executor - each pose has a waypoint schedule
   (20 ticks per waypoint, 0.08 rad/tick slew) that plants/levers the arm to roll the body back
   upright; `roll_neg` additionally uses elbow-wedge pumps and a whip-slam fallback;
 - **Fallbacks**: 14 s timeout, pose re-planning and automatic retry after the fall gate;
   `roll_neg` uses per-stage adaptive holds and exits to retract as soon as it is upright;
 - **Verified**: four directions stand up directly in about 1-6 s; the same model drives the
-  MuJoCo simulation and the live hardware twin ([page 08](./08-step4-wifi-twin)).
+  MuJoCo simulation and the live hardware twin ([page 09](./09-wifi-twin)).
 
 ## 1.2 Overview
 
@@ -54,7 +54,7 @@ SR-Support is a 2-DOF (shoulder + elbow) active self-righting device:
 
 - Calipers and a multimeter (continuity/voltage);
 - Screwdrivers and hex keys;
-- A computer with PlatformIO (recommended) or Arduino IDE;
+- A computer with the environment from [page 02](./02-environment);
 - Optional: servo tester, INA219 current monitor.
 
 ## 1.5 Power and safety
