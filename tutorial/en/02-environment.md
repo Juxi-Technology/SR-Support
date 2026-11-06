@@ -56,7 +56,13 @@ py -3.12 -m venv .venv
 - Not sure you are in the right place? Run `dir`; it must list `firmware`, `tools`, `tutorial`;
 - Without Python 3.12, use `py -3 -m venv .venv` (3.10+ works);
 - If PowerShell refuses to run scripts, run
-  `Set-ExecutionPolicy -Scope Process Bypass` in this window and activate again.
+  `Set-ExecutionPolicy -Scope Process Bypass` in this window and activate again;
+- `.\.venv\Scripts\Activate.ps1` is the **PowerShell activation script** that venv creates:
+  the leading `.\` means "run the script in the current folder" and is required in
+  PowerShell (plain `Activate.ps1` will not be found). Other shells use their own file:
+  - **cmd.exe**: `.venv\Scripts\activate.bat`
+  - **Git Bash**: `source .venv/Scripts/activate`
+  - Leave the venv with `deactivate`
 
 **Linux / macOS**
 

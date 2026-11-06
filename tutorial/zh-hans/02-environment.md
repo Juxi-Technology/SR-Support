@@ -53,7 +53,13 @@ py -3.12 -m venv .venv
 - 不确定进对没有：运行 `dir`，应该能看到 `firmware`、`tools`、`tutorial` 等文件夹；
 - 没有 Python 3.12 时用 `py -3 -m venv .venv`（3.10+ 均可）；
 - 若提示"禁止运行脚本"，先在当前窗口执行
-  `Set-ExecutionPolicy -Scope Process Bypass`，再重新激活。
+  `Set-ExecutionPolicy -Scope Process Bypass`，再重新激活；
+- `.\.venv\Scripts\Activate.ps1` 是 venv 自带的 **PowerShell 激活脚本**：开头的 `.\`
+  表示"运行当前目录下的脚本"，PowerShell 里必须写，不能只写 `Activate.ps1`。
+  换终端时用对应的激活文件：
+  - **cmd.exe**：`.venv\Scripts\activate.bat`
+  - **Git Bash**：`source .venv/Scripts/activate`
+  - 退出虚拟环境：`deactivate`
 
 **Linux / macOS**
 
