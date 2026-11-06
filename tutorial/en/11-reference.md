@@ -12,10 +12,8 @@ The simulation uses MuJoCo MJCF (`.xml` + `.stl` meshes), sharing the hardware's
 | File | Description |
 |---|---|
 | `hardware/v1/robot_v1.xml` | Main model (geometry/mass matched to the hardware) |
-
-| `hardware/v1/meshes/*.stl` | 6 meshes (foot plate/shell, shoulder mount, arm bracket, elbow servo, forearm) |
+| `hardware/v1/meshes/*.stl` | 6 meshes (foot plate, foot shell, shoulder mount, upper-arm bracket, elbow mount, forearm) |
 | `hardware/v1/meshes/print_mass_model.json` | Per-part printed mass table (15% infill) |
-
 
 No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 

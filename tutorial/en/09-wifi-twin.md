@@ -1,9 +1,9 @@
 ---
-title: 09 Step 4: WiFi and the simulation twin
+title: 09 WiFi and the simulation twin
 description: Status page, home-network provisioning, the wireless MuJoCo live twin and WiFi telemetry logging.
 ---
 
-# 09 Step 4: WiFi and the simulation twin
+# 09 WiFi and the simulation twin
 
 This step is optional and not required for self-righting itself.
 
@@ -55,4 +55,4 @@ Saves the hotspot telemetry stream to `logs/wifi_<time>.txt` for offline replay 
 ## 9.5 Simulation and training reference
 
 The repo ships the MuJoCo model and training code (`training/b_line/`) for replay and
-retraining; the model files are described on [page 10](./11-reference).
+retraining; the model files are described on [page 11](./11-reference).

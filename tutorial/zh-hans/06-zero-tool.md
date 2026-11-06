@@ -33,7 +33,7 @@ DIY 组装则**必做本页**：手动装配后手臂几乎不可能正好落在
    python tools/hw_shoulder_range.py
    ```
 
-   界面常驻三行、原地刷新：
+   界面常驻四行、原地刷新：
 
    ```
    Up/Dn=BigArm  L/R=SmallArm  Sh:fast

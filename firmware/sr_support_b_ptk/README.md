@@ -1,6 +1,6 @@
 # sr_support_b_ptk — B 线固件（PTK7452MG，180° PWM）
 
-> **完整步骤请按教程 [`../../tutorial/zh-hans/04-build-flash.md`](../../tutorial/zh-hans/04-build-flash.md) 及后续页**。
+> **完整步骤请按教程 [`../../tutorial/zh-hans/03-build-flash.md`](../../tutorial/zh-hans/03-build-flash.md) 及后续页**。
 
 > **客户直接烧固件**：用 [`../releases/sr_support_b_ptk_factory.bin`](../releases/sr_support_b_ptk_factory.bin)
 > 烧到 `0x0` 即可，无需 PlatformIO；本 README 其余部分面向开发者。

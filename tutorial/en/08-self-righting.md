@@ -1,9 +1,9 @@
 ---
-title: 08 Step 3: self-righting usage and monitoring
+title: 08 Self-righting usage and monitoring
 description: How to operate SR-Support in each fallen direction, expected motion times, serial events and monitoring logs.
 ---
 
-# 08 Step 3: self-righting usage and monitoring
+# 08 Self-righting usage and monitoring
 
 > Every finished unit is tested in all four directions before shipping. For the first use,
 > still verify each direction once per section 8.2 to make sure the unit is healthy after
@@ -40,9 +40,9 @@ description: How to operate SR-Support in each fallen direction, expected motion
 - If the body settles on another lying axis (`up_z<0.6`, `|ω|<0.8` for 15 ticks), retract to
   neutral and switch to the new pose's reference (up to 5 switches);
 - The `roll_neg` reference uses **per-stage adaptive holds**: press/pump stages hold while
-  `up_z<0.92` up to a per-stage tick cap (press 40 / pump 30 / pump 30 / final 90); if the body
-  comes upright mid-sequence the executor jumps straight to the retract so the later stages
-  cannot knock the standing robot over.
+  `up_z<0.92` up to a per-stage tick cap (press 40 / pump 30 / pump 30 / whip 40 / final 90); if
+  the body comes upright mid-sequence the executor jumps straight to the retract so the later
+  stages cannot knock the standing robot over.
 
 ## 8.4 Monitoring and logs
 

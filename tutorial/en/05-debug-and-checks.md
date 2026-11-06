@@ -45,9 +45,9 @@ mis-oriented IMU.
 
 | Check | Method | Expected |
 |---|---|---|
-| Centers | `k` | `shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 06](./06-zero-tool)) |
+| Centers | `k` | `centers: shoulder 1681 us, elbow 1456 us` (visual-center values baked 2026-11; re-zero per [page 06](./06-zero-tool)) |
 | Shoulder trim | `o` / `p` (±10 µs) | Arm vertical at `q=0` |
-| Direction | `m 0.5 0` / `m 0 0.8` | Shoulder + → big arm toward −Y; elbow + → forearm toward +X |
+| Direction | `m 0.5 0` / `m 0 0.5` | Shoulder + → big arm toward −Y; elbow + → forearm toward +X |
 | Sign flip | `v` (shoulder) / `b` (elbow) | Only if a direction is reversed |
 | Self-test | `t` | Small motion on both joints, then center |
 | Neutral | `m 0 0` or `r` | Arm vertical |

@@ -1,9 +1,9 @@
 ---
-title: 09 第四步：WiFi 与仿真镜像
+title: 09 WiFi 与仿真镜像
 description: 状态页、家庭网络配网、MuJoCo 无线实时镜像与 WiFi 遥测落盘。
 ---
 
-# 09 第四步：WiFi 与仿真镜像
+# 09 WiFi 与仿真镜像
 
 本步为可选功能，不影响自扶正本身。
 
@@ -52,4 +52,4 @@ python tools/tcp_log.py
 ## 9.5 仿真与训练参考
 
 项目自带 MuJoCo 仿真模型与训练代码（`training/b_line/`），用于复盘与重训；
-模型文件说明见 [10 参考页](./11-reference)。
+模型文件说明见 [11 参考页](./11-reference)。

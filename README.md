@@ -45,16 +45,16 @@ SR-Support/
 4. MuJoCo 实时镜像：先按教程 02 页创建并激活 `.venv`，再运行
    `python tools/live_twin.py --tcp <Robot IP>:3333`。
 
-自组装流程（环境→打印→装配→烧录→标定）见 [`tutorial/zh-hans/index.md`](tutorial/zh-hans/index.md)。
+自组装流程（环境→烧录→装配→标定）见 [`tutorial/zh-hans/index.md`](tutorial/zh-hans/index.md)。
 
 ## 重要提醒
 
 - **电源**：舵机规格 6 V / ≥5 A（独立供电）；5 V 可用但堵转扭矩约降 15%，
   `roll_neg` 更依赖楔形泵。ESP32 用 USB-C 单独供电，与舵机电源共地，**不要把 6 V 接到 ESP32**；
 - **IMU 标定**：更换/重装 IMU 后，站立水平发 `c`（陀螺+加速度计零点，写入 NVS）；
-- **重新烧录**：`firmware/releases/` 提供预编译 bin（主固件 + 装配找中），用
+- **重新烧录**：`firmware/releases/` 提供预编译 bin（主固件，内置装配找中），用
   乐鑫 Flash Download Tool 或 `esptool` 烧到 `0x0` 即可，**不需要 PlatformIO**；
-  PlatformIO 仅供改代码/源码构建（教程 02/04 页）；
+  PlatformIO 仅供改代码/源码构建（教程 02/03 页）；
 - **零点**：换齿/重装舵盘后用 `tools/hw_shoulder_range.py` 定零并固化（教程第 06 页）；
 - **许可**：代码 MIT/Apache-2.0；自研 CAD/模型 CERN-OHL-S-2.0；SelfRisingRobot 无许可、
   仓库不包含其任何文件；专利 CN109693729A/B 商用前需 FTO。详见

@@ -12,10 +12,8 @@ description: 参考模型文件（MuJoCo XML / STL）、固件参数表、四姿
 | 文件 | 说明 |
 |---|---|
 | `hardware/v1/robot_v1.xml` | 主模型（与实机几何/质量对应） |
-
-| `hardware/v1/meshes/*.stl` | 6 个网格（底座底板/外壳、肩座、上臂支架、肘舵机、小臂杆） |
+| `hardware/v1/meshes/*.stl` | 6 个网格（底座底板、底座外壳、肩舵机座、上臂支架、肘舵机座、小臂杆） |
 | `hardware/v1/meshes/print_mass_model.json` | 逐件打印质量表（15% 填充） |
-
 
 本仓库未附带 URDF；如需 ROS 使用，可由上述 CAD/网格导出。
 

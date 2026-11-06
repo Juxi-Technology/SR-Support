@@ -11,14 +11,14 @@ tutorial/
 ├─ zh-hans/                     # 简体中文（11 页正文 + 目录）
 │  ├─ index.md                  # 目录
 │  ├─ 01-basics.md              # 基础知识
-│  ├─ 02-environment.md         # 环境准备（软件与工具）
-│  ├─ 03-assembly.md            # 散件组装：打印、装配与接线
-│  ├─ 04-build-flash.md         # 第一步：构建与烧录
+│  ├─ 02-environment.md         # 环境准备（虚拟环境、烧录工具与固件）
+│  ├─ 03-build-flash.md         # 烧录主固件
+│  ├─ 04-assembly.md            # 散件组装：打印、装配与接线
 │  ├─ 05-debug-and-checks.md    # 调试与检查
 │  ├─ 06-zero-tool.md           # 中位零点校准（DIY 必做）
-│  ├─ 07-calibrate.md           # 第二步：标定
-│  ├─ 08-self-righting.md       # 第三步：自扶正使用与监控
-│  ├─ 09-wifi-twin.md           # 第四步：WiFi 与仿真镜像
+│  ├─ 07-calibrate.md           # 标定
+│  ├─ 08-self-righting.md       # 自扶正使用与监控
+│  ├─ 09-wifi-twin.md           # WiFi 与仿真镜像
 │  ├─ 10-troubleshooting.md     # 故障排查
 │  └─ 11-reference.md           # 参考：模型、参数与许可
 ├─ en/                          # 英文（与中文逐文件对应，11 页正文 + 目录）

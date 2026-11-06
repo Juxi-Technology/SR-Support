@@ -17,7 +17,7 @@ description: Common SR-Support symptoms, causes and fixes covering IMU, serial p
 | Run stops and prints `executor timeout` after 14 s | Reference did not finish | Normal fallback; automatic retry after 1.5 s; keep the log |
 | Occasional `executor re-plan` events | Normal fallback after a failed `roll_neg` press | Check whether it ends with `done` |
 | Servo buzzes / heats up | Stall or binding target | Send `x` or cut power; check limits and mechanical clearance |
-| Arm hits the body during self-righting | Large shoulder motion | Check `Q_SHOULDER_MAX` and clearance; keep the 40 mm base height |
+| Arm hits the body during self-righting | Large shoulder motion | Check `Q_SHOULDER_MAX` and clearance; keep the ~68 mm base height |
 | `up` does not match the real pose (persistent 5°+ tilt while lying) | Accel zero offsets uncalibrated | Stand the robot level and send `c` (see [page 05, 5.2](./05-debug-and-checks)) |
 | Arm does not rest at the visual center after retracting | Zero drifted (re-indexed/re-assembled without re-zeroing) | Re-zero with the [page 06 tool](./06-zero-tool) and bake it |
 | Servo buzzes/chatters after a get-up | Analog servo transient self-excitation after large motion/stalls (output is constant) | Self-decays; add rubber damping washers or use a digital servo; pinching the arm silences it instantly |

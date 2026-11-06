@@ -16,13 +16,13 @@ verified build.
 |---|---|---|---|
 | 01 | [Basics](./01-basics) | Working principle, specs, BOM | read first |
 | 02 | [Environment setup](./02-environment) | Create/activate `.venv`, prebuilt firmware + flash tools (Flash Download Tool / esptool), computer-side tools and MuJoCo env, optional PlatformIO, serial port | **do this first** |
-| 03 | [Assembly: print, build, wire](./03-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
-| 04 | [Step 1: flash the main firmware](./04-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
+| 03 | [Flash the main firmware](./03-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
+| 04 | [Assembly: print, build, wire](./04-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
 | 05 | [Debug and checks](./05-debug-and-checks) | Telemetry, IMU/servo checks, four lying poses, fall gate | debug page |
 | 06 | [Zero-calibration](./06-zero-tool) | Arrow-key jog + `z` zeroing (after re-indexing/re-assembly) | **required for DIY builds**; skippable for stock units |
-| 07 | [Step 2: calibration](./07-calibrate) | Gyro+accel calibration, direction self-test, zero check, fall-gate check | |
-| 08 | [Step 3: self-righting usage](./08-self-righting) | Four fall directions, expected motion, monitoring and logs | |
-| 09 | [Step 4: WiFi and the twin](./09-wifi-twin) | Status page, home-WiFi provisioning, wireless MuJoCo twin | optional |
+| 07 | [Calibration](./07-calibrate) | Gyro+accel calibration, direction self-test, zero check, fall-gate check | |
+| 08 | [Self-righting usage and monitoring](./08-self-righting) | Four fall directions, expected motion, monitoring and logs | |
+| 09 | [WiFi and the simulation twin](./09-wifi-twin) | Status page, home-WiFi provisioning, wireless MuJoCo twin | optional |
 | 10 | [Troubleshooting](./10-troubleshooting) | Common symptoms and fixes | reference |
 | 11 | [Reference: model, parameters, licensing](./11-reference) | Model files (XML/STL), parameters, reference sequences, licensing | reference |
 
@@ -33,7 +33,7 @@ This tutorial serves two audiences - pick the path that matches yours:
 | Reader | Factory state | Recommended path |
 |---|---|---|
 | **Finished-unit user** | Assembled and wired, firmware flashed, **calibrated** (servo zeros and IMU accel zeros baked), **tested** (all four get-up directions verified per unit) | Go straight to [08 usage](./08-self-righting) and [09 WiFi/twin](./09-wifi-twin) (optional); keep [10](./10-troubleshooting)/[11](./11-reference) for reference. **Pages 02/03/04/06/07 are only needed for firmware upgrades, servo/IMU replacement or horn re-mounting**; to use the twin/telemetry tools on page 09, first install the computer-side tools from page 02. |
-| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [02](./02-environment) → [03](./03-assembly) → [04](./04-build-flash) → [05](./05-debug-and-checks) → [06 zeroing (required)](./06-zero-tool) → [07](./07-calibrate) → [08](./08-self-righting) end to end. Both servo zeroing (06) and IMU calibration (07) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
+| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [02](./02-environment) → [03 flash](./03-build-flash) → [04 assembly](./04-assembly) → [05](./05-debug-and-checks) → [06 zeroing (required)](./06-zero-tool) → [07](./07-calibrate) → [08](./08-self-righting) end to end. Both servo zeroing (06) and IMU calibration (07) happen **after full assembly and flashing**: `z` does not use the IMU and works in any pose; `c` needs the assembled robot standing level. |
 
 > Recommended first-use check for a finished unit: power up upright → confirm `up≈(0,0,1)` →
 > tip it once in each of the four directions per [page 08](./08-self-righting) and
@@ -41,7 +41,7 @@ This tutorial serves two audiences - pick the path that matches yours:
 
 ## Prerequisites
 
-- SR-Support mechanical parts (bottom plate, shoulder servo mount, elbow servo mount, top strut; printing and assembly on [page 03](./03-assembly));
+- SR-Support mechanical parts (bottom plate, shoulder servo mount, elbow servo mount, top strut; printing and assembly on [page 04](./04-assembly));
 - ESP32-S3 board, Juxi ICM42670P IMU, passive direct-drive servo adapter board;
 - 2× PTK7452MG (180° PWM) servos;
 - A servo power supply (spec 6 V / ≥5 A) and a USB-C data cable;
@@ -61,4 +61,4 @@ page with home-network provisioning, and a wireless MuJoCo live twin
 >   on any anomaly;
 > - Never stall a servo longer than 1 s; stop when the case exceeds 60 °C;
 > - 6 V goes to the servo rail only - **never** to the ESP32 5V/3V3;
-> - Everything shares one ground; power-up order is in [page 03](./03-assembly).
+> - Everything shares one ground; power-up order is in [page 04](./04-assembly).

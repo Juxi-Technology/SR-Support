@@ -39,7 +39,7 @@ corresponding center pulse widths.
    python tools/hw_shoulder_range.py
    ```
 
-   A persistent three-line display updates in place:
+   A persistent four-line display updates in place:
 
    ```
    Up/Dn=BigArm  L/R=SmallArm  Sh:fast

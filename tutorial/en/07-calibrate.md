@@ -1,9 +1,9 @@
 ---
-title: 07 Step 2: calibration
+title: 07 Calibration
 description: After flashing, complete gyro+accel calibration, servo self-test, zeroing and the fall-gate check in order.
 ---
 
-# 07 Step 2: calibration
+# 07 Calibration
 
 > **Finished-unit users can skip this page**: the factory calibrates and verifies every unit.
 > Redo these four items only after replacing a servo/IMU, re-mounting a horn, or when a
@@ -32,7 +32,7 @@ Send `t` and confirm:
 
 Baked at the factory (shoulder 1681 µs / elbow 1456 µs) - **skippable for a stock unit**. In a
 DIY build this was already done with the [page 06 zero-calibration](./06-zero-tool) after
-[flashing](./04-build-flash), with the values baked into `config.h` (reflash if they
+[flashing](./03-build-flash), with the values baked into `config.h` (reflash if they
 changed); here just run `k` to confirm the centers match the baked values. Return to page 06
 only after re-indexing a horn, re-assembly, or if the arm no longer rests at the visual center.
 
