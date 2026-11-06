@@ -4,8 +4,8 @@ Keeps the serial port open (opening it resets the ESP32 via DTR) and appends
 a compact telemetry summary plus every state event to logs/hw_monitor.log.
 Flags any commanded joint angle outside the legal servo envelope:
 
-  shoulder  [-1.07, +2.07] rad  (180 deg total after the horn re-index)
-  elbow     [-1.55, +1.55] rad  (177.6 deg total)
+  shoulder  [-1.85, +1.82] rad  (firmware manual limits)
+  elbow     [-1.55, +1.55] rad  (mechanical travel)
 
 Run:  python tools/hw_monitor.py [PORT]
 Stop: close the window / Ctrl-C.
