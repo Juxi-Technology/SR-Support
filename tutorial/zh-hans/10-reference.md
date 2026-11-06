@@ -11,11 +11,11 @@ description: 参考模型文件（MuJoCo XML / STL）、固件参数表、四姿
 
 | 文件 | 说明 |
 |---|---|
-| `training/b_line/assets/robot_v1.xml` | 主模型（与实机几何/质量对应） |
-| `training/b_line/assets/robot_v1_sym.xml` / `robot_v1_270.xml` | 行程变体（对称 ±90° / 270° 验证用） |
-| `training/b_line/assets/v1_meshes/*.stl` | 6 个网格（底座底板/外壳、肩座、上臂支架、肘舵机、小臂杆） |
-| `training/b_line/assets/v1_meshes/print_mass_model.json` | 逐件打印质量表（15% 填充） |
-| `hardware/juxi_b_line/STEP|STL/` | Juxi B 线参考 CAD（CERN-OHL-S） |
+| `hardware/v1/robot_v1.xml` | 主模型（与实机几何/质量对应） |
+
+| `hardware/v1/meshes/*.stl` | 6 个网格（底座底板/外壳、肩座、上臂支架、肘舵机、小臂杆） |
+| `hardware/v1/meshes/print_mass_model.json` | 逐件打印质量表（15% 填充） |
+
 
 本仓库未附带 URDF；如需 ROS 使用，可由上述 CAD/网格导出。
 

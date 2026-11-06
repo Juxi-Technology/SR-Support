@@ -22,7 +22,7 @@ servo stalls against the real floor, the commanded angle does not).
 Usage:
   .venv/Scripts/python.exe tools/live_twin.py --port COM27
   .venv/Scripts/python.exe tools/live_twin.py --replay logs/hw_fast_20261022_180610.txt
-  .venv/Scripts/python.exe tools/live_twin.py --port COM27 --xml training/b_line/assets/robot_v1_270.xml
+  .venv/Scripts/python.exe tools/live_twin.py --port COM27 --xml hardware/v1/robot_v1.xml
 
 Note: opening the port can reset the ESP32 (DTR), as with the other hw
 tools. The twin is read-only apart from the single 'd' toggle it may send.
@@ -41,7 +41,7 @@ import mujoco.viewer
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-XML_V1 = ROOT / "training/b_line/assets/robot_v1.xml"
+XML_V1 = ROOT / "hardware/v1/robot_v1.xml"
 
 F_RE = re.compile(
     r"^F\s+([-+0-9.]+)\s+([-+0-9.]+)\s+([-+0-9.]+)\s*\|\s*"

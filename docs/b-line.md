@@ -1,5 +1,7 @@
 # B 线方案（2026-10-20 决定）
 
+> 注（2026-11 瘦身）：文中出现的 `hardware/juxi_b_line/`、`bom/`、`firmware/sr_support_2dof/`、旧仿真模型与变体 XML 已从仓库移除，相关描述仅作历史记录；当前模型见 [`hardware/v1/`](../hardware/v1/)。
+
 > **第一次做请按 [`build-guide.md`](build-guide.md) 的 0→12 阶段执行**；一页检查清单见 [`checklist.md`](checklist.md)。
 
 > 决定：采用 Juxi-Technology/2dof-selfrighting-robot 的 **B 线**（2× PTK 180° PWM + 2R 臂 + IMU + RL），不再按之前“8 路/waypoint 骨架”作为主方案。  

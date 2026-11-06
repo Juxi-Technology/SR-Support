@@ -210,20 +210,18 @@
 
 ### 4.1 文件
 
-当前实机是 **SelfRisingRobot 3D 打印件**，在你本地目录：
+当前为 **自研 v1 设计**，模型与打印件在 [`../hardware/v1/`](../hardware/v1/)：
 
-`D:\Project\3D-Models\self-rising-robot\source\`
+| 文件 | 说明 |
+|---|---|
+| `meshes/foot_bottom.stl` + `foot_shell.stl` + `foot_servo_shoulder.stl` | 底座：底板 + 外壳 + 肩舵机座 |
+| `meshes/arm1_bracket.stl` + `arm1_servo_elbow.stl` | 上臂：支架 + 肘舵机座 |
+| `meshes/arm2_strut.stl` | 小臂杆 |
 
-| 文件 | 数量 | 说明 |
-|---|---:|---|
-| `footP.stl` | 1 | 底座：底板 + 肩舵机塔 + 转轴销 |
-| `arm1P.stl` | 1 | 一级摆臂（Z 形曲柄），带肘舵机座 |
-| `arm2P.stl` | 1 | 二级长摆臂 |
-| `armhornP.stl` | **2** | 舵机摇臂片，`arm1P`、`arm2P` 各一片 |
+- 舵机（PTK7452MG 23.6×26.9×11.7 mm、25T）为外购件，按实物孔位装配；
+- 逐件打印后称重，更新 `meshes/print_mass_model.json` 与 `robot_v1.xml` 的质量参数；
+- 许可：自研设计，随仓库按 **CERN-OHL-S-2.0** 发布。
 
-- PTK7452 的安装孔距是 **30.8 mm（中间孔排）**，原打印件是 27.8 mm；改配件在 `output/modified/footP_7452.stl`、`arm1P_7452.stl`（补孔 + 凸台），要实机锁螺丝就用改配件。
-- 这些 STL **没有许可证**：只用于你自己的实机，不要上传/分发；本项目仿真用的副本在 `training/b_line/assets/selfrising/`（同样不分发）。
-- Juxi B 线 STL（`hardware/juxi_b_line/STL/`）保留为备选结构，不是当前实机。
 
 ### 4.2 参数
 
@@ -640,153 +638,20 @@ Home WiFi 状态、Twin 流开关，每 300 ms 刷新。若浏览器设置了代
 
 ### 11.2 更新仿真模型
 
-> 不要手改 XML。模型由脚本生成：
+> 模型参数集中在两处，改质量不需要动网格：
 
-1. 改 `tools/build_selfrising_model.py` 顶部的 `MASS_*`（和需要的电控盒尺寸/位置）。
-2. 重新生成模型：
+1. `hardware/v1/meshes/print_mass_model.json` — 逐件打印质量（15% 填充基准）；
+2. `hardware/v1/robot_v1.xml` — 各 body 的质量参数（与 json 对应）。
 
-```bash
-.venv/Scripts/python.exe tools/build_selfrising_model.py
-```
+逐件称重后更新这两处，重新加载模型确认整机质量与实测一致，再重跑仿真验证；
+并记录本次修改（日期/质量/尺寸）到 [provenance.md](provenance.md)。
 
-3. 生成后先跑 `--smoke`，确认 XML 能加载、整机质量打印值和实测一致。
-4. 记录本次修改（日期/质量/尺寸）到 [provenance.md](provenance.md)。
+## 12. 阶段 9–11：训练 / 评估 / 导出（已随方案变更移除）
 
-> 不做这一步，仿真成功率和实机没有对应关系。
-
----
-
-## 12. 阶段 9：训练
-
-### 12.1 冒烟测试
-
-```bash
-python -m training.b_line.train --robot selfrising --smoke --n-envs 2
-```
-
-- 只跑少量步数，确认 MuJoCo/SB3/XML/路径都正常。
-- 看到 `saved training/b_line/models/ppo_selfrising/final.zip` 即通过。
-- 本机实测（2026-10-22）：MuJoCo 3.16.0 + SB3 2.9.0 + PyTorch 2.14.1 CPU，**40,960 步约 28 s，1428 fps**。
-- 看 MuJoCo 窗口：`python -m training.b_line.play --random --episodes 1`（本机已验证窗口能打开并跑完 400 步）。
-
-> `n_steps=1024`、`batch_size=2048`，所以 `--n-envs` 至少 2；建议 4。
-
-### 12.2 方案 A：128×128 从零训练
-
-```bash
-python -m training.b_line.train --robot selfrising --steps 3000000 --n-envs 4 --hidden 128
-```
-
-- CPU 训练，数小时；建议整夜跑。
-- Windows 用 DummyVecEnv，8 env 可能更慢；4 个先跑通。
-- 显存/内存不足：减 `--n-envs`、减 `--steps`。
-
-### 12.3 方案 B：逐面教师 + 蒸馏（更接近 Juxi B 线配方）
-
-先训练 4 个单面教师（单行命令，Windows 也可用）：
-
-```bash
-python -m training.b_line.train --robot selfrising --poses roll_pos --run-name ppo_selfrising_roll_pos --hidden 128 --steps 2000000
-```
-
-```bash
-python -m training.b_line.train --robot selfrising --poses roll_neg --run-name ppo_selfrising_roll_neg --hidden 128 --steps 2000000
-```
-
-```bash
-python -m training.b_line.train --robot selfrising --poses pitch_pos --run-name ppo_selfrising_pitch_pos --hidden 128 --steps 2000000
-```
-
-```bash
-python -m training.b_line.train --robot selfrising --poses pitch_neg --run-name ppo_selfrising_pitch_neg --hidden 128 --steps 2000000
-```
-
-蒸馏 + PPO：
-
-```bash
-python -m training.b_line.pretrain_teachers --robot selfrising --hidden 128 --steps 2000000 --teachers roll_pos=training/b_line/models/ppo_selfrising_roll_pos/final.zip,roll_neg=training/b_line/models/ppo_selfrising_roll_neg/final.zip,pitch_pos=training/b_line/models/ppo_selfrising_pitch_pos/final.zip,pitch_neg=training/b_line/models/ppo_selfrising_pitch_neg/final.zip
-```
-
-- 教师必须在同一 XML/同一 `q_half`/同一观测下训练。
-- 不使用 SelfRisingRobot 的 waypoint；教师从零 PPO。
-- 如果某面教师成功率低，先加步数/调奖励/检查该面几何，再做蒸馏。
-
-### 12.4 训练验收
-
-- [ ] 训练完成、模型保存；
-- [ ] 训练日志无 NaN/崩溃；
-- [ ] 评估标称成功率达到你设定的门槛（见阶段 10）；
-- [ ] 记录训练命令、seed、步数、XML 版本。
-
----
-
-## 13. 阶段 10：评估
-
-### 13.1 命令
-
-标称：
-
-```bash
-python -m training.b_line.evaluate --robot selfrising --episodes 100
-```
-
-DR + 逐面：
-
-```bash
-python -m training.b_line.evaluate --robot selfrising --episodes 100 --dr --per-face --home
-```
-
-结果写入 `training/b_line/models/eval_selfrising_*.json`。
-
-### 13.2 成功定义
-
-- 策略 `info["upright"]`：`up_z > 0.90` 且脚座高度在站立高度 ±30 mm（只要求扶正）。
-- 最终竖直姿态由 `StandHomer` 微调：`up_z>0.95` 连续 10 个控制周期（0.2 s）后，以 **0.12 rad/step** 把目标角归零并保持；`up_z<0.95` 暂停收臂，`up_z<0.90` 交回策略。v2 策略在起立过程中已把手臂带到 q≈0.1–0.35，微调只需 0.06–0.10 s。
-- `--home` 评估要求 episode 最后 25 步（0.5 s）中 ≥90% 满足：
-  - `up_z > 0.90`；
-  - 脚座高度 ±30 mm；
-  - **两个关节指令角 `|q| < 0.12 rad`（手臂竖直向上）**。
-- 只把机身扶正、手臂横着不算最终成功；最终姿态就是装配姿态（手臂竖直）。
-- `t_stand`：从某一时刻起直到结束都直立的最早时间。
-
-### 13.3 验收门槛（建议）
-
-| 阶段 | 门槛 |
-|---|---|
-| 标称随机倒地 | ≥80%（先跑通；Juxi B 线参考 96%） |
-| DR 随机倒地 | ≥50%（Juxi B 线参考 63%；PTK7452 可能更低） |
-| 四姿态逐面 | 每面 ≥70% 起步，最终目标 ≥80% |
-| 实机 | 每面 ≥8/10；100 次无硬件损坏 |
-
-> 不要直接用 Juxi 的 96% 作为你的验收线；那是 PTK7465 + 他们的几何/质量。
-
----
-
-## 14. 阶段 11：导出策略并重烧
-
-```bash
-python -m training.b_line.export_policy --robot selfrising
-```
-
-- 默认覆盖 `firmware/sr_support_b_ptk/include/policy_b.h`。
-- 可选 C/PyTorch 校验（需要本机 `clang`）：
-
-```bash
-python -m training.b_line.export_policy --robot selfrising --verify
-```
-
-- 重新编译/烧录：
-
-```bash
-pio run -d firmware/sr_support_b_ptk -t upload
-pio device monitor --rts 0 --dtr 0 -b 115200 -p COM5
-```
-
-- 上电仍是 hold；`g` 才跑新策略。
-- 固件已内置站立收臂状态机（2026-10-22）：`up_z>0.95` 连续 10 个控制周期（0.2 s）→ 目标角以 0.12 rad/20 ms 归零并保持；`up_z<0.95` 暂停，`<0.90` 交回策略。
-- 如果编译报 `POLICY_OBS_DIM`/`POLICY_ACT_DIM` 不匹配：检查导出的 header 是否是 10→128→128→2。
-
----
+> 2026-11 起产品采用**参考序列执行器方案**（固定序列 + 自适应反馈，四方向实机验证通过），
+> 不再需要 PPO 策略训练。原训练/评估/导出章节与管线已随仓库瘦身移除（历史在 git 中）；
+> 仿真环境与执行器保留在 [`../training/b_line/`](../training/b_line/) 用于回放与验证。
+> 如需策略范式，可参考上游 [Juxi-Technology/2dof-selfrighting-robot](https://github.com/Juxi-Technology/2dof-selfrighting-robot)（MIT/Apache-2.0）。
 
 ## 15. 阶段 12：实机验收
 
@@ -926,24 +791,20 @@ ready; send g to run
 | 策略 header | `firmware/sr_support_b_ptk/include/policy_b.h` |
 | 中位 sketch | `firmware/servo_center_ptk/servo_center_ptk.ino` |
 | 训练 | `training/b_line/` |
-| 实机 STL | `D:\Project\3D-Models\self-rising-robot\source\`（无许可证，仅本地使用） |
-| 仿真模型 | `training/b_line/assets/robot_selfrising.xml`（由 `tools/build_selfrising_model.py` 生成） |
-| B 线备选 CAD | `hardware/juxi_b_line/` |
+| 打印件 STL | `hardware/v1/meshes/` |
+| 仿真模型 | `hardware/v1/robot_v1.xml` |
 | 引脚记录 | `docs/pinmap.md` |
-| BOM | `bom/bom.md` |
 | 烧录 | `pio run -d firmware/sr_support_b_ptk -t upload` |
 | 串口 | `pio device monitor --rts 0 --dtr 0 -b 115200 -p COM5` |
-| 训练 | `python -m training.b_line.train --robot selfrising --steps 3000000 --n-envs 4 --hidden 128` |
-| 评估 | `python -m training.b_line.evaluate --robot selfrising --episodes 100 --dr --per-face` |
-| 导出 | `python -m training.b_line.export_policy --robot selfrising` |
+| 训练/评估/导出 | 见 `training/b_line/README.md` |
 
 ---
 
 ## 20. 附录 D：许可与来源
 
 - B 线固件/仿真基于 Juxi-Technology/2dof-selfrighting-robot：**MIT OR Apache-2.0**；见 [`../third_party/juxi-2dof/`](../third_party/juxi-2dof/)。
-- 实机 STL 来自 SelfRisingRobot：**无许可证**，仅本地仿真实机、不随产品/公开仓库分发；商用需作者许可或自行重画。
-- B 线备选 CAD/STL/STEP：**CERN-OHL-S-2.0**；见 [`../hardware/juxi_b_line/`](../hardware/juxi_b_line/)。
+- 早期 SelfRisingRobot 本地仿真副本已随 2026-11 瘦身移除；仓库不包含其任何文件。
+- 自研 v1 模型/STL：**CERN-OHL-S-2.0**；见 [`../hardware/v1/`](../hardware/v1/)。
 - B 线固件不链接 Feetech SCServo（GPL-3.0）；A 线才会。
 - 不使用 SelfRisingRobot 的代码/STL/waypoint；基线 `policy_b.h` 只作 bring-up。
 - 商用/分发前：CERN 义务、Arduino LGPL、专利 FTO（CN109693729A/B 等）请法务/专利代理人复核。

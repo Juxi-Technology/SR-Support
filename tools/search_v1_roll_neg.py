@@ -2,7 +2,7 @@
 
 The deployed roll_neg reference is hardware-specific (arm over the top + pose
 re-plan) and does not transfer to MuJoCo. This searches a sim reference on
-the v1 model (training/b_line/assets/robot_v1.xml) with the same
+the v1 model (hardware/v1/robot_v1.xml) with the same
 reference+feedback executor, then evolves the best candidates.
 
 Usage:
@@ -26,7 +26,7 @@ sys.path.insert(0, str(ROOT))
 from training.b_line.getup_env import B39GetupEnv, Q_HI, Q_LO  # noqa: E402
 from training.b_line.getup_executor import GetupExecutor  # noqa: E402
 
-XML_V1 = ROOT / "training/b_line/assets/robot_v1.xml"
+XML_V1 = ROOT / "hardware/v1/robot_v1.xml"
 POSE = "roll_neg"
 MAX_STEPS = 600
 OUT = ROOT / "logs" / "search_v1_roll_neg.json"

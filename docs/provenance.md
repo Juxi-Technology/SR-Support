@@ -1,5 +1,7 @@
 # 来源记录（Provenance）
 
+> 注（2026-11 瘦身）：文中出现的 `hardware/juxi_b_line/`、`bom/`、`firmware/sr_support_2dof/`、旧仿真模型与变体 XML 已从仓库移除，相关描述仅作历史记录；当前模型见 [`hardware/v1/`](../hardware/v1/)。
+
 > 目的：记录本项目每个文件/组件的来源与许可，避免把无许可证内容带进商用产品。  
 > 规则见 [`licensing.md`](licensing.md)。  
 > 2026-10-20：主方案改为 **B 线**，复用 Juxi-Technology/2dof-selfrighting-robot `main` @ `6caaf9b` 的 MIT/Apache 代码与 CERN-OHL-S 硬件。详细文件清单见 [`../third_party/juxi-2dof/ORIGIN.md`](../third_party/juxi-2dof/ORIGIN.md)。

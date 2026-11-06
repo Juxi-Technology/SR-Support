@@ -68,7 +68,7 @@
 
 - [ ] 整机/零件称重
 - [ ] 肩高/大臂/小臂/垫位置测量
-- [ ] 逐件称重，改 `tools/build_selfrising_model.py` 的 `MASS_*` 并重跑生成 `assets/robot_selfrising.xml`
+- [ ] 逐件称重，更新 `hardware/v1/meshes/print_mass_model.json` 与 `hardware/v1/robot_v1.xml` 的质量参数并重新验证
 - [ ] `--smoke` 通过
 - [ ] 128×128 训练完成（或逐面教师+蒸馏）
 - [ ] 标称/DR/逐面评估完成

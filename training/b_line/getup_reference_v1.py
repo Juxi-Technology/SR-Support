@@ -4,7 +4,7 @@ The deployed references in getup_reference_b39.py are the hardware set. Its
 roll_neg entry is hardware-specific (swing the arm over the top, roll the
 body, then let the pose re-plan take over with the pitch reference) and does
 not transfer to MuJoCo. This module keeps the four references with a
-sim-searched roll_neg for the v1 model (training/b_line/assets/robot_v1.xml).
+sim-searched roll_neg for the v1 model (hardware/v1/robot_v1.xml).
 
 roll_neg (v1 sim): the get-up mechanism itself is mirror-symmetric - both
 roll directions need about 1.4 rad of shoulder travel to press the floor
@@ -16,7 +16,8 @@ sequence is the best motion within range: it yaws the lying body 90 deg
 onto the pitch axis (flat, up_z never below the lying value) and then
 runs the pitch lift - no over-the-top roll. ~226 ticks, one re-plan.
 
-Proven fix (sim, training/b_line/assets/robot_v1_sym.xml, range +-1.57):
+Proven fix (sim; the robot_v1_sym variant file has since been removed
+from the repo during the 2026-11 slimming, kept here as a record):
 re-index the shoulder horn to center the 180 deg window (same servo, no
 new part). Then roll_neg gets up directly: press the shoulder to -1.5 and
 hold ~2 s, the body tips straight up onto its base face - ~175 ticks,

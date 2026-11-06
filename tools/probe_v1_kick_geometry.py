@@ -21,7 +21,7 @@ import mujoco
 import numpy as np
 
 ROOT = Path(r"D:\Project\SR-Support")
-m = mujoco.MjModel.from_xml_path(str(ROOT / "training/b_line/assets/robot_v1.xml"))
+m = mujoco.MjModel.from_xml_path(str(ROOT / "hardware/v1/robot_v1.xml"))
 d = mujoco.MjData(m)
 
 

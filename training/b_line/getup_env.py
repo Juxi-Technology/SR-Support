@@ -17,7 +17,7 @@ import mujoco
 import numpy as np
 from gymnasium import spaces
 
-XML = Path(__file__).resolve().parent / "assets" / "robot_selfrising_b39_h26_ri.xml"
+XML = Path(__file__).resolve().parents[2] / "hardware" / "v1" / "robot_v1.xml"
 
 FALLEN_POSES = {
     "roll_pos": (math.pi / 2.0, 0.0),

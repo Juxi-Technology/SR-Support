@@ -12,8 +12,8 @@ In particular:
 - Files derived from Juxi-Technology/2dof-selfrighting-robot software
   (firmware/sr_support_b_ptk, training/b_line, and the baseline policy_b.h)
   are available under MIT OR Apache-2.0; see third_party/juxi-2dof/.
-- Hardware design files under hardware/juxi_b_line/ are under
-  CERN-OHL-S-2.0; see hardware/juxi_b_line/LICENSE-CERN-OHL-S-2.0.txt.
+- Hardware design files under hardware/v1/ are under
+  CERN-OHL-S-2.0; see hardware/v1/LICENSE-CERN-OHL-S-2.0.txt.
 - SelfRisingRobot (no license) is not included; its code/STL/waypoints are
   not used.
 

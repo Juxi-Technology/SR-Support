@@ -1,24 +1,33 @@
-# Hardware / CAD / STL
+# Hardware / 模型文件
 
-本目录用于存放 **CAD、STL、STEP、3D 打印文件**；机械验证清单在 [`../docs/hardware-validation.md`](../docs/hardware-validation.md)，文字方案在 [`../docs`](../docs)，许可规则在 [`../docs/licensing.md`](../docs/licensing.md)。
-
-建议结构（**全部自行设计或使用许可明确的模型**）：
+**找 3D 模型和 MuJoCo XML 看这里。**
 
 ```
 hardware/
 ├─ README.md
-├─ juxi_b_line/          # 当前 B 线：Juxi B 线 CAD/STL/STEP（CERN-OHL-S-2.0）
-├─ sr_2dof/              # 我们自己的旧 2-DOF/8 路结构（如继续做）
-├─ drawings/             # 尺寸图、装配图、爆炸图
-└─ references/           # 仅放许可明确的参考模型（MIT/CC0/商业授权），并记录来源
+└─ v1/                       # 当前在用模型（自研设计，CERN-OHL-S-2.0）
+   ├─ robot_v1.xml           # MuJoCo 主模型（仿真与实时镜像共用）
+   └─ meshes/                # 6 个 STL（打印件）+ 属性/质量表
+      ├─ foot_bottom.stl     # 底座底板
+      ├─ foot_shell.stl      # 底座外壳
+      ├─ foot_servo_shoulder.stl  # 肩舵机座
+      ├─ arm1_bracket.stl    # 上臂支架
+      ├─ arm1_servo_elbow.stl # 肘舵机座
+      ├─ arm2_strut.stl      # 小臂杆
+      ├─ props.json          # 几何/质量属性
+      └─ print_mass_model.json  # 逐件打印质量（15% 填充）
 ```
 
-当前 B 线使用 [`juxi_b_line/`](juxi_b_line/)：b_base / b_arm1 / b_arm2，PETG 打印。  
-注意：Juxi B 线 CAD 是 **CERN-OHL-S-2.0**（强互惠硬件许可），不是 MIT；商用/分发前确认义务，见该目录 README。
+说明：
 
-注意：
+- 当前设计可组装为 **4 组装配件**（底座＝底板+外壳+肩座；上臂＝支架+肘座；小臂；舵机摇臂沿用舵机自带），
+  舵机（PTK7452MG 23.6×26.9×11.7 mm、25T）为外购件，模型中以简化体表示；
+- `robot_v1.xml` 是 **MuJoCo MJCF**（非 URDF）；网格由 `meshes/` 提供（XML 内 `meshdir="meshes"`），
+  仿真、`tools/live_twin.py`、训练共用这一份；
+- 打印参数：PETG/PLA、层高 0.2 mm、4 圈壁；打印后逐件称重，更新 `print_mass_model.json`
+  与 XML 中的质量参数；
+- 许可：v1 模型为自研设计，**CERN-OHL-S-2.0**；Juxi B 线旧 CAD、SelfRisingRobot STL 副本
+  均已随 2026-11 瘦身从仓库移除，不再分发。
 
-- **不要**把 SelfRisingRobot 的 `foot.stl`、`arm1.stl`、`arm2.stl`、`armhornP.stl` 放进本目录用于商用；该项目无许可证，默认保留所有权利。个人学习也要注明来源，商用/再分发前联系作者。
-- 打印前先确认 PTK 7452MG 的尺寸（23.6×26.9×11.7 mm）和输出花键（常见 25T）；舵盘/连杆按实物测绘。
-- 先用纸板/木条验证力臂和接触点，再打印最终件；不要直接把未验证的 STL 当成品。
-- 每个新增 CAD/STL 在 [`../docs/provenance.md`](../docs/provenance.md) 记录来源/许可证。
+机械验证记录见 [`../docs/hardware-validation.md`](../docs/hardware-validation.md)；
+许可规则见 [`../docs/licensing.md`](../docs/licensing.md)。

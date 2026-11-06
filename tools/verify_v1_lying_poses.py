@@ -29,7 +29,7 @@ from training.b_line.getup_env import B39GetupEnv  # noqa: E402
 from training.b_line.getup_executor import GetupExecutor, pose_from_up  # noqa: E402
 from training.b_line.getup_reference_v1 import SEQUENCES_V1  # noqa: E402
 
-XML_V1 = ROOT / "training/b_line/assets/robot_v1.xml"
+XML_V1 = ROOT / "hardware/v1/robot_v1.xml"
 POSES = ("roll_pos", "roll_neg", "pitch_pos", "pitch_neg")
 
 

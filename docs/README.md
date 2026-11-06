@@ -1,6 +1,6 @@
 # Docs / 文字内容
 
-本目录只放文字内容（Markdown），代码在 [`../firmware`](../firmware)，BOM 在 [`../bom`](../bom)，图片/下载资料在 [`../assets`](../assets)，CAD/STL 在 [`../hardware`](../hardware)，工具在 [`../tools`](../tools)，训练在 [`../training`](../training)。
+本目录只放文字内容（Markdown）。教程在 [`../tutorial`](../tutorial)，代码在 [`../firmware`](../firmware)，模型/CAD 在 [`../hardware`](../hardware)，工具在 [`../tools`](../tools)，训练在 [`../training`](../training)。
 
 - [`requirements.md`](requirements.md)：**工程需求文档（先看这个）**，定义慢速起立方案的范围、FR/NFR、硬件/软件/机械/安全/验收标准。
 - [`plan.md`](plan.md)：**当前项目计划与约定**：几何/关节/方向的统一描述，阶段计划（机械拍板→仿真定稿→固件→实机校准→分级测试），以及“实机只有固定动作”的排查顺序。

@@ -58,5 +58,5 @@
 | `Q_HALF_RANGE` | `include/config.h` | 1.55 rad（±89°） |
 | `MAX_CMD_RATE` | `include/config.h` | 0.12 rad / 20 ms |
 
-> B 线固件没有 PCA9685 分支；如果转接板实际是 PCA9685，需要另写驱动（旧的 `sr_support_2dof` 里有参考实现，但不能直接用于 B 线策略）。  
+> B 线固件没有 PCA9685 分支；如果转接板实际是 PCA9685，需要另写驱动（旧 `sr_support_2dof` 参考实现已随瘦身移除，可参考 ESP32Servo/PCA9685 库）。  
 > CH3/CH4 借给 I²C 前，先用电阻档确认信号脚对 V+ 为高阻（没有 6V 上拉/串阻）；I²C 线尽量短，模块上拉到 3.3V。

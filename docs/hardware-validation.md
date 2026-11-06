@@ -1,5 +1,7 @@
 # Hardware / 机械验证记录
 
+> 注（2026-11 瘦身）：文中出现的 `hardware/juxi_b_line/`、`bom/`、`firmware/sr_support_2dof/`、旧仿真模型与变体 XML 已从仓库移除，相关描述仅作历史记录；当前模型见 [`hardware/v1/`](../hardware/v1/)。
+
 > **2026-10-20：当前 B 线用 Juxi B 线 CAD/STL**，见 [`../hardware/juxi_b_line/`](../hardware/juxi_b_line/)；本清单的纸板/转台/甩棍内容是旧“底部方位+顶部打击”备选方案的验证，不适用于当前 B 线 2R 臂。  
 > B 线重点：打印后称重/量尺寸、舵机 1520µs 中位、肩/肘方向、末端垫防滑、整机质量 vs 仿真 97.4 g。
 

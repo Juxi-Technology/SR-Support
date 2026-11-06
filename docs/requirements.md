@@ -1,5 +1,7 @@
 # SR-Support 2-DOF 慢速自起立机器人 工程需求文档
 
+> 注（2026-11 瘦身）：文中出现的 `hardware/juxi_b_line/`、`bom/`、`firmware/sr_support_2dof/`、旧仿真模型与变体 XML 已从仓库移除，相关描述仅作历史记录；当前模型见 [`hardware/v1/`](../hardware/v1/)。
+
 | 项目 | 内容 |
 |---|---|
 | 文档版本 | v0.3（草案） |
