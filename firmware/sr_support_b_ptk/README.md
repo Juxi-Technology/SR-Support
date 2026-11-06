@@ -15,24 +15,23 @@
 - 转接板：**无源直连**，ESP32 GPIO → 3-pin 舵机排针；舵机 V+/GND 共用电源轨，排针可级联；**没有 PCA9685 / GPIO 扩展**。
 - 2× PTK7452MG（180° PWM，无位置反馈；v0 只用 2 个，其余备用）。
 - Juxi 6 轴 IMU（I²C 0x23、100 kHz、3.3V）。
-- 舵机电源：**6V/≥5A**（PTK7452 在 6V 约 3.4 kg·cm）；想接近 B 线训练的 4.5 kg·cm，可用 7.4V/5A，但注意发热/电流。
-- ESP32 用 USB-C 5V；舵机电源与 ESP32 **共地**；舵机电源端 1000–2200 µF。
+- 舵机电源：**5V/≥5A**（本项目实机，四方向扶正已验证；PTK7452 额定 6V 约 3.4 kg·cm，更高电压仅作余量且只能接舵机电源轨）。
+- ESP32 由同一 5V 电源经一分二供电（或 USB-C）；与舵机电源 **共地**；舵机电源端 1000–2200 µF。
 
 ## 2. 接线（示例，按转接板实际丝印确认）
 
 | 器件 | 引脚 | 说明 |
 |---|---|---|
-| IMU SDA | GPIO6 | I²C 100 kHz；转接板 CH3 信号脚 |
-| IMU SCL | GPIO7 | I²C 100 kHz；转接板 CH4 信号脚 |
-| IMU VCC | ESP32 3V3 | **不要接 CH3/CH4 的 V+（6V）** |
-| IMU GND | CH3/CH4 GND 或 ESP32 GND | 共地 |
-| 肩舵机信号 | GPIO4 | 50Hz PWM |
-| 肘舵机信号 | GPIO5 | 50Hz PWM |
+| IMU SDA | GPIO6 | I²C 100 kHz；转接板 S6 信号脚 |
+| IMU SCL | GPIO7 | I²C 100 kHz；转接板 S7 信号脚 |
+| IMU VCC | ESP32 3V3 | 经转接板 S1 信号脚；**不要接舵机 V+（5V）** |
+| IMU GND | ESP32 GND（直连） | 共地 |
+| 肩舵机信号 | GPIO4 | 转接板 S4，50Hz PWM |
+| 肘舵机信号 | GPIO5 | 转接板 S5，50Hz PWM |
 | LED（可选） | GPIO2 | 状态灯 |
-| 舵机 V+ | 6V/5A 电源 + | **不要接 ESP32 3V3/USB 5V** |
+| 舵机 V+ | 5V/5A 电源 + | **不要接 ESP32 3V3** |
 | 舵机 GND | 电源 − / ESP32 GND | 共地 |
 
-> 当前 `config.h` 的 GPIO4/5 是示例；等口述实际映射后改 `PIN_SERVO_SHOULDER/ELBOW`。  
 > 转接板是级联方式：确认每个排针的 V+/GND/信号顺序一致，避免插反。
 
 ## 3. 编译/烧录
@@ -152,14 +151,14 @@ python tools/live_twin.py --tcp <Robot IP>:3333
 
 - `include/policy_b.h` 现在是 **v7（SR 慢接口）策略**（`training/b_line/models/ppo_selfrising_sr5/final.zip` 导出，5 维观测、目标增量 0.08 rad/step，10→128→128→2，Tanh），按估算质量 97.4 g、硬舵机模型（kp=50/kv=0.5）训练。
 - 固件内置**站立收臂**：`up_z>0.95` 连续 0.2 s → 目标角以 0.12 rad/20 ms 归零（手臂竖直）并保持；`up_z<0.95` 暂停收臂，`<0.90` 交回策略重试。
-- PTK7452 在 6V 只有 3.4 kg·cm；实机打印件称重后，用 [`../../training/b_line/`](../../training/b_line/) 重训并重新导出覆盖 `policy_b.h`。**当前版本按估算质量训练，实机成功率会低于仿真。**
+- PTK7452 额定 6V 3.4 kg·cm（本项目 5V 实测可四方向扶正）；实机打印件称重后，用 [`../../training/b_line/`](../../training/b_line/) 重训并重新导出覆盖 `policy_b.h`。**当前版本按估算质量训练，实机成功率会低于仿真。**
 - 观测/动作必须一致：10 维 `[up(3), gyro(3), q(2), qdot(2)]`；目标角 = action × 1.55 rad；每 20ms 最多变化 0.12 rad。
 
 ## 6. 上电顺序（建议）
 
 1. 机器人放桌面，手臂大致竖直，周围 30 cm 无遮挡；手扶底座。
 2. 只接 USB，确认 IMU 版本、陀螺校准、`ready; send g to run`。
-3. 舵机上电（6V/5A），确认无异常电流/发热。
+3. 舵机上电（5V/5A），确认无异常电流/发热。
 4. 发 `t` 自检，确认两个关节方向；方向反了改 `SERVO_SHOULDER_SIGN`/`SERVO_ELBOW_SIGN` 或重装舵盘。
 5. 手扶机器人摆成倒地姿态，发 `g`；一有异常立即 `x` 或断舵机电源。
 6. 成功后再逐步放手；记录成功率、电流、温度。

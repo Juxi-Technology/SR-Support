@@ -72,7 +72,7 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 | IMU GND | GND | — (direct) | common ground |
 | LED (optional) | GPIO2 | — | status LED |
 | 5 V power input | 5V / GND | — | 1-to-2 cable: one branch to the ESP32, one to the adapter V+/GND for the servos |
-| Servo power | — | V+/GND terminal | 5 V / ≥5 A; **with 6 V use this terminal only, never the ESP32 5V** |
+| Servo power | — | V+/GND terminal | 5 V / ≥5 A; **higher voltages must use this terminal only, never the ESP32 5V** |
 | S2 / S3 | — | — | not connected |
 
 Notes:
@@ -82,8 +82,8 @@ Notes:
   reversed polarity destroys servos or the board;
 - Keep I²C wires short and away from servo wires; module pull-ups are 3.3 V;
 - With a **5 V** supply you may feed the ESP32 5V/GND and branch the same supply to the
-  adapter V+/GND for the servos; with **6 V / 7.4 V** power the adapter V+/GND only and
-  power the ESP32 from USB;
+  adapter V+/GND for the servos; higher voltages (6 V / 7.4 V) must feed the adapter
+  V+/GND only and the ESP32 must be powered from USB;
 - With USB and the 5 V supply connected at the same time: the ESP32-S3-DevKitC-1 has a
   reverse-feed diode between USB and the 5V pin, so both may be connected; if your board
   lacks that diode, unplug the 5 V branch while flashing;

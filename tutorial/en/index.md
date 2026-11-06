@@ -44,7 +44,7 @@ This tutorial serves two audiences - pick the path that matches yours:
 - SR-Support mechanical parts (bottom plate, shoulder servo mount, elbow servo mount, top strut; printing and assembly on [page 04](./04-assembly));
 - ESP32-S3 board, Juxi ICM42670P IMU, passive direct-drive servo adapter board;
 - 2× PTK7452MG (180° PWM) servos;
-- A servo power supply (spec 6 V / ≥5 A) and a USB-C data cable;
+- A servo power supply (5 V / ≥5 A) and a USB-C data cable;
 - A computer with the environment from [page 02](./02-environment).
 
 ## Verified status (2026-11-06)
@@ -60,8 +60,6 @@ page with home-network provisioning, and a wireless MuJoCo live twin
 > - Hold the robot on first power-up, keep a 30 cm clear area, and send `x` or cut servo power
 >   on any anomaly;
 > - Never stall a servo longer than 1 s; stop when the case exceeds 60 °C;
-> - the servo supply **5 V / ≥5 A is verified for all four get-up directions** (6 V gives
->   more margin);
-> - 6 V goes to the servo rail only - **never** to the ESP32 5V/3V3 (a 5 V supply may feed the
->   ESP32 5V pin);
+> - the servo supply **5 V / ≥5 A** (verified for all four get-up directions);
+> - anything above 5 V goes to the servo rail only - **never** to the ESP32 5V/3V3;
 > - Everything shares one ground; power-up order is in [page 04](./04-assembly).
