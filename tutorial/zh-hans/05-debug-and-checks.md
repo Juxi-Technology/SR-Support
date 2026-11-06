@@ -21,9 +21,9 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 | `qd` | 关节指令角速度 |
 | 末尾 | `run` / `hold` / `manual` / `auto` |
 
-快速硬件自检：`python tools/hw_check.py --port COM27` 会读取 0.6 秒
-遥测；加 `--tilt 8` 后用手倾斜机器人，会打印 up/角速度范围与倾角变化，用来确认 IMU
-不是卡死或方向接反。
+快速硬件自检（在 `SR-Support` 目录、已激活 `.venv` 的终端里）：
+`python tools/hw_check.py --port COM27` 会读取 0.6 秒遥测；加 `--tilt 8` 后用手倾斜机器人，
+会打印 up/角速度范围与倾角变化，用来确认 IMU 不是卡死或方向接反。
 
 ## 5.2 IMU 检查与标定
 

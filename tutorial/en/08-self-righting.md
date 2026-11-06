@@ -50,7 +50,7 @@ description: How to operate SR-Support in each fallen direction, expected motion
 python tools/hw_monitor.py COM27
 ```
 
-(Run it in the terminal with `.venv` activated - [page 02](./02-environment).)
+(Run it in the `SR-Support` folder with `.venv` activated - [page 02](./02-environment).)
 
 - Appends events and 5-second telemetry summaries to `logs/hw_monitor.log`;
 - Records `getup start`, `executor re-plan`, `standing`, `executor timeout`, `IMU lost`, etc.;

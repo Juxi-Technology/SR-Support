@@ -32,8 +32,8 @@ corresponding center pulse widths.
 
 ## 6.2 Procedure
 
-1. Connect both the battery and USB (servos powered) and run this in the terminal with
-   `.venv` activated:
+1. Connect both the battery and USB (servos powered) and run this in the `SR-Support` folder
+   with `.venv` activated:
 
    ```bash
    python tools/hw_shoulder_range.py

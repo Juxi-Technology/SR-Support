@@ -14,7 +14,8 @@ description: Flash the SR-Support B-line firmware from the prebuilt bin (Flash D
 1. Make sure you have `firmware/releases/sr_support_b_ptk_factory.bin` (checksums in
    `SHA256SUMS` next to it; GitHub Releases requires repository access);
 2. Enter download mode: hold **BOOT**, tap **RST**, release **BOOT**;
-3. Flash it (tool setup on [page 02, section 2.3](./02-environment)):
+3. Flash it (tool setup on [page 02, section 2.3](./02-environment); run these commands in
+   the `SR-Support` folder with `.venv` activated):
    - Windows GUI: Flash Download Tool → ESP32-S3 → load the bin at `0x0` → START;
    - Windows / Linux / macOS command line:
 
@@ -40,9 +41,9 @@ pio run -d firmware/sr_support_b_ptk
 pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-> Run these in the terminal with `.venv` activated (page 02, section 2.3). Close anything
-> holding the serial port (serial monitor, `tools/hw_monitor.py`) before flashing, otherwise
-> you get `could not open port` / `Access is denied`.
+> Run these in the `SR-Support` folder with `.venv` activated (page 02, section 2.3). Close
+> anything holding the serial port (serial monitor, `tools/hw_monitor.py`) before flashing,
+> otherwise you get `could not open port` / `Access is denied`.
 
 A successful build uses about RAM 56% and Flash 30% (WiFi + web server included; earlier
 builds without WiFi were about 7% / 12%).

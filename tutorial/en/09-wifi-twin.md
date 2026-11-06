@@ -36,8 +36,8 @@ Press `Twin ON` on the status page (same as serial `d`), then:
 python tools/live_twin.py --tcp <Robot IP>:3333
 ```
 
-(Create and activate `.venv` first as on [page 02](./02-environment); the tool environment is
-set up there too.)
+(In the `SR-Support` folder; create and activate `.venv` first as on
+[page 02](./02-environment) - the tool environment is set up there too.)
 
 - The window mirrors the real attitude live and keeps the body on the floor;
 - The arm is held at its floor-contact angle like the stalled servo (no floor penetration);

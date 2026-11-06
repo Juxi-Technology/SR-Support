@@ -13,7 +13,8 @@ description: 用预编译 bin（Flash Download Tool / esptool）或 PlatformIO �
 1. 确认有 `firmware/releases/sr_support_b_ptk_factory.bin`（校验和见同目录
    `SHA256SUMS`；从 GitHub Releases 下载时需仓库权限）；
 2. 进入下载模式：按住 **BOOT**，点按一下 **RST**，松开 **BOOT**；
-3. 烧录（工具安装见 [02 页 2.3](./02-environment)）：
+3. 烧录（工具安装见 [02 页 2.3](./02-environment)；以下命令在 `SR-Support` 目录、
+   已激活 `.venv` 的终端里执行）：
    - Windows 图形界面：Flash Download Tool → ESP32-S3 → `0x0` 加载 bin → START；
    - Windows / Linux / macOS 命令行：
 
@@ -38,9 +39,9 @@ pio run -d firmware/sr_support_b_ptk
 pio run -d firmware/sr_support_b_ptk -t upload --upload-port COM27
 ```
 
-> 命令在已激活 `.venv` 的终端里执行（02 页 2.3）。烧录前必须关闭占用串口的程序
-> （串口监视器、`tools/hw_monitor.py` 等），否则会报 `could not open port` /
-> `Access is denied`。
+> 命令在 `SR-Support` 目录下、已激活 `.venv` 的终端里执行（02 页 2.3）。烧录前必须
+> 关闭占用串口的程序（串口监视器、`tools/hw_monitor.py` 等），否则会报
+> `could not open port` / `Access is denied`。
 
 构建成功时资源占用约 RAM 56%、Flash 30%（含 WiFi 与网页服务；不含 WiFi 的早期版本
 约 7%/12%）。

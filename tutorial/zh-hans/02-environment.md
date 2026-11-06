@@ -5,9 +5,10 @@ description: 开工前准备：创建并激活项目 .venv、获取预编译固�
 
 # 02 环境准备（虚拟环境、烧录工具与固件）
 
-> 本页在开工前完成。**命令默认在仓库根目录执行**（即包含 `firmware/`、`tools/` 的那一层）；
-> **所有 Python 命令都在已激活 `.venv` 的终端里执行**（2.3）。只烧预编译固件不需要
-> PlatformIO、不需要编译，改代码才需要开发者环境（2.5）。
+> 本页在开工前完成。**命令默认在仓库根目录执行**——就是从 GitHub 下载的 **`SR-Support`
+> 文件夹**（解压 zip 时可能叫 `SR-Support-main`，以包含 `firmware/`、`tools/` 的那一层
+> 为准）。**所有 Python 命令都在已激活 `.venv` 的终端里执行**（2.3）。只烧预编译固件
+> 不需要 PlatformIO、不需要编译，改代码才需要开发者环境（2.5）。
 
 ## 2.1 前提
 
@@ -36,15 +37,20 @@ description: 开工前准备：创建并激活项目 .venv、获取预编译固�
 ## 2.3 创建并激活虚拟环境（.venv）
 
 所有电脑端 Python 工具（esptool、PlatformIO、MuJoCo 工具）都装进项目内**同一个**
-`.venv`。在仓库根目录执行：
+`.venv`，并且 `.venv` 必须创建在从 GitHub 下载的 **`SR-Support` 目录**里（zip 解压得到
+的目录可能叫 `SR-Support-main`，同样以包含 `firmware/`、`tools/` 的那一层为准）。
+
+先进入这个目录，下面的命令都在这里执行：
 
 **Windows（PowerShell）**
 
 ```powershell
+cd D:\Project\SR-Support    # 换成你实际存放 SR-Support 的位置
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
+- 不确定进对没有：运行 `dir`，应该能看到 `firmware`、`tools`、`tutorial` 等文件夹；
 - 没有 Python 3.12 时用 `py -3 -m venv .venv`（3.10+ 均可）；
 - 若提示"禁止运行脚本"，先在当前窗口执行
   `Set-ExecutionPolicy -Scope Process Bypass`，再重新激活。
@@ -52,28 +58,31 @@ py -3.12 -m venv .venv
 **Linux / macOS**
 
 ```bash
+cd ~/SR-Support             # 换成你实际存放 SR-Support 的位置
 python3 -m venv .venv
 source .venv/bin/activate
 ```
+
+- 不确定进对没有：运行 `ls`，应该能看到 `firmware`、`tools`、`tutorial` 等文件夹。
 
 激活成功后提示符前会出现 **`(.venv)`**。本页其余命令和教程后续所有命令都要在这个
 **已激活的终端**里执行；关掉终端再打开时需要重新激活。忘记激活时 `pip` / `python`
 会指向系统环境，安装或运行都会出问题。
 
-> **目录要求（重要）**：`.venv` 必须位于**仓库根目录**（与 `firmware/`、`tools/`
-> 同级）。上面的创建与激活命令都是**相对路径**，所以必须在仓库根目录执行——新开终端
-> 也要先 `cd` 回仓库根目录再激活；或者用绝对路径激活，如
+> **目录要求（重要）**：`.venv` 必须位于**`SR-Support` 文件夹（仓库根目录）**，不能建在
+> 子目录。上面的创建/激活命令都是**相对路径**，所以必须在这个目录里执行——新开终端
+> 也要先 `cd D:\Project\SR-Support`（换成你的实际路径）再激活；或者用绝对路径激活，如
 > `C:\path\SR-Support\.venv\Scripts\Activate.ps1` /
 > `source /path/SR-Support/.venv/bin/activate`。
 >
 > 激活之后可以 `cd` 到任意子目录，`python` / `pip` / `pio` 仍然指向该 `.venv`；但教程里的
-> `tools/...`、`firmware/...`、`hardware/v1/...` 都是相对路径，**请在仓库根目录执行**。
-> `.venv` 与创建时的路径绑定：仓库移动或改名后，删除 `.venv` 重新创建即可。
+> `tools/...`、`firmware/...`、`hardware/v1/...` 都是相对路径，**请在 `SR-Support` 目录下
+> 执行**。`.venv` 与创建时的路径绑定：仓库移动或改名后，删除 `.venv` 重新创建即可。
 
 ## 2.4 烧录工具（所有客户，二选一）
 
 预编译固件是一个 bin 直接烧，**不需要 PlatformIO、不需要下载工具链**。
-先确认终端提示符是 `(.venv)`。
+先确认终端位于 `SR-Support` 目录、提示符是 `(.venv)`。
 
 **A. Windows 图形界面：乐鑫 Flash Download Tool**
 
@@ -110,7 +119,7 @@ python -m esptool --chip esp32s3 -p COM27 -b 460800 write_flash 0x0 firmware/rel
 > 都要下载 espressif32 平台与 Xtensa 工具链（约 1 GB，来自 PlatformIO registry 与
 > GitHub），国内网络可能很慢或失败，必要时需要代理/VPN；换插件绕不开这一步。
 
-确认终端处于 `(.venv)`，然后：
+确认终端在 `SR-Support` 目录、处于 `(.venv)`，然后：
 
 ```bash
 pip install platformio
@@ -125,8 +134,8 @@ pio --version
 ## 2.6 电脑端工具与 MuJoCo 环境（Twin/零点/日志）
 
 只烧固件不需要本节；要用方向键零点工具、MuJoCo 实时镜像（`tools/live_twin.py`）、
-仿真回放或日志工具时安装。终端保持 `(.venv)`，安装依赖（pyserial、numpy、MuJoCo 3.1+、
-gymnasium）：
+仿真回放或日志工具时安装。终端保持在 `SR-Support` 目录、`.venv` 已激活，安装依赖
+（pyserial、numpy、MuJoCo 3.1+、gymnasium）：
 
 ```bash
 pip install -r tools/requirements.txt
