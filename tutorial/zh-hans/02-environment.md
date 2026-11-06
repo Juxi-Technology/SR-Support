@@ -165,6 +165,10 @@ Windows 也可以运行 `tools/install_platformio.ps1`（同样安装进这个 `
 pio --version
 ```
 
+> 旧版教程把 PlatformIO 装在单独的 `.venv-pio`；现在统一装进 `.venv`。如果升级后 `pio`
+> 提示找不到，就在已激活的 `.venv` 里执行 `pip install platformio`（或重新运行
+> `tools/install_platformio.ps1`）即可，旧的 `.venv-pio` 可以删除。
+
 ## 2.6 电脑端工具与 MuJoCo 环境（Twin/零点/日志）
 
 只烧固件不需要本节；要用方向键零点工具、MuJoCo 实时镜像（`tools/live_twin.py`）、

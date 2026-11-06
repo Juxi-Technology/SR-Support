@@ -175,6 +175,11 @@ On Windows you can also run `tools/install_platformio.ps1`, which installs into 
 pio --version
 ```
 
+> Older tutorial versions installed PlatformIO into a separate `.venv-pio`; it now lives in
+> the single `.venv`. If `pio` is not found after upgrading, run `pip install platformio` in
+> the activated `.venv` (or rerun `tools/install_platformio.ps1`); the old `.venv-pio` can be
+> deleted.
+
 ## 2.6 Computer-side tools and MuJoCo environment (twin / zeroing / logs)
 
 Not needed for flashing. Install it when you use the arrow-key zero tool, the MuJoCo live twin
