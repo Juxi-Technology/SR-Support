@@ -5,9 +5,10 @@ description: Jog the arm to the visual center with arrow keys and declare it q=0
 
 # 02 Zero-calibration tool (arrow keys, skippable)
 
-The zero is baked at the factory, so you can **skip this page** for a stock unit. Come back
-when: a horn was re-indexed, the arm was disassembled/re-assembled, a servo was replaced, or
-the arm no longer rests at the visual center after retracting.
+The servo zeros and the IMU accel zeros are calibrated and baked per unit at the factory, so
+**you can skip this page** for a stock unit. Come back when: a horn was re-indexed, the arm was
+disassembled/re-assembled, a servo was replaced, the IMU was replaced/re-mounted (recalibrate
+the accel), or the arm no longer rests at the visual center after retracting.
 
 ## 2.1 Principle
 

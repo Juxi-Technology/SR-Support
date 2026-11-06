@@ -5,6 +5,10 @@ description: How to operate SR-Support in each fallen direction, expected motion
 
 # 07 Step 3: self-righting usage and monitoring
 
+> Every finished unit is tested in all four directions before shipping. For the first use,
+> still verify each direction once per section 7.2 to make sure the unit is healthy after
+> transport.
+
 ## 7.1 Procedure
 
 1. Power up with the robot upright and wait for `autorun on: get-up waits for a fall`;

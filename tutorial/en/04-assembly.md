@@ -5,6 +5,10 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 # 04 Assembly: print, build, wire
 
+> **Finished-unit users can skip this page**: the factory has already printed, assembled, wired
+> and inspected the unit (see the factory-state section in [index](./index)). Follow this page
+> only when building from parts or replacing components.
+
 ## 4.1 Printing and inspection
 
 1. Print `footP`, `arm1P`, `arm2P` and `armhornP` ×2;

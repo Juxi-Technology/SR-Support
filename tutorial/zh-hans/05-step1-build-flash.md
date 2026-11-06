@@ -5,6 +5,8 @@ description: 使用 PlatformIO 构建并烧录 SR-Support B 线固件，串口�
 
 # 05 第一步：环境、构建与烧录
 
+> **成品用户可跳过本页**：出厂已烧录并验证固件。仅在升级固件或自行修改代码后重新执行。
+
 ## 5.1 环境
 
 - **PlatformIO（Arduino framework）**，不是 ESP-IDF；

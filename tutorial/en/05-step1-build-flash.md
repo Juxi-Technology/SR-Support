@@ -5,6 +5,9 @@ description: Build and flash the SR-Support B-line firmware with PlatformIO, ser
 
 # 05 Step 1: environment, build and flash
 
+> **Finished-unit users can skip this page**: the factory has flashed and verified the
+> firmware. Only redo this for firmware upgrades or after modifying the code.
+
 ## 5.1 Environment
 
 - **PlatformIO (Arduino framework)**, not ESP-IDF;

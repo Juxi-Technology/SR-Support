@@ -25,6 +25,19 @@ verified build.
 | 09 | [Troubleshooting](./09-troubleshooting) | Common symptoms and fixes | reference |
 | 10 | [Reference: model, parameters, licensing](./10-reference) | Model files (XML/STL), parameters, reference sequences, licensing | reference |
 
+## Factory state of a finished unit (two reading paths)
+
+This tutorial serves two audiences - pick the path that matches yours:
+
+| Reader | Factory state | Recommended path |
+|---|---|---|
+| **Finished-unit user** | Assembled and wired, firmware flashed, **calibrated** (servo zeros and IMU accel zeros baked), **tested** (all four get-up directions verified per unit) | Go straight to [07 usage](./07-step3-self-righting) and [08 WiFi/twin](./08-step4-wifi-twin) (optional); keep [09](./09-troubleshooting)/[10](./10-reference) for reference. **Pages 04/05/06 are only needed for firmware upgrades, servo/IMU replacement or horn re-mounting** |
+| **Kit / DIY builder** | Starts from parts | Follow [01](./01-basics) → [04](./04-assembly) → [05](./05-step1-build-flash) → [06](./06-step2-calibrate) → [07](./07-step3-self-righting) end to end |
+
+> Recommended first-use check for a finished unit: power up upright → confirm `up≈(0,0,1)` →
+> tip it once in each of the four directions per [page 07](./07-step3-self-righting) and
+> confirm it stands up.
+
 ## Prerequisites
 
 - Printed and assembled SR-Support mechanical parts (`footP`, `arm1P`, `arm2P`, `armhornP` ×2);

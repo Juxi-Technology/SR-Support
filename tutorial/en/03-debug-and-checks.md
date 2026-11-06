@@ -27,7 +27,9 @@ up -0.01 +0.02 +1.00 | w  0.0  0.0  0.0 | q +0.00 +0.00 | qd  0.0  0.0 | run
 2. Stand the robot LEVEL on a flat surface and keep it still; send `c` to calibrate gyro AND
    accel zero offsets together (`calibrating gyro+accel...`; the accel bias is stored in NVS
    and only counts when `accel bias ... (saved)` is printed; a `rejected` message means the
-   robot was not level or not still - retry);
+   robot was not level or not still - retry). **Factory units are already calibrated and
+   stored in NVS** - only redo this after replacing/re-mounting the IMU, or when the lying
+   check (step 5) shows a tilt problem;
 3. Tilt slowly in x and y; the up components must respond in the correct direction without jumps;
 4. If an axis is inverted, send `i` / `j` and recalibrate with `c`;
 5. Lying check: after placing the robot and waiting 2 s, `up` must be stable and match the real

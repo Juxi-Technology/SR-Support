@@ -58,8 +58,11 @@ No URDF is bundled; for ROS use, export one from the CAD/meshes above.
 | `pitch_pos` | `[-1.32,1.45] → [-0.25,1.45] → retract` |
 | `pitch_neg` | `[-1.32,-1.65] → [-0.25,-1.65] → retract` |
 
-## 10.4 Verified status (2026-11-06)
+## 10.4 Verified status and factory inspection (2026-11-06)
 
+- **Factory inspection**: each finished unit gets - servo zeros defined and baked per unit
+  ([page 02](./02-zero-tool)), gyro + accel zero calibration (NVS), and a four-direction
+  get-up test before shipping;
 - All four directions verified on the real robot, each as a **direct get-up** (no roll-over),
   about 1–6 s; no servo envelope violations;
 - `roll_neg` final recipe: full-travel direct press + elbow-wedge pumps ×2, whip-slam retry as

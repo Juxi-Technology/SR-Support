@@ -5,6 +5,10 @@ description: After flashing, complete gyro+accel calibration, servo self-test, z
 
 # 06 Step 2: calibration
 
+> **Finished-unit users can skip this page**: the factory calibrates and verifies every unit.
+> Redo these four items only after replacing a servo/IMU, re-mounting a horn, or when a
+> firmware upgrade is suspected to have disturbed the calibration.
+
 Complete these four items in order. Details for each live on the referenced pages.
 
 ## 6.1 Gyro + accelerometer calibration
