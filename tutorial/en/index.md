@@ -14,7 +14,7 @@ verified build.
 
 | # | Page | Content | Note |
 |---|---|---|---|
-| 01 | [Basics](./01-basics) | Working principle, specs, BOM, tools, power safety | read first |
+| 01 | [Basics](./01-basics) | Working principle, specs, BOM | read first |
 | 02 | [Environment setup](./02-environment) | Prebuilt firmware + flash tools (Flash Download Tool / esptool), optional PlatformIO and tool env, serial port | **do this first** |
 | 03 | [Assembly: print, build, wire](./03-assembly) | Printed parts, horn index, wiring table, IMU mounting | skippable for stock units |
 | 04 | [Step 1: flash the main firmware](./04-build-flash) | Prebuilt bin (recommended for customers) or a PlatformIO source build, serial commands, boot behavior | skippable for stock units |
@@ -41,7 +41,7 @@ This tutorial serves two audiences - pick the path that matches yours:
 
 ## Prerequisites
 
-- SR-Support mechanical parts (`footP`, `arm1P`, `arm2P`, `armhornP` ×2; printing and assembly on [page 03](./03-assembly));
+- SR-Support mechanical parts (bottom plate, shoulder servo mount, elbow servo mount, top strut; printing and assembly on [page 03](./03-assembly));
 - ESP32-S3 board, Juxi ICM42670P IMU, passive direct-drive servo adapter board;
 - 2× PTK7452MG (180° PWM) servos;
 - A servo power supply (spec 6 V / ≥5 A) and a USB-C data cable;

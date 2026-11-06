@@ -11,11 +11,10 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 ## 3.1 Printing and inspection
 
-1. Print `footP`, `arm1P`, `arm2P` and `armhornP` ×2;
-2. Check the base outline (~60 × 73 mm) and the 37 mm riser with calipers; the foot plate is
-   3 mm, total base height 40 mm;
+1. Print the bottom plate, shoulder servo mount, elbow servo mount and top strut (1 each);
+2. Check the base outline (~88 × 82 mm) and total height (~68 mm) with calipers;
 3. Test-fit the 25T servo horns in their slots; fix with screws only when there is no bind;
-4. Weigh every printed part and record it for later simulation mass calibration.
+4. Weigh every printed part and record it against `hardware/v1/meshes/print_mass_model.json`.
 
 ## 3.2 Servo preparation (electrical center and horn index)
 
@@ -47,10 +46,12 @@ description: Printing, servo horn re-index and centering, wiring table, IMU moun
 
 ## 3.3 Base and arm assembly
 
-1. Fix the 3 mm foot plate to the 37 mm riser with M3 screws to form the 40 mm base;
-2. Install the shoulder servo in the top slot, horn facing up;
-3. Attach `arm1P` (upper arm) to the shoulder horn and tighten;
-4. Install the elbow servo at the top of `arm1P`; connect `arm2P` (forearm) through `armhornP`;
+1. Fix the bottom plate, shell and shoulder servo mount together with M3 screws to form the
+   base (~68 mm tall);
+2. Install the shoulder servo in the shoulder mount, horn facing up;
+3. Attach the upper-arm bracket to the shoulder horn and tighten; install the elbow servo in
+   the bracket/elbow mount;
+4. Connect the top strut (forearm) to the elbow horn;
 5. Move the arm to vertical by hand (`q≈0`) and confirm it matches the servo center.
 
 ## 3.4 Wiring
