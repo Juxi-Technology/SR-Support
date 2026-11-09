@@ -22,7 +22,7 @@ SR-Support ist ein aktives Selbstaufrichtungsgerät mit 2 DOF (Schulter + Ellenb
   Fall-Gate; `roll_neg` verwendet stufenweise adaptive Haltezeiten und geht zum Einfahren über,
   sobald es aufrecht steht;
 - **Verifiziert**: vier Richtungen stehen direkt in etwa 1–6 s auf; dasselbe Modell treibt die
-  MuJoCo-Simulation und den Live-Zwilling der Hardware an ([Seite 08](./08-wifi-twin.md)).
+  MuJoCo-Simulation und den Live-Zwilling der Hardware an ([Seite 09](./09-mujoco.md)).
 
 ## 1.2 Übersicht
 

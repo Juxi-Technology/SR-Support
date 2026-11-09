@@ -123,7 +123,7 @@ Escreva cada comando na **caixa de envio** do monitor/assistente série e prima 
 | `z` | Zero tipo encoder: a postura atual passa a q=0 para ambas as juntas; imprime os novos impulsos (apenas em RAM; ver [página 05](./05-zero-tool.md)) |
 | `e` | Centro elétrico (opcional): ambos os servos a 1520 µs para montar os horns no centro elétrico; o habitual é ligar até ao zero do firmware e montar aí (ver [página 04, 4.2](./04-assembly.md)) |
 | `d` | Alternar o fluxo do gémeo a 50 Hz (gémeo MuJoCo; o mesmo interruptor na página de estado) |
-| `w` | Alternar o WiFi (hotspot + página de estado/aprovisionamento, ver [página 08](./08-wifi-twin.md)) |
+| `w` | Alternar o WiFi (hotspot + página de estado/aprovisionamento, ver [página 08](./08-wifi.md)) |
 | `v` / `b` | Inverter o sinal do ombro / do cotovelo |
 | `i` / `j` | Inverter o sinal X / Y da IMU |
 | `h` | Alternar a homing vertical (caminho de política legado) |

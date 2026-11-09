@@ -24,9 +24,10 @@ leitura que cobre todo o percurso, do zero até uma montagem verificada.
 | 05 | [Calibração do ponto zero](./05-zero-tool.md) | Jog com teclas de seta + ponto zero com `z` (após reindexação/remontagem) | **obrigatório para montagens DIY**; pode saltar-se em unidades prontas |
 | 06 | [Depuração e calibração](./06-debug-and-calibrate.md) | Verificação e calibração do robô completo: telemetria, IMU, servos, verificação do centro, quatro posturas deitadas, condição de queda | |
 | 07 | [Utilização e monitorização do auto-endireitamento](./07-self-righting.md) | As quatro direções de queda, movimento esperado, monitorização e registos | |
-| 08 | [WiFi e o gémeo de simulação](./08-wifi-twin.md) | Página de estado, aprovisionamento do WiFi doméstico, gémeo MuJoCo sem fios | opcional |
-| 09 | [Resolução de problemas](./09-troubleshooting.md) | Sintomas comuns e soluções | referência |
-| 10 | [Referência: modelo, parâmetros, licenciamento](./10-reference.md) | Ficheiros de modelo (XML/STL), parâmetros, sequências de referência, licenciamento | referência |
+| 08 | [Página de estado WiFi e aprovisionamento](./08-wifi.md) | Hotspot, página de estado, aprovisionamento do WiFi doméstico | opcional |
+| 09 | [Simulação MuJoCo e o gémeo ao vivo](./09-mujoco.md) | Janela de simulação local nas quatro posturas, gémeo ao vivo por WiFi, registo de telemetria | opcional |
+| 10 | [Resolução de problemas](./10-troubleshooting.md) | Sintomas comuns e soluções | referência |
+| 11 | [Referência: modelo, parâmetros, licenciamento](./11-reference.md) | Ficheiros de modelo (XML/STL), parâmetros, sequências de referência, licenciamento | referência |
 
 ## Estado de fábrica de uma unidade acabada (dois percursos de leitura)
 
@@ -34,7 +35,7 @@ Este tutorial serve dois públicos — escolha o percurso que se aplica ao seu c
 
 | Leitor | Estado de fábrica | Percurso recomendado |
 |---|---|---|
-| **Utilizador de unidade acabada** | Montada e ligada, firmware gravado, **calibrada** (zeros dos servos e zeros do acelerómetro da IMU gravados), **testada** (as quatro direções de levantamento verificadas em cada unidade) | Vá diretamente para [07 utilização](./07-self-righting.md) e [08 WiFi/gémeo](./08-wifi-twin.md) (opcional); guarde [09](./09-troubleshooting.md)/[10](./10-reference.md) para referência. **As páginas 02/03/04/05/06 só são necessárias para atualizações de firmware, substituição de servos/IMU ou remontagem do horn**; para usar as ferramentas de gémeo/telemetria da página 08, instale primeiro as ferramentas do lado do computador da página 02. |
+| **Utilizador de unidade acabada** | Montada e ligada, firmware gravado, **calibrada** (zeros dos servos e zeros do acelerómetro da IMU gravados), **testada** (as quatro direções de levantamento verificadas em cada unidade) | Vá diretamente para [07 utilização](./07-self-righting.md), [08 aprovisionamento WiFi](./08-wifi.md) e [09 simulação MuJoCo e gémeo ao vivo](./09-mujoco.md) (opcional); guarde [10](./10-troubleshooting.md)/[11](./11-reference.md) para referência. **As páginas 02/03/04/05/06 só são necessárias para atualizações de firmware, substituição de servos/IMU ou remontagem do horn**; para usar as ferramentas de gémeo/telemetria da página 09, instale primeiro as ferramentas do lado do computador da página 02. |
 | **Construtor de kit / DIY** | Parte das peças | Siga [01](./01-basics.md) → [02](./02-environment.md) → [03 gravação](./03-build-flash.md) → [04 montagem](./04-assembly.md) → [05 ponto zero (obrigatório)](./05-zero-tool.md) → [06 depuração/calibração](./06-debug-and-calibrate.md) → [07](./07-self-righting.md) do início ao fim. Tanto o ponto zero (05) como a calibração (06) acontecem **depois da montagem completa e da gravação do firmware**: o `z` não usa a IMU e funciona em qualquer postura; o `c` requer o robô montado e nivelado. |
 
 > Verificação recomendada na primeira utilização de uma unidade acabada: ligue-a na vertical →
@@ -56,8 +57,8 @@ As quatro direções de queda foram verificadas no robô real, cada uma como um 
 direto** (sem necessidade de rolamento), demorando cerca de 1–6 s; não foi registada qualquer
 violação do envelope dos servos. O kit inclui também uma ferramenta de calibração do ponto zero
 com teclas de seta ([página 05](./05-zero-tool.md)), uma página de estado WiFi com
-aprovisionamento da rede doméstica e um gémeo MuJoCo ao vivo sem fios
-([página 08](./08-wifi-twin.md)).
+aprovisionamento da rede doméstica ([página 08](./08-wifi.md)) e a simulação MuJoCo com o seu
+gémeo ao vivo sem fios ([página 09](./09-mujoco.md)).
 
 ## Segurança
 

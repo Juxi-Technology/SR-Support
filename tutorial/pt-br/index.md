@@ -24,9 +24,10 @@ leitura que cobre o caminho completo, do zero a uma montagem verificada.
 | 05 | [Calibração de zero](./05-zero-tool.md) | Movimentação com as teclas de seta + zeragem com `z` (após reindexação/remontagem) | **obrigatório para builds DIY**; dispensável para unidades prontas |
 | 06 | [Depuração e calibração](./06-debug-and-calibrate.md) | Verificação e calibração do robô completo: telemetria, IMU, servos, verificação de centralização, quatro poses deitadas, condição de queda | |
 | 07 | [Uso e monitoramento do auto-endireitamento](./07-self-righting.md) | Quatro direções de queda, movimento esperado, monitoramento e logs | |
-| 08 | [WiFi e o gêmeo de simulação](./08-wifi-twin.md) | Página de status, provisionamento de WiFi doméstico, gêmeo MuJoCo sem fio | opcional |
-| 09 | [Solução de problemas](./09-troubleshooting.md) | Sintomas comuns e correções | referência |
-| 10 | [Referência: modelo, parâmetros, licenciamento](./10-reference.md) | Arquivos do modelo (XML/STL), parâmetros, sequências de referência, licenciamento | referência |
+| 08 | [Página de status WiFi e provisionamento](./08-wifi.md) | Hotspot, página de status, provisionamento de WiFi doméstico | opcional |
+| 09 | [Simulação MuJoCo e o gêmeo ao vivo](./09-mujoco.md) | Janela local de simulação das quatro poses, gêmeo ao vivo por WiFi, registro de telemetria | opcional |
+| 10 | [Solução de problemas](./10-troubleshooting.md) | Sintomas comuns e correções | referência |
+| 11 | [Referência: modelo, parâmetros, licenciamento](./11-reference.md) | Arquivos do modelo (XML/STL), parâmetros, sequências de referência, licenciamento | referência |
 
 ## Estado de fábrica de uma unidade pronta (dois caminhos de leitura)
 
@@ -34,7 +35,7 @@ Este tutorial atende a dois públicos — escolha o caminho que corresponde ao s
 
 | Leitor | Estado de fábrica | Caminho recomendado |
 |---|---|---|
-| **Usuário de unidade pronta** | Montada e cabeada, firmware gravado, **calibrada** (zeros dos servos e zeros do acelerômetro da IMU já gravados), **testada** (todas as quatro direções de endireitamento verificadas em cada unidade) | Vá direto para [07 uso](./07-self-righting.md) e [08 WiFi/gêmeo](./08-wifi-twin.md) (opcional); guarde [09](./09-troubleshooting.md)/[10](./10-reference.md) para referência. **As páginas 02/03/04/05/06 só são necessárias para atualizações de firmware, substituição de servo/IMU ou remontagem do horn**; para usar as ferramentas de gêmeo/telemetria da página 08, primeiro instale as ferramentas do computador da página 02. |
+| **Usuário de unidade pronta** | Montada e cabeada, firmware gravado, **calibrada** (zeros dos servos e zeros do acelerômetro da IMU já gravados), **testada** (todas as quatro direções de endireitamento verificadas em cada unidade) | Vá direto para [07 uso](./07-self-righting.md), [08 provisionamento WiFi](./08-wifi.md) e [09 simulação MuJoCo e gêmeo ao vivo](./09-mujoco.md) (opcional); guarde [10](./10-troubleshooting.md)/[11](./11-reference.md) para referência. **As páginas 02/03/04/05/06 só são necessárias para atualizações de firmware, substituição de servo/IMU ou remontagem do horn**; para usar as ferramentas de gêmeo/telemetria da página 09, primeiro instale as ferramentas do computador da página 02. |
 | **Montador de kit / DIY** | Começa a partir das peças | Siga [01](./01-basics.md) → [02](./02-environment.md) → [03 gravação](./03-build-flash.md) → [04 montagem](./04-assembly.md) → [05 zeragem (obrigatória)](./05-zero-tool.md) → [06 depuração/calibração](./06-debug-and-calibrate.md) → [07](./07-self-righting.md) do início ao fim. Tanto a zeragem (05) quanto a calibração (06) acontecem **após a montagem completa e a gravação**: `z` não usa a IMU e funciona em qualquer pose; `c` exige o robô montado em pé e nivelado. |
 
 > Verificação recomendada na primeira utilização de uma unidade pronta: ligue em pé → confirme `up≈(0,0,1)` →
@@ -55,8 +56,8 @@ As quatro direções de queda foram verificadas no robô real, cada uma como **e
 direto** (sem necessidade de rolar), levando cerca de 1–6 s; nenhuma violação do envelope dos
 servos foi registrada. O kit também inclui uma ferramenta de calibração de zero com teclas de
 seta ([página 05](./05-zero-tool.md)), uma página de status WiFi com provisionamento para a
-rede doméstica e um gêmeo MuJoCo ao vivo sem fio
-([página 08](./08-wifi-twin.md)).
+rede doméstica ([página 08](./08-wifi.md)) e a simulação MuJoCo com seu gêmeo ao vivo sem fio
+([página 09](./09-mujoco.md)).
 
 ## Segurança
 

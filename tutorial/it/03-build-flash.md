@@ -120,7 +120,7 @@ es. `m 0.5 0`.
 | `z` | Zero in stile encoder: la posa attuale diventa q=0 per entrambi i giunti; stampa i nuovi impulsi (solo RAM; vedi [pagina 05](./05-zero-tool.md)) |
 | `e` | Centro elettrico (opzionale): entrambi i servomotori a 1520 µs per montare le squadrette al centro elettrico; il modo usuale è accendere fino allo zero del firmware e montare lì (vedi [pagina 04, 4.2](./04-assembly.md)) |
 | `d` | Attiva/disattiva il flusso a 50 Hz del gemello (gemello MuJoCo; lo stesso interruttore sulla pagina di stato) |
-| `w` | Attiva/disattiva il WiFi (hotspot + pagina di stato/provisioning, vedi [pagina 08](./08-wifi-twin.md)) |
+| `w` | Attiva/disattiva il WiFi (hotspot + pagina di stato/provisioning, vedi [pagina 08](./08-wifi.md)) |
 | `v` / `b` | Inverti il segno di spalla / gomito |
 | `i` / `j` | Inverti il segno X / Y dell'IMU |
 | `h` | Attiva/disattiva l'homing in posizione eretta (percorso policy legacy) |

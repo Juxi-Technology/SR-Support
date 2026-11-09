@@ -22,7 +22,7 @@ O SR-Support é um dispositivo ativo de auto-endireitamento de 2 GDL (ombro + co
   condição de queda; `roll_neg` usa esperas adaptativas por estágio e passa para a retração
   assim que está na vertical;
 - **Verificado**: as quatro direções se levantam diretamente em cerca de 1–6 s; o mesmo modelo
-  alimenta a simulação MuJoCo e o gêmeo ao vivo do hardware ([página 08](./08-wifi-twin.md)).
+  alimenta a simulação MuJoCo e o gêmeo ao vivo do hardware ([página 09](./09-mujoco.md)).
 
 ## 1.2 Visão geral
 

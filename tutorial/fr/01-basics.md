@@ -22,7 +22,7 @@ SR-Support est un dispositif actif d'auto-redressement à 2 DDL (épaule + coude
   automatique après le seuil de chute ; `roll_neg` utilise des maintiens adaptatifs par étape et
   sort vers la rétraction dès qu'il est redressé ;
 - **Vérifié** : les quatre directions se redressent directement en 1 à 6 s environ ; le même
-  modèle pilote la simulation MuJoCo et le jumeau matériel en direct ([page 08](./08-wifi-twin.md)).
+  modèle pilote la simulation MuJoCo et le jumeau matériel en direct ([page 09](./09-mujoco.md)).
 
 ## 1.2 Vue d'ensemble
 

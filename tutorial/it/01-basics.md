@@ -24,7 +24,7 @@ SR-Support è un dispositivo auto-raddrizzante attivo a 2-DOF (spalla + gomito):
   appena è in posizione eretta;
 - **Verificato**: le quattro direzioni si rialzano direttamente in circa 1–6 s; lo stesso
   modello guida la simulazione MuJoCo e il gemello digitale in tempo reale dell'hardware
-  ([pagina 08](./08-wifi-twin.md)).
+  ([pagina 09](./09-mujoco.md)).
 
 ## 1.2 Panoramica
 

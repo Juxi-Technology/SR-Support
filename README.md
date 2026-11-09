@@ -16,13 +16,13 @@
 | 固件（命令表、镜像、零点、WiFi） | [`firmware/sr_support_b_ptk/README.md`](firmware/sr_support_b_ptk/README.md) |
 | 电脑端工具 | [`tools/README.md`](tools/README.md) |
 | 仿真与训练 | [`training/README.md`](training/README.md) |
-| 许可与来源（商用必读） | [`tutorial/zh-hans/10-reference.md`](tutorial/zh-hans/10-reference.md)（10.5 节） |
+| 许可与来源（商用必读） | [`tutorial/zh-hans/11-reference.md`](tutorial/zh-hans/11-reference.md)（11.5 节） |
 
 ## 目录结构
 
 ```
 SR-Support/
-├─ tutorial/                # 教程（11 种语言，各 11 页含目录，见 tutorial/README）
+├─ tutorial/                # 教程（11 种语言，各 12 页含目录，见 tutorial/README）
 ├─ firmware/
 │  ├─ releases/             # ★ 预编译固件（客户直接烧录，无需 PlatformIO）
 │  ├─ sr_support_b_ptk/     # ★ 当前主固件
@@ -59,7 +59,7 @@ SR-Support/
 - **零点**：换齿/重装舵盘后用 `tools/hw_shoulder_range.py` 定零并固化（教程第 05 页）；
 - **许可**：代码 MIT/Apache-2.0；自研 CAD/模型 CERN-OHL-S-2.0；SelfRisingRobot 无许可、
   仓库不包含其任何文件；专利 CN109693729A/B 商用前需 FTO。详见
-  教程 [`10-reference`](tutorial/zh-hans/10-reference.md) 的许可一节。
+  教程 [`11-reference`](tutorial/zh-hans/11-reference.md) 的许可一节。
 
 ## 资料与许可
 

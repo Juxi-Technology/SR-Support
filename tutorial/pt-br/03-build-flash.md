@@ -119,7 +119,7 @@ exemplo `m 0.5 0`.
 | `z` | Zero estilo encoder: a pose atual vira q=0 para as duas juntas; imprime os novos pulsos (apenas na RAM; veja a [página 05](./05-zero-tool.md)) |
 | `e` | Centro elétrico (opcional): ambos os servos em 1520 µs para montar os horns no centro elétrico; o modo usual é energizar até o zero do firmware e montar ali (veja a [página 04, 4.2](./04-assembly.md)) |
 | `d` | Alterna o fluxo do gêmeo a 50 Hz (gêmeo MuJoCo; mesmo interruptor na página de status) |
-| `w` | Alterna o WiFi (hotspot + página de status/provisionamento, veja a [página 08](./08-wifi-twin.md)) |
+| `w` | Alterna o WiFi (hotspot + página de status/provisionamento, veja a [página 08](./08-wifi.md)) |
 | `v` / `b` | Inverte o sinal do ombro / cotovelo |
 | `i` / `j` | Inverte o sinal X / Y da IMU |
 | `h` | Alterna o stand-homing (caminho de política legado) |

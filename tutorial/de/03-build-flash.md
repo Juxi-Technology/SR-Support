@@ -125,7 +125,7 @@ Leerzeichen und zwei Werte, z. B. `m 0.5 0`.
 | `z` | Nullpunkt nach Encoder-Art: die aktuelle Pose wird für beide Gelenke zu q=0; gibt die neuen Pulsweiten aus (nur im RAM; siehe [Seite 05](./05-zero-tool.md)) |
 | `e` | Elektrische Mitte (optional): beide Servos auf 1520 µs, um die Servohörner in der elektrischen Mitte zu montieren; üblich ist, bis zum Firmware-Nullpunkt einzuschalten und dort zu montieren (siehe [Seite 04, 4.2](./04-assembly.md)) |
 | `d` | Den 50-Hz-Zwilling-Stream umschalten (MuJoCo-Zwilling; derselbe Schalter auf der Statusseite) |
-| `w` | WLAN umschalten (Hotspot + Statusseite/Einrichtung, siehe [Seite 08](./08-wifi-twin.md)) |
+| `w` | WLAN umschalten (Hotspot + Statusseite/Einrichtung, siehe [Seite 08](./08-wifi.md)) |
 | `v` / `b` | Vorzeichen von Schulter / Ellenbogen umkehren |
 | `i` / `j` | Vorzeichen der IMU X / Y umkehren |
 | `h` | Stand-Homing-Umschaltung (Legacy-Richtlinienpfad) |

@@ -24,9 +24,10 @@ come un ordine di lettura che copre l'intero percorso da zero a una build verifi
 | 05 | [Azzeramento](./05-zero-tool.md) | Spostamento con i tasti freccia + azzeramento con `z` (dopo re-indicizzazione/riassemblaggio) | **obbligatorio per le build fai-da-te**; saltabile per le unità di serie |
 | 06 | [Debug e calibrazione](./06-debug-and-calibrate.md) | Verifica e calibrazione dell'intero robot: telemetria, IMU, servomotori, controllo della centratura, quattro pose sdraiate, soglia di caduta | |
 | 07 | [Uso dell'auto-raddrizzamento e monitoraggio](./07-self-righting.md) | Quattro direzioni di caduta, movimento previsto, monitoraggio e log | |
-| 08 | [WiFi e il gemello della simulazione](./08-wifi-twin.md) | Pagina di stato, provisioning del WiFi domestico, gemello MuJoCo wireless | opzionale |
-| 09 | [Risoluzione dei problemi](./09-troubleshooting.md) | Sintomi comuni e soluzioni | consultazione |
-| 10 | [Riferimenti: modello, parametri e licenze](./10-reference.md) | File del modello (XML/STL), parametri, sequenze di riferimento, licenze | consultazione |
+| 08 | [Pagina di stato WiFi e provisioning](./08-wifi.md) | Hotspot, pagina di stato, provisioning del WiFi domestico | opzionale |
+| 09 | [Simulazione MuJoCo e gemello in tempo reale](./09-mujoco.md) | Finestra di simulazione locale a quattro pose, gemello WiFi in tempo reale, logging della telemetria | opzionale |
+| 10 | [Risoluzione dei problemi](./10-troubleshooting.md) | Sintomi comuni e soluzioni | consultazione |
+| 11 | [Riferimenti: modello, parametri e licenze](./11-reference.md) | File del modello (XML/STL), parametri, sequenze di riferimento, licenze | consultazione |
 
 ## Stato di fabbrica di un'unità finita (due percorsi di lettura)
 
@@ -34,7 +35,7 @@ Questo tutorial si rivolge a due tipi di lettori: scegli il percorso che ti corr
 
 | Lettore | Stato di fabbrica | Percorso consigliato |
 |---|---|---|
-| **Utente di un'unità finita** | Assemblata e cablata, firmware caricato, **calibrata** (zeri dei servomotori e zeri dell'accelerometro IMU memorizzati), **collaudata** (tutte e quattro le direzioni di rialzata verificate su ogni unità) | Vai direttamente alla [07 uso](./07-self-righting.md) e alla [08 WiFi/gemello](./08-wifi-twin.md) (opzionale); tieni la [09](./09-troubleshooting.md)/[10](./10-reference.md) per consultazione. **Le pagine 02/03/04/05/06 servono solo per aggiornamenti del firmware, sostituzione di servomotori/IMU o rimontaggio delle squadrette**; per usare gli strumenti gemello/telemetria della pagina 08, installa prima gli strumenti lato computer della pagina 02. |
+| **Utente di un'unità finita** | Assemblata e cablata, firmware caricato, **calibrata** (zeri dei servomotori e zeri dell'accelerometro IMU memorizzati), **collaudata** (tutte e quattro le direzioni di rialzata verificate su ogni unità) | Vai direttamente alla [07 uso](./07-self-righting.md), alla [08 provisioning WiFi](./08-wifi.md) e alla [09 simulazione MuJoCo e gemello in tempo reale](./09-mujoco.md) (opzionale); tieni la [10](./10-troubleshooting.md)/[11](./11-reference.md) per consultazione. **Le pagine 02/03/04/05/06 servono solo per aggiornamenti del firmware, sostituzione di servomotori/IMU o rimontaggio delle squadrette**; per usare gli strumenti gemello/telemetria della pagina 09, installa prima gli strumenti lato computer della pagina 02. |
 | **Costruttore di kit / fai-da-te** | Parte dai componenti | Segui [01](./01-basics.md) → [02](./02-environment.md) → [03 flash](./03-build-flash.md) → [04 assemblaggio](./04-assembly.md) → [05 azzeramento (obbligatorio)](./05-zero-tool.md) → [06 debug/calibrazione](./06-debug-and-calibrate.md) → [07](./07-self-righting.md) dall'inizio alla fine. Sia l'azzeramento (05) sia la calibrazione (06) avvengono **dopo l'assemblaggio completo e il flash**: `z` non usa l'IMU e funziona in qualsiasi posa; `c` richiede il robot assemblato, in piedi e in piano. |
 
 > Controllo consigliato al primo uso di un'unità finita: accendi in posizione eretta → conferma
@@ -57,8 +58,8 @@ Tutte e quattro le direzioni di caduta sono state verificate sul robot reale, ci
 **rialzata diretta** (senza bisogno di ribaltamento), in circa 1–6 s; non sono state registrate
 violazioni dell'inviluppo dei servomotori. Il kit include anche uno strumento di calibrazione
 del punto zero con i tasti freccia ([pagina 05](./05-zero-tool.md)), una pagina di stato WiFi
-con provisioning della rete domestica e un gemello digitale MuJoCo wireless in tempo reale
-([pagina 08](./08-wifi-twin.md)).
+con provisioning della rete domestica ([pagina 08](./08-wifi.md)) e la simulazione MuJoCo
+con il suo gemello wireless in tempo reale ([pagina 09](./09-mujoco.md)).
 
 ## Sicurezza
 

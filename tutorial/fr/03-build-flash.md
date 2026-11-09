@@ -122,7 +122,7 @@ par ex. `m 0.5 0`.
 | `z` | Zéro façon codeur : la pose actuelle devient q=0 pour les deux articulations ; affiche les nouvelles impulsions (RAM seulement ; voir [page 05](./05-zero-tool.md)) |
 | `e` | Centre électrique (facultatif) : les deux servomoteurs à 1520 µs pour monter les palonniers au centre électrique ; la méthode habituelle est de mettre sous tension jusqu'au zéro du firmware et de monter là (voir [page 04, 4.2](./04-assembly.md)) |
 | `d` | Basculer le flux jumeau à 50 Hz (jumeau MuJoCo ; même interrupteur sur la page d'état) |
-| `w` | Basculer le WiFi (point d'accès + page d'état/provisionnement, voir [page 08](./08-wifi-twin.md)) |
+| `w` | Basculer le WiFi (point d'accès + page d'état/provisionnement, voir [page 08](./08-wifi.md)) |
 | `v` / `b` | Inverser le signe de l'épaule / du coude |
 | `i` / `j` | Inverser le signe X / Y de l'IMU |
 | `h` | Bascule du retour en position debout (ancien chemin de politique) |

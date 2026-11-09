@@ -24,9 +24,10 @@ organisiert und deckt den gesamten Weg von Null bis zum verifizierten Aufbau ab.
 | 05 | [Nullpunkt-Kalibrierung](./05-zero-tool.md) | Joggen mit Pfeiltasten + Nullpunkt setzen mit `z` (nach Neuindexierung/Neumontage) | **für DIY-Bauten erforderlich**; bei Seriengeräten überspringbar |
 | 06 | [Debug und Kalibrierung](./06-debug-and-calibrate.md) | Prüfung und Kalibrierung des gesamten Roboters: Telemetrie, IMU, Servos, Mittenprüfung, vier Liegepositionen, Fall-Gate | |
 | 07 | [Selbstaufrichtung: Anwendung und Überwachung](./07-self-righting.md) | Vier Fallrichtungen, erwartete Bewegung, Überwachung und Protokolle | |
-| 08 | [WLAN und der Simulationszwilling](./08-wifi-twin.md) | Statusseite, Einrichtung im Heim-WLAN, drahtloser MuJoCo-Zwilling | optional |
-| 09 | [Fehlerbehebung](./09-troubleshooting.md) | Häufige Symptome und Lösungen | Referenz |
-| 10 | [Referenz: Modell, Parameter, Lizenzierung](./10-reference.md) | Modelldateien (XML/STL), Parameter, Referenzsequenzen, Lizenzierung | Referenz |
+| 08 | [WLAN-Statusseite und Einrichtung im Heimnetz](./08-wifi.md) | Hotspot, Statusseite, Einrichtung im Heim-WLAN | optional |
+| 09 | [MuJoCo-Simulation und Live-Zwilling](./09-mujoco.md) | Lokales Simulationsfenster für die vier Liegepositionen, WLAN-Live-Zwilling, Telemetrie-Protokollierung | optional |
+| 10 | [Fehlerbehebung](./10-troubleshooting.md) | Häufige Symptome und Lösungen | Referenz |
+| 11 | [Referenz: Modell, Parameter, Lizenzierung](./11-reference.md) | Modelldateien (XML/STL), Parameter, Referenzsequenzen, Lizenzierung | Referenz |
 
 ## Werkszustand eines fertigen Geräts (zwei Lesepfade)
 
@@ -34,7 +35,7 @@ Dieses Tutorial bedient zwei Zielgruppen – wählen Sie den Pfad, der zu Ihnen 
 
 | Leser | Werkszustand | Empfohlener Pfad |
 |---|---|---|
-| **Nutzer eines fertigen Geräts** | Montiert und verkabelt, Firmware geflasht, **kalibriert** (Servo-Nullpunkte und IMU-Beschleunigungs-Nullpunkte fest eingebrannt), **getestet** (alle vier Aufrichtrichtungen pro Gerät verifiziert) | Direkt zu [07 Anwendung](./07-self-righting.md) und [08 WLAN/Zwilling](./08-wifi-twin.md) (optional); [09](./09-troubleshooting.md)/[10](./10-reference.md) als Referenz behalten. **Die Seiten 02/03/04/05/06 werden nur bei Firmware-Upgrades, Servo-/IMU-Austausch oder erneuter Servohorn-Montage benötigt**; um die Zwilling-/Telemetrie-Tools von Seite 08 zu nutzen, installieren Sie zuerst die PC-seitigen Tools von Seite 02. |
+| **Nutzer eines fertigen Geräts** | Montiert und verkabelt, Firmware geflasht, **kalibriert** (Servo-Nullpunkte und IMU-Beschleunigungs-Nullpunkte fest eingebrannt), **getestet** (alle vier Aufrichtrichtungen pro Gerät verifiziert) | Direkt zu [07 Anwendung](./07-self-righting.md), [08 WLAN-Einrichtung](./08-wifi.md) und [09 MuJoCo-Simulation und Live-Zwilling](./09-mujoco.md) (optional); [10](./10-troubleshooting.md)/[11](./11-reference.md) als Referenz behalten. **Die Seiten 02/03/04/05/06 werden nur bei Firmware-Upgrades, Servo-/IMU-Austausch oder erneuter Servohorn-Montage benötigt**; um die Zwilling-/Telemetrie-Tools von Seite 09 zu nutzen, installieren Sie zuerst die PC-seitigen Tools von Seite 02. |
 | **Kit- / DIY-Bauer** | Beginnt bei den Einzelteilen | Folgen Sie [01](./01-basics.md) → [02](./02-environment.md) → [03 Flashen](./03-build-flash.md) → [04 Montage](./04-assembly.md) → [05 Nullpunkt (erforderlich)](./05-zero-tool.md) → [06 Debug/Kalibrierung](./06-debug-and-calibrate.md) → [07](./07-self-righting.md) vollständig von Anfang bis Ende. Sowohl die Nullpunkt-Kalibrierung (05) als auch die Kalibrierung (06) erfolgen **nach vollständiger Montage und dem Flashen**: `z` verwendet die IMU nicht und funktioniert in jeder Pose; `c` erfordert den montierten, aufrecht stehenden Roboter. |
 
 > Empfohlene Erstinbetriebnahme-Prüfung für ein fertiges Gerät: aufrecht einschalten → `up≈(0,0,1)` bestätigen →
@@ -54,8 +55,9 @@ Dieses Tutorial bedient zwei Zielgruppen – wählen Sie den Pfad, der zu Ihnen 
 Alle vier Liegerichtungen wurden am realen Roboter verifiziert, jeweils als **direktes Aufstehen**
 (kein Überrollen nötig), mit etwa 1–6 s Dauer; es wurden keine Verletzungen der Servo-Grenzwerte
 aufgezeichnet. Das Kit enthält außerdem ein Nullpunkt-Kalibrierwerkzeug mit Pfeiltasten
-([Seite 05](./05-zero-tool.md)), eine WLAN-Statusseite mit Einrichtung im Heimnetz und einen
-drahtlosen MuJoCo-Live-Zwilling ([Seite 08](./08-wifi-twin.md)).
+([Seite 05](./05-zero-tool.md)), eine WLAN-Statusseite mit Einrichtung im Heimnetz
+([Seite 08](./08-wifi.md)) und die MuJoCo-Simulation mit ihrem drahtlosen Live-Zwilling
+([Seite 09](./09-mujoco.md)).
 
 ## Sicherheit
 

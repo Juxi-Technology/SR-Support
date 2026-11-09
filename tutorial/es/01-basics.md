@@ -22,7 +22,7 @@ SR-Support es un dispositivo auto-enderezante activo de 2 GDL (hombro + codo):
   automático tras la condición de caída; `roll_neg` usa esperas adaptativas por etapa y sale a
   retraerse en cuanto está erguido;
 - **Verificado**: las cuatro direcciones se levantan directamente en unos 1-6 s; el mismo modelo
-  impulsa la simulación MuJoCo y el gemelo en vivo del hardware ([página 08](./08-wifi-twin.md)).
+  impulsa la simulación MuJoCo y el gemelo en vivo del hardware ([página 09](./09-mujoco.md)).
 
 ## 1.2 Vista general
 

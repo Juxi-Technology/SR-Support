@@ -20,7 +20,7 @@ SR-Support is a 2-DOF (shoulder + elbow) active self-righting device:
 - **Fallbacks**: 14 s timeout, pose re-planning and automatic retry after the fall gate;
   `roll_neg` uses per-stage adaptive holds and exits to retract as soon as it is upright;
 - **Verified**: four directions stand up directly in about 1-6 s; the same model drives the
-  MuJoCo simulation and the live hardware twin ([page 08](./08-wifi-twin.md)).
+  MuJoCo simulation and the live hardware twin ([page 09](./09-mujoco.md)).
 
 ## 1.2 Overview
 

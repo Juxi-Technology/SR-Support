@@ -121,7 +121,7 @@ p. ej. `m 0.5 0`.
 | `z` | Punto cero tipo encoder: la postura actual pasa a ser q=0 para ambas articulaciones; imprime los nuevos pulsos (solo RAM; véase la [página 05](./05-zero-tool.md)) |
 | `e` | Centro eléctrico (opcional): ambos servos a 1520 µs para montar los brazos de servo en el centro eléctrico; lo habitual es encender hasta el cero del firmware y montar ahí (véase la [página 04, 4.2](./04-assembly.md)) |
 | `d` | Alternar el flujo del gemelo a 50 Hz (gemelo MuJoCo; el mismo interruptor en la página de estado) |
-| `w` | Alternar WiFi (punto de acceso + página de estado/aprovisionamiento, véase la [página 08](./08-wifi-twin.md)) |
+| `w` | Alternar WiFi (punto de acceso + página de estado/aprovisionamiento, véase la [página 08](./08-wifi.md)) |
 | `v` / `b` | Invertir el signo del hombro / codo |
 | `i` / `j` | Invertir el signo X / Y de la IMU |
 | `h` | Alternar el retorno a vertical (ruta de política heredada) |

@@ -10,7 +10,7 @@
 
 ```text
 tutorial/
-├─ zh-hans/                     # 简体中文（10 页正文 + 目录）
+├─ zh-hans/                     # 简体中文（11 页正文 + 目录）
 │  ├─ index.md                  # 目录
 │  ├─ 01-basics.md              # 基础知识
 │  ├─ 02-environment.md         # 环境准备（虚拟环境、烧录工具与固件）
@@ -19,20 +19,21 @@ tutorial/
 │  ├─ 05-zero-tool.md           # 中位零点校准（DIY 必做）
 │  ├─ 06-debug-and-calibrate.md # 调试与标定
 │  ├─ 07-self-righting.md       # 自扶正使用与监控
-│  ├─ 08-wifi-twin.md           # WiFi 与仿真镜像
-│  ├─ 09-troubleshooting.md     # 故障排查
-│  └─ 10-reference.md           # 参考：模型、参数与许可
-├─ zh-hant/                     # 繁體中文（10 页正文 + 目录）
-├─ en/                          # English（10 页正文 + 目录）
-├─ ja/                          # 日本語（10 页正文 + 目录）
-├─ ko/                          # 한국어（10 页正文 + 目录）
-├─ de/                          # Deutsch（10 页正文 + 目录）
-├─ fr/                          # Français（10 页正文 + 目录）
-├─ es/                          # Español（10 页正文 + 目录）
-├─ it/                          # Italiano（10 页正文 + 目录）
-├─ pt-br/                       # Português (Brasil)（10 页正文 + 目录）
-├─ pt-pt/                       # Português (Portugal)（10 页正文 + 目录）
-└─ images/sr-support/self-righting/   # 教程图片（各语言共用）
+│  ├─ 08-wifi.md                # WiFi 状态页与配网
+│  ├─ 09-mujoco.md              # MuJoCo 仿真与实机实时镜像
+│  ├─ 10-troubleshooting.md     # 故障排查
+│  └─ 11-reference.md           # 参考：模型、参数与许可
+├─ zh-hant/                     # 繁體中文（11 页正文 + 目录）
+├─ en/                          # English（11 页正文 + 目录）
+├─ ja/                          # 日本語（11 页正文 + 目录）
+├─ ko/                          # 한국어（11 页正文 + 目录）
+├─ de/                          # Deutsch（11 页正文 + 目录）
+├─ fr/                          # Français（11 页正文 + 目录）
+├─ es/                          # Español（11 页正文 + 目录）
+├─ it/                          # Italiano（11 页正文 + 目录）
+├─ pt-br/                       # Português (Brasil)（11 页正文 + 目录）
+├─ pt-pt/                       # Português (Portugal)（11 页正文 + 目录）
+└─ images/sr-support/           # 教程图片（各语言共用；self-righting/ 与 mujoco/）
 ```
 
 ## 发布
@@ -59,10 +60,12 @@ npm run docs:build    # 提交前验证构建
 
 ## 教程配图
 
-图片放在 `tutorial/images/sr-support/self-righting/`，建议文件名：
+图片放在 `tutorial/images/sr-support/` 下，按小节分子目录。`self-righting/` 建议文件名：
 `01-printed-parts.png`（打印件全家福）、`02-base-40mm.png`（40 mm 底座）、
 `03-wiring.png`（接线总览）、`04-poses.png`（四种躺姿与 up 值）、
-`05-trace.png`（串口执行轨迹截图）。发布时按 wiki 的图片路径约定放置，并用相对路径引用。
+`05-trace.png`（串口执行轨迹截图）。`wifi/01-status-page.png` 为 08 页图 8-1（实机状态页
+截图），`mujoco/01-mujoco-window.png` 为 09 页图 9-1（MuJoCo 仿真运行窗口截图）。
+发布时按 wiki 的图片路径约定放置，并用相对路径引用。
 
 ## 来源与许可
 
